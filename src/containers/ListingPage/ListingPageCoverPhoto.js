@@ -237,6 +237,7 @@ export const ListingPageComponent = props => {
   // Note: this is for inquiry state in booking and purchase processes. Inquiry process is handled through handleSubmit.
   const onSubmitInquiry = handleSubmitInquiry({
     ...commonParams,
+    currentUser,
     getListing,
     onSendInquiry,
     setInquiryModalOpen,

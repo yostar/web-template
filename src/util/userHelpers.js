@@ -167,3 +167,20 @@ export const isUserAuthorized = (currentUser, permissionsToCheck) => {
     ? isActive && hasPermissionToPostListings(currentUser)
     : isActive;
 };
+
+/**
+ * Check if currentUser has permission to post listings.
+ *
+ * @param {Object} currentUser API entity
+ * @returns {Boolean} true if currentUser has permission to post listings.
+ */
+export const hasPermissionToInitiateTransactions = currentUser => {
+  if (currentUser?.id && !currentUser?.effectivePermissionSet?.id) {
+    console.warn(
+      '"effectivePermissionSet" relationship is not defined or included to the fetched currentUser entity.'
+    );
+  }
+  return (
+    currentUser?.effectivePermissionSet?.attributes?.initiateTransactions === 'permission/allow'
+  );
+};

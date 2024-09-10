@@ -4,8 +4,12 @@ import { types as sdkTypes } from '../../util/sdkLoader';
 import { createResourceLocatorString, findRouteByRouteName } from '../../util/routes';
 import { formatMoney } from '../../util/currency';
 import { timestampToDate } from '../../util/dates';
-import { isUserAuthorized } from '../../util/userHelpers';
-import { NO_ACCESS_PAGE_USER_PENDING_APPROVAL, createSlug } from '../../util/urlHelpers';
+import { isUserAuthorized, hasPermissionToInitiateTransactions } from '../../util/userHelpers';
+import {
+  NO_ACCESS_PAGE_USER_PENDING_APPROVAL,
+  NO_ACCESS_PAGE_INITIATE_TRANSACTIONS,
+  createSlug,
+} from '../../util/urlHelpers';
 
 import { Page, LayoutSingleColumn } from '../../components';
 import FooterContainer from '../../containers/FooterContainer/FooterContainer';
@@ -138,21 +142,37 @@ export const handleContactUser = parameters => () => {
  * @param {Object} parameters all the info needed to create inquiry.
  */
 export const handleSubmitInquiry = parameters => values => {
-  const { history, params, getListing, onSendInquiry, routes, setInquiryModalOpen } = parameters;
-  const listingId = new UUID(params.id);
-  const listing = getListing(listingId);
-  const { message } = values;
+  const {
+    history,
+    params,
+    getListing,
+    onSendInquiry,
+    routes,
+    setInquiryModalOpen,
+    currentUser,
+  } = parameters;
 
-  onSendInquiry(listing, message.trim())
-    .then(txId => {
-      setInquiryModalOpen(false);
+  if (!hasPermissionToInitiateTransactions(currentUser)) {
+    const pathParams = { missingAccessRight: NO_ACCESS_PAGE_INITIATE_TRANSACTIONS };
+    history.push(createResourceLocatorString('NoAccessPage', routes, pathParams, {}));
+  } else {
+    const listingId = new UUID(params.id);
+    const listing = getListing(listingId);
+    const { message } = values;
 
-      // Redirect to OrderDetailsPage
-      history.push(createResourceLocatorString('OrderDetailsPage', routes, { id: txId.uuid }, {}));
-    })
-    .catch(() => {
-      // Ignore, error handling in duck file
-    });
+    onSendInquiry(listing, message.trim())
+      .then(txId => {
+        setInquiryModalOpen(false);
+
+        // Redirect to OrderDetailsPage
+        history.push(
+          createResourceLocatorString('OrderDetailsPage', routes, { id: txId.uuid }, {})
+        );
+      })
+      .catch(() => {
+        // Ignore, error handling in duck file
+      });
+  }
 };
 
 /**
@@ -173,66 +193,71 @@ export const handleSubmit = parameters => values => {
   const listingId = new UUID(params.id);
   const listing = getListing(listingId);
 
-  const {
-    bookingDates,
-    bookingStartTime,
-    bookingEndTime,
-    bookingStartDate, // not relevant (omit)
-    bookingEndDate, // not relevant (omit)
-    quantity: quantityRaw,
-    deliveryMethod,
-    ...otherOrderData
-  } = values;
+  if (!hasPermissionToInitiateTransactions(currentUser)) {
+    const pathParams = { missingAccessRight: NO_ACCESS_PAGE_INITIATE_TRANSACTIONS };
+    history.push(createResourceLocatorString('NoAccessPage', routes, pathParams, {}));
+  } else {
+    const {
+      bookingDates,
+      bookingStartTime,
+      bookingEndTime,
+      bookingStartDate, // not relevant (omit)
+      bookingEndDate, // not relevant (omit)
+      quantity: quantityRaw,
+      deliveryMethod,
+      ...otherOrderData
+    } = values;
 
-  const bookingMaybe = bookingDates
-    ? {
-        bookingDates: {
-          bookingStart: bookingDates.startDate,
-          bookingEnd: bookingDates.endDate,
-        },
-      }
-    : bookingStartTime && bookingEndTime
-    ? {
-        bookingDates: {
-          bookingStart: timestampToDate(bookingStartTime),
-          bookingEnd: timestampToDate(bookingEndTime),
-        },
-      }
-    : {};
-  const quantity = Number.parseInt(quantityRaw, 10);
-  const quantityMaybe = Number.isInteger(quantity) ? { quantity } : {};
-  const deliveryMethodMaybe = deliveryMethod ? { deliveryMethod } : {};
+    const bookingMaybe = bookingDates
+      ? {
+          bookingDates: {
+            bookingStart: bookingDates.startDate,
+            bookingEnd: bookingDates.endDate,
+          },
+        }
+      : bookingStartTime && bookingEndTime
+      ? {
+          bookingDates: {
+            bookingStart: timestampToDate(bookingStartTime),
+            bookingEnd: timestampToDate(bookingEndTime),
+          },
+        }
+      : {};
+    const quantity = Number.parseInt(quantityRaw, 10);
+    const quantityMaybe = Number.isInteger(quantity) ? { quantity } : {};
+    const deliveryMethodMaybe = deliveryMethod ? { deliveryMethod } : {};
 
-  const initialValues = {
-    listing,
-    orderData: {
-      ...bookingMaybe,
-      ...quantityMaybe,
-      ...deliveryMethodMaybe,
-      ...otherOrderData,
-    },
-    confirmPaymentError: null,
-  };
+    const initialValues = {
+      listing,
+      orderData: {
+        ...bookingMaybe,
+        ...quantityMaybe,
+        ...deliveryMethodMaybe,
+        ...otherOrderData,
+      },
+      confirmPaymentError: null,
+    };
 
-  const saveToSessionStorage = !currentUser;
+    const saveToSessionStorage = !currentUser;
 
-  // Customize checkout page state with current listing and selected orderData
-  const { setInitialValues } = findRouteByRouteName('CheckoutPage', routes);
+    // Customize checkout page state with current listing and selected orderData
+    const { setInitialValues } = findRouteByRouteName('CheckoutPage', routes);
 
-  callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
+    callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
 
-  // Clear previous Stripe errors from store if there is any
-  onInitializeCardPaymentData();
+    // Clear previous Stripe errors from store if there is any
+    onInitializeCardPaymentData();
 
-  // Redirect to CheckoutPage
-  history.push(
-    createResourceLocatorString(
-      'CheckoutPage',
-      routes,
-      { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
-      {}
-    )
-  );
+    // Redirect to CheckoutPage
+    history.push(
+      createResourceLocatorString(
+        'CheckoutPage',
+        routes,
+        { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
+        {}
+      )
+    );
+  }
 };
 
 /**
