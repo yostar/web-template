@@ -303,11 +303,7 @@ exports.getListingPrice = async (listing, currency, prefetchedExchangeRate) => {
   const { price, publicData } = listing?.attributes || {};
   const { exchangePrice = {}, listingCurrency = DEFAULT_CURRENCY } = publicData || {};
 
-  let exchangeRate = prefetchedExchangeRate;
-
-  if (!prefetchedExchangeRate) {
-    exchangeRate = await getExchangeRate();
-  }
+  const exchangeRate = prefetchedExchangeRate || (await getExchangeRate());
 
   if (!exchangeRate || !exchangeRate[currency]) {
     return price;

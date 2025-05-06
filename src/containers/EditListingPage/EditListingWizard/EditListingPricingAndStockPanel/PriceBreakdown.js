@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { formatMoney } from '../../../../util/currency';
 import { types as sdkTypes } from '../../../../util/sdkLoader';
 import { FormattedMessage, injectIntl, intlShape } from '../../../../util/reactIntl';
+import calculateMaxFlatFee from '../../../../extensions/categoryConfig/helpers/calculateMaxFlatFee';
 
 import css from './PriceBreakdown.module.css';
-import calculateMaxFlatFee from '../../../../extensions/categoryConfig/helpers/calculateMaxFlatFee';
 
 const { Money } = sdkTypes;
 

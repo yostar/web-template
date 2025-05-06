@@ -13,11 +13,7 @@ const calculateFlatFeeInCurrency = async ({
   flatFee,
   exchangeRate: prefetchedExchangeRate,
 }) => {
-  let exchangeRate = prefetchedExchangeRate;
-
-  if (!prefetchedExchangeRate) {
-    exchangeRate = await getExchangeRate();
-  }
+  const exchangeRate = prefetchedExchangeRate || (await getExchangeRate());
 
   const currencyExchangeRate = exchangeRate[currency] || 1;
   const dailyExchangeRate = 1 / currencyExchangeRate;
@@ -48,15 +44,14 @@ const calculateFlatFeeToCurrency = async ({ currency, flatFee }) => {
 async function calculateFlatFee({ flatFeeConfig, listingPrice, listingCurrency, exchangeRate }) {
   const { providerMinFlatFee, providerFeePercentage } = flatFeeConfig;
 
-  let minFlatFee = providerMinFlatFee;
-
-  if (listingCurrency !== DEFAULT_CURRENCY) {
-    minFlatFee = await calculateFlatFeeInCurrency({
-      currency: listingCurrency,
-      flatFee: providerMinFlatFee,
-      exchangeRate,
-    });
-  }
+  const minFlatFee =
+    listingCurrency === DEFAULT_CURRENCY
+      ? providerMinFlatFee
+      : await calculateFlatFeeInCurrency({
+          currency: listingCurrency,
+          flatFee: providerMinFlatFee,
+          exchangeRate,
+        });
 
   if (!(listingPrice instanceof Money)) {
     return minFlatFee;
