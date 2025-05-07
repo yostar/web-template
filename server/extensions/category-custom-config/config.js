@@ -28,7 +28,7 @@ const categoriesExtraConfig = {
     providerCommissionPercentage: 3,
     customerCommissionPercentage: 0,
   },
-  [CATEGORY_ID_MACHINE]: {
+  [CATEGORY_ID_LOCATION_MACHINE]: {
     minimumPrice: 20000,
     providerMinFlatFee: 10000,
     providerFeePercentage: 20,

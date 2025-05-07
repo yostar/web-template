@@ -41,7 +41,12 @@ const calculateFlatFeeToCurrency = async ({ currency, flatFee }) => {
  *
  * Calculate flat fee base on min flat fee vs percentage * listing price
  */
-async function calculateFlatFee({ flatFeeConfig, listingPrice, listingCurrency, exchangeRate }) {
+async function calculateFlatFee({
+  flatFeeConfig = {},
+  listingPrice,
+  listingCurrency,
+  exchangeRate,
+}) {
   const { providerMinFlatFee, providerFeePercentage } = flatFeeConfig;
 
   const minFlatFee =
