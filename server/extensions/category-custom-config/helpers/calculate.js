@@ -27,6 +27,10 @@ const calculateFlatFeeInCurrency = async ({
  * Convert to exchangeCurrency from default
  */
 const calculateFlatFeeToCurrency = async ({ currency, flatFee }) => {
+  if (!flatFee) {
+    return null;
+  }
+
   if (currency === DEFAULT_CURRENCY) {
     return flatFee;
   }
@@ -41,12 +45,11 @@ const calculateFlatFeeToCurrency = async ({ currency, flatFee }) => {
  *
  * Calculate flat fee base on min flat fee vs percentage * listing price
  */
-async function calculateFlatFee({
-  flatFeeConfig = {},
-  listingPrice,
-  listingCurrency,
-  exchangeRate,
-}) {
+async function calculateFlatFee({ flatFeeConfig, listingPrice, listingCurrency, exchangeRate }) {
+  if (!flatFeeConfig) {
+    return null;
+  }
+
   const { providerMinFlatFee, providerFeePercentage } = flatFeeConfig;
 
   const minFlatFee =
