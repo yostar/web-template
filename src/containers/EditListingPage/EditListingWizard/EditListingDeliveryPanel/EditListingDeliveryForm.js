@@ -26,6 +26,8 @@ import {
   FieldCheckbox,
 } from '../../../../components';
 
+import { Info } from 'lucide-react';
+
 // Import modules from this directory
 import css from './EditListingDeliveryForm.module.css';
 
@@ -192,6 +194,11 @@ export const EditListingDeliveryFormComponent = props => (
               <h4 className={css.sectionHeading}>
                 <FormattedMessage id="EditListingDeliveryForm.propertyManagerFieldsHeading" />
               </h4>
+              <div className={css.propertyManagerNote}>
+                <Info className={css.infoIcon} /> 
+                <FormattedMessage id="EditListingDeliveryForm.propertyManagerNote" />
+              </div>
+
               {propertyManagerFields.map(fieldName => (
                 <FieldTextInput
                   key={fieldName}
@@ -307,7 +314,7 @@ export const EditListingDeliveryFormComponent = props => (
             >
               {saveActionMsg}
             </Button>
-            
+
           </div>
         </Form>
       );

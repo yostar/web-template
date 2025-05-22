@@ -129,9 +129,9 @@ const EditListingDeliveryPanel = props => {
           )}
         </H3>
         
-        <div className={css.sideNote}>
+        <div className={css.locationNote}>
           <Info className={css.infoIcon} /> 
-          <FormattedMessage id="EditListingDeliveryPanel.sideNote" />
+          <FormattedMessage id="EditListingDeliveryPanel.locationNote" />
         </div>
 
       {priceCurrencyValid ? (
