@@ -208,8 +208,15 @@ export const sanitizeListing = (entity, config = {}) => {
   const { title, description, publicData, ...restAttributes } = attributes || {};
 
   const sanitizeLocation = location => {
-    const { address, building } = location || {};
-    return { address: sanitizeText(address), building: sanitizeText(building) };
+    const { address, building, businessName, managerName, managerPhone, managerEmail } = location || {};
+    return { 
+      address: sanitizeText(address), 
+      building: sanitizeText(building), 
+      businessName: sanitizeText(businessName), 
+      managerName: sanitizeText(managerName), 
+      managerPhone: sanitizeText(managerPhone), 
+      managerEmail: sanitizeText(managerEmail) 
+    };
   };
 
   const sanitizePublicData = publicData => {

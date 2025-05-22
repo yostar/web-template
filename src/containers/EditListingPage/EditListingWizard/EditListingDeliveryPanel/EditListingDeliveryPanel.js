@@ -10,6 +10,7 @@ import { types as sdkTypes } from '../../../../util/sdkLoader';
 
 // Import shared components
 import { H3, ListingLink } from '../../../../components';
+import { Info } from 'lucide-react';
 
 // Import modules from this directory
 import EditListingDeliveryForm from './EditListingDeliveryForm';
@@ -31,7 +32,7 @@ const getInitialValues = props => {
   // TODO bounds are missing - those need to be queried directly from Google Places
   const locationFieldsPresent = publicData?.location?.address && geolocation;
   const location = publicData?.location || {};
-  const { address, building } = location;
+  const { address, building, businessName, managerName, managerPhone, managerEmail } = location;
   const {
     shippingEnabled,
     pickupEnabled,
@@ -60,6 +61,10 @@ const getInitialValues = props => {
   // Initial values for the form
   return {
     building,
+    businessName,
+    managerName,
+    managerPhone,
+    managerEmail,
     location: locationFieldsPresent
       ? {
           search: address,
@@ -110,19 +115,25 @@ const EditListingDeliveryPanel = props => {
 
   return (
     <div className={classes}>
-      <H3 as="h1">
-        {isPublished ? (
-          <FormattedMessage
-            id="EditListingDeliveryPanel.title"
-            values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
-          />
-        ) : (
-          <FormattedMessage
-            id="EditListingDeliveryPanel.createListingTitle"
-            values={{ lineBreak: <br /> }}
-          />
-        )}
-      </H3>
+        <H3 as="h1">
+          {isPublished ? (
+            <FormattedMessage
+              id="EditListingDeliveryPanel.title"
+              values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
+            />
+          ) : (
+            <FormattedMessage
+              id="EditListingDeliveryPanel.createListingTitle"
+              values={{ lineBreak: <br /> }}
+            />
+          )}
+        </H3>
+        
+        <div className={css.sideNote}>
+          <Info className={css.infoIcon} /> 
+          <FormattedMessage id="EditListingDeliveryPanel.sideNote" />
+        </div>
+
       {priceCurrencyValid ? (
         <EditListingDeliveryForm
           className={css.form}
@@ -130,6 +141,10 @@ const EditListingDeliveryPanel = props => {
           onSubmit={values => {
             const {
               building = '',
+              businessName = '',
+              managerName = '',
+              managerPhone = '',
+              managerEmail = '',
               location,
               shippingPriceInSubunitsOneItem,
               shippingPriceInSubunitsAdditionalItems,
@@ -142,7 +157,7 @@ const EditListingDeliveryPanel = props => {
             const origin = location?.selectedPlace?.origin || null;
 
             const pickupDataMaybe =
-              pickupEnabled && address ? { location: { address, building } } : {};
+              pickupEnabled && address ? { location: { address, building, businessName, managerName, managerPhone, managerEmail } } : {};
 
             const shippingDataMaybe =
               shippingEnabled && shippingPriceInSubunitsOneItem != null
@@ -172,6 +187,10 @@ const EditListingDeliveryPanel = props => {
             setState({
               initialValues: {
                 building,
+                businessName,
+                managerName,
+                managerPhone,
+                managerEmail,
                 location: { search: address, selectedPlace: { address, origin } },
                 shippingPriceInSubunitsOneItem,
                 shippingPriceInSubunitsAdditionalItems,
@@ -181,6 +200,7 @@ const EditListingDeliveryPanel = props => {
             onSubmit(updateValues);
           }}
           listingTypeConfig={listingTypeConfig}
+          listingCategoryConfig={listingCategoryConfig}
           marketplaceCurrency={marketplaceCurrency}
           hasStockInUse={hasStockInUse}
           saveActionMsg={submitButtonText}

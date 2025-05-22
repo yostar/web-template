@@ -15,3 +15,12 @@
 .priceCurrencyInvalid {
   color: var(--colorFail);
 }
+
+.infoIcon {
+  margin-right: 5px;
+}
+
+.sideNote {
+  color: var(--colorGrey500);
+  margin-bottom: 40px;
+}
