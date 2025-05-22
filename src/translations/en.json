@@ -225,7 +225,23 @@
   "EditListingDeliveryForm.shippingOneItemRequired": "Shipping fee for one item required.",
   "EditListingDeliveryForm.showListingFailed": "Fetching listing data failed.",
   "EditListingDeliveryForm.updateFailed": "Failed to update listing. Please try again.",
+  "EditListingDeliveryForm.propertyManagerFieldsHeading": "Business information",
+  "EditListingDeliveryForm.businessName": "Business name",
+  "EditListingDeliveryForm.businessNamePlaceholder": "John's Barber Shop",
+  "EditListingDeliveryForm.businessNameRequired": "Business name is required",
+  "EditListingDeliveryForm.managerName": "Property manager's name",
+  "EditListingDeliveryForm.managerNamePlaceholder": "John Doe",
+  "EditListingDeliveryForm.managerNameRequired": "Manager's name is required",
+  "EditListingDeliveryForm.managerPhone": "Manager's phone number",
+  "EditListingDeliveryForm.managerPhonePlaceholder": "(555) 555-5555",
+  "EditListingDeliveryForm.managerPhoneRequired": "Manager's phone number is required",
+  "EditListingDeliveryForm.managerEmail": "Manager's email",
+  "EditListingDeliveryForm.managerEmailPlaceholder": "john.doe@example.com",
+  "EditListingDeliveryForm.managerEmailRequired": "Manager's email is required",
+  "EditListingDeliveryForm.propertyManagerNote": "Business/contact details are not shared until you make the introduction",
+
   "EditListingDeliveryPanel.createListingTitle": "Location",
+  "EditListingDeliveryPanel.locationNote": "Exact location is only displayed to a buyer after purchase",
   "EditListingDeliveryPanel.title": "Edit the location of {listingTitle}",
   "EditListingDetailsForm.categoryLabel": "{categoryLevel, select, categoryLevel1 {Category} other {Subcategory}}",
   "EditListingDetailsForm.categoryPlaceholder": "{categoryLevel, select, categoryLevel1 {Select category} other {Select subcategory}}",
@@ -1196,6 +1212,8 @@
   "SearchRequestLinks.or": "or",
   "SocialProofReviews.title": "4.9/5 Reviews",
   "SocialProofReviews.caption": "Overall average for buyers and sellers",
-  "AgentApplyNow.buttonLabel": "Apply now"
+  "AgentApplyNow.buttonLabel": "Apply now",
+ "AuthenticationPage.login.toastTitle": "Welcome back!",
+  "AuthenticationPage.login.toastContent": "You're all set to buy and sell locations."
 
 }

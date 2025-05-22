@@ -15,6 +15,7 @@ const getField = ({ config, configIndex, intl, values }) => {
     labelTranslationId,
     placeholderTranslationId,
     name,
+    initialValue,
     validators: validatorsConfig = [],
   } = config;
 
@@ -32,6 +33,7 @@ const getField = ({ config, configIndex, intl, values }) => {
           id={name}
           name={name}
           type="text"
+          initialValue={initialValue}
           label={labelTranslationId && intl.formatMessage({ id: labelTranslationId })}
           placeholder={
             placeholderTranslationId && intl.formatMessage({ id: placeholderTranslationId })
@@ -66,6 +68,7 @@ const getField = ({ config, configIndex, intl, values }) => {
           placeholder={
             placeholderTranslationId && intl.formatMessage({ id: placeholderTranslationId })
           }
+          initialValue={initialValue}
           useDefaultPredictions={false}
           format={v => v}
           valueFromForm={values[name]}
