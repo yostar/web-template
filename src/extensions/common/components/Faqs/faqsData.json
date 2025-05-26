@@ -234,5 +234,41 @@
         "answer": "You will be calling Property Managers to secure appointments to place vending machines at their location. You will not have anything to do with vending machines themselves.",
         "audience": "all",
         "category": ["recruiting"]
+    },
+    {
+        "question": "Is there any cost or long-term commitment to getting a machine?",
+        "answer": "Nope—there are zero costs and no contracts. Vending Village operators provide vending machines as a completely free amenity to your location. We believe in earning your trust with excellent service, not locking you in with paperwork.",
+        "audience": "all",
+        "category": ["free-machine"]
+    },
+    {
+        "question": "What happens if we want the machine removed later?",
+        "answer": "No problem at all. If for any reason it's not the right fit, simply let your operator know. Machines can typically be removed within 30 days or less, with no penalties or fees.",
+        "audience": "all",
+        "category": ["free-machine"]
+    },
+    {
+        "question": "Who keeps the machines stocked and working?",
+        "answer": "Your dedicated local operator handles everything—including regular stocking, cleaning, maintenance, and troubleshooting. Vending Village machines use real-time technology, so operators are alerted to any issues instantly and act quickly to fix them.",
+        "audience": "all",
+        "category": ["free-machine"]
+    },
+    {
+        "question": "How do we know what snacks and drinks we'll get?",
+        "answer": "During your initial consultation, your operator will work with you to understand your preferences and your guests' needs. Whether it's healthy options, energy drinks, or classic snacks, your setup is customized for your space.",
+        "audience": "all",
+        "category": ["free-machine"]
+    },
+    {
+        "question": "What if there's a problem with the machine?",
+        "answer": "Support is always nearby. Because we partner with local, vetted operators, response times are fast—usually same-day or within 24 hours. You'll have direct contact info for your operator, so you're never stuck waiting on a help desk.",
+        "audience": "all",
+        "category": ["free-machine"]
+    },
+    {
+        "question": "What payment options do the machines accept?",
+        "answer": "Most Vending Village machines accept credit/debit cards, mobile payments (Apple Pay, Google Pay), and in many cases, cash. Your operator will confirm available payment options during setup.",
+        "audience": "all",
+        "category": ["free-machine"]
     }
-  ]
+]

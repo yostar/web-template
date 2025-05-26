@@ -1213,6 +1213,8 @@
   "SocialProofReviews.title": "4.9/5 Reviews",
   "SocialProofReviews.caption": "Overall average for buyers and sellers",
   "AgentApplyNow.buttonLabel": "Apply now",
+  "ManagerApplyNow.buttonLabel": "Apply now",
+
  "AuthenticationPage.login.toastTitle": "Welcome back!",
   "AuthenticationPage.login.toastContent": "You're all set to buy and sell locations."
 

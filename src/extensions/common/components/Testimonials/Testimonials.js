@@ -68,7 +68,9 @@ const Testimonials = ({section}) => {
               <h3>{testimonial.name}</h3>
               <p>{testimonial.title}</p>
               <blockquote><Quote className={css.openQuote} />{testimonial.testimonial}<Quote className={css.closeQuote} /></blockquote>
-              <Link href={`/u/${testimonial.profileID}`}>View Profile</Link>
+              {testimonial.profileID && (
+                <Link href={`/u/${testimonial.profileID}`}>View Profile</Link>
+              )}
             </div>
           ))}
         </Slider>
