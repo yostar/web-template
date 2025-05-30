@@ -57,12 +57,14 @@ import { TOS_ASSET_NAME, PRIVACY_POLICY_ASSET_NAME } from './AuthenticationPage.
 
 import css from './AuthenticationPage.module.css';
 import { FacebookLogo, GoogleLogo } from './socialLoginLogos';
+import { toastSuccess } from '../../extensions/common/components/Toast/Toast';
 
 // Social login buttons are needed by AuthenticationForms
 export const SocialLoginButtonsMaybe = props => {
   const routeConfiguration = useRouteConfiguration();
   const { isLogin, showFacebookLogin, showGoogleLogin, from, userType } = props;
-  const showSocialLogins = showFacebookLogin || showGoogleLogin;
+  const queryParams = new URLSearchParams(window.location.search);
+  const showSocialLogins = (showFacebookLogin || showGoogleLogin) && !queryParams.get('hideSocial');
 
   const getDataForSSORoutes = () => {
     const baseUrl = apiBaseUrl();
@@ -518,7 +520,20 @@ export const AuthenticationPageComponent = props => {
   // flag only when the current user is fully loaded.
   const showEmailVerification = !isLogin && currentUserLoaded && !user.attributes.emailVerified;
 
-  // Already authenticated, redirect away from auth page
+  // Ensure useEffect is not conditional
+  useEffect(() => {
+    
+    if (isAuthenticated && currentUserLoaded) {
+      toastSuccess({
+        titleId: 'AuthenticationPage.login.toastTitle',
+        contentId: 'AuthenticationPage.login.toastContent',
+        intl,
+      });
+
+    }
+  }, [isAuthenticated, currentUserLoaded, location, intl]);
+
+  // Move any conditional returns after hooks
   if (isAuthenticated && from) {
     return <Redirect to={from} />;
   } else if (isAuthenticated && currentUserLoaded && !showEmailVerification) {

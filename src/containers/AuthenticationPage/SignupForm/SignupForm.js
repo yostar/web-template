@@ -29,6 +29,8 @@ const SignupFormComponent = props => {
   const [currency, setCurrency] = useState(null);
   const [region, setRegion] = useState(null);
   const [promoCode, setPromoCode] = useState(null);
+  const [userType, setUserType] = useState(null);
+  const [params, setParams] = useState(new URLSearchParams(window.location.search));
 
   useEffect(() => {
     const fetchLocationData = async position => {
@@ -53,14 +55,17 @@ const SignupFormComponent = props => {
 
     // Get promo code from URL if it exists, otherwise check cookie
     //if the value is set, make the field readonly
-    const params = new URLSearchParams(window.location.search);
     const fprParam = params.get('fpr');
     const cookiePromoCode = Cookies.get('_fprom_ref');
     if (fprParam) {
       setPromoCode(fprParam);
     } else if (cookiePromoCode) {
-        setPromoCode(cookiePromoCode);
-      }
+      setPromoCode(cookiePromoCode);
+    }
+
+    if( params.get('userType') && props.userTypes.find(type => type.userType === params.get('userType')) ){
+      setUserType( params.get('userType') )
+    }
     
     /*
     if(fprParam || cookiePromoCode){ 
@@ -74,11 +79,14 @@ const SignupFormComponent = props => {
       {...props}
       mutators={{ ...arrayMutators }}
       initialValues={{
-        userType: props.preselectedUserType || getSoleUserTypeMaybe(props.userTypes),
+        userType: userType || getSoleUserTypeMaybe(props.userTypes),
         pub_userCurrency: currency,
         pub_userLocation: region,
         pub_userPromoCode: promoCode,
-        pub_userAffiliateProgram: 'true'
+        email: params.get('email') ?? '',
+        fname: params.get('fname') ?? '',
+        lname: params.get('lname') ?? '',
+        phoneNumber: params.get('phoneNumber') ?? '',
       }}
       render={formRenderProps => {
         const {
@@ -97,6 +105,9 @@ const SignupFormComponent = props => {
         } = formRenderProps;
 
         const { userType } = values || {};
+
+        // Find the label for the current userType
+        const userTypeLabel = userTypes.find(type => type.userType === userType)?.label || userType;
 
         // email
         const emailRequired = validators.required(
@@ -167,12 +178,24 @@ const SignupFormComponent = props => {
 
         return (
           <Form className={classes} onSubmit={handleSubmit}>
-            <FieldSelectUserType
-              name="userType"
-              userTypes={userTypes}
-              hasExistingUserType={!!preselectedUserType}
-              intl={intl}
-            />
+            { userType &&params.get('userType') ? (
+              <>
+              <label>User Type</label>
+              <h5 className={css.userTypeLabel}>{userTypeLabel}</h5>
+              <FieldTextInput
+                  type="hidden"
+                  name="userType"
+                />
+                </>
+            ) : (
+              <FieldSelectUserType
+                name="userType"
+                userTypes={userTypes}
+                hasExistingUserType={!!preselectedUserType}
+                intl={intl}
+              />
+            
+            )}
 
             {showDefaultUserFields ? (
               <div className={css.defaultUserFields}>
