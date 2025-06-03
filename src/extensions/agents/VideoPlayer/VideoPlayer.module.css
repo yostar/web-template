@@ -1,0 +1,33 @@
+@import '../../../styles/customMediaQueries.css';
+
+.root {
+    width: 100%;
+}
+.title {
+    text-align: center;
+    margin: 10px 20px 20px;
+    opacity: 0;
+    font-size: 16px;
+
+    @media (--viewportMedium) {
+        font-size: 20px;
+    }
+
+}
+.player {
+    width: 100%;
+    height: 400px;
+}
+.progress{
+    height: 24px;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-transform: uppercase;
+    color: var(--colorGrey500);
+
+    label {
+        font-size: 11px;
+        line-height: 1;
+    }
+}

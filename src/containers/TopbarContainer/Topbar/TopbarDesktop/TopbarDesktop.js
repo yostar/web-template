@@ -16,6 +16,8 @@ import {
   NamedLink,
 } from '../../../../components';
 
+import AgentTrainingButton from '../../../../extensions/agents/TopbarButton/TopbarButton';
+
 import TopbarSearchForm from '../TopbarSearchForm/TopbarSearchForm';
 import CustomLinksMenu from './CustomLinksMenu/CustomLinksMenu';
 import CurrencyDropdown from '../../../../extensions/MultipleCurrency/components/CurrencyDropdown/CurrencyDropdown';
@@ -163,6 +165,9 @@ const TopbarDesktop = props => {
   const signupLinkMaybe = isAuthenticatedOrJustHydrated ? null : <SignupLink />;
   const loginLinkMaybe = isAuthenticatedOrJustHydrated ? null : <LoginLink />;
 
+  const isAgent = currentUser?.attributes?.profile?.publicData?.userType === 'agent';
+  const isAgentTraining = currentUser?.attributes?.profile?.publicData?.training;
+
   return (
     <nav className={classes}>
       <LinkedLogo
@@ -179,18 +184,31 @@ const TopbarDesktop = props => {
         appConfig={config}
       />
 
-      <CustomLinksMenu
-        currentPage={currentPage}
-        customLinks={customLinks}
-        intl={intl}
-        hasClientSideContentReady={authenticatedOnClientSide || !isAuthenticatedOrJustHydrated}
-      />
+      { isAgent && isAgentTraining ? (
+          
+          <>
+            <AgentTrainingButton />
+            {profileMenuMaybe}
+          </>
+          ) : (
+            <>
+            
 
-      {inboxLinkMaybe}
-      {profileMenuMaybe}
-      {signupLinkMaybe}
-      {loginLinkMaybe}
-      <CurrencyDropdown />
+            <CustomLinksMenu
+              currentPage={currentPage}
+              customLinks={customLinks}
+              intl={intl}
+              hasClientSideContentReady={authenticatedOnClientSide || !isAuthenticatedOrJustHydrated}
+            />
+
+            {inboxLinkMaybe}
+            {profileMenuMaybe}
+            {signupLinkMaybe}
+            {loginLinkMaybe}
+            <CurrencyDropdown />
+
+      </>
+      )}
     </nav>
   );
 };

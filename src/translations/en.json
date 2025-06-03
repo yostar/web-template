@@ -1216,6 +1216,15 @@
   "ManagerApplyNow.buttonLabel": "Apply now",
 
  "AuthenticationPage.login.toastTitle": "Welcome to the village!",
-  "AuthenticationPage.login.toastContent": " "
+  "AuthenticationPage.login.toastContent": " ",
+  "TopbarButton.agentTraining": "Agent Training", 
 
+  "ProgressStep.stepTitle.AgentTraining.Videos": "Training Videos",
+  "ProgressStep.stepTitle.AgentTraining.Quiz": "Quick Quiz",
+  "ProgressStep.stepTitle.AgentTraining.Calls": "Make Calls",
+  "ProgressStep.stepTitle.AgentTraining.CRM": "CRM Setup",
+  "ProgressStep.stepTitle.AgentTraining.Begin": "Begin Journey",
+
+  "VideoPlayer.videoCountLabel": "Video {currentVideo} of {totalVideos}",
+  "VideoPlayer.progressLabel": "Overall Progress: {percentage}%"
 }

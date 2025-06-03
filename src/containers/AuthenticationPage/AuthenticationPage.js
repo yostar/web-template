@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { bool, func, object, oneOf, shape } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter, Redirect, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
@@ -456,6 +456,7 @@ export const AuthenticationPageComponent = props => {
   const [authInfo, setAuthInfo] = useState(getAuthInfoFromCookies());
   const [authError, setAuthError] = useState(getAuthErrorFromCookies());
   const config = useConfiguration();
+  const history = useHistory();
 
   useEffect(() => {
     // Remove the autherror cookie once the content is saved to state
@@ -532,6 +533,19 @@ export const AuthenticationPageComponent = props => {
 
     }
   }, [isAuthenticated, currentUserLoaded, location, intl]);
+
+  useEffect(() => {
+    if (isAuthenticated && currentUserLoaded) {
+      const userData = currentUser?.attributes?.profile?.publicData;
+      if (userData?.training) {
+        history.push('/agent/training/videos');
+      } else if (from) {
+        history.push(from);
+      } else {
+        history.push('/');
+      }
+    }
+  }, [isAuthenticated, currentUserLoaded, from, history]);
 
   // Move any conditional returns after hooks
   if (isAuthenticated && from) {
