@@ -187,7 +187,7 @@ const TopbarDesktop = props => {
       { isAgent && isAgentTraining ? (
           
           <>
-            <AgentTrainingButton />
+            <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
             {profileMenuMaybe}
           </>
           ) : (

@@ -1219,6 +1219,8 @@
   "AuthenticationPage.login.toastContent": " ",
   "TopbarButton.agentTraining": "Agent Training", 
 
+  "AgentTrainingPage.title": "Agent Training Course",
+
   "ProgressStep.stepTitle.AgentTraining.Videos": "Training Videos",
   "ProgressStep.stepTitle.AgentTraining.Quiz": "Quick Quiz",
   "ProgressStep.stepTitle.AgentTraining.Calls": "Make Calls",
@@ -1226,5 +1228,10 @@
   "ProgressStep.stepTitle.AgentTraining.Begin": "Begin Journey",
 
   "VideoPlayer.videoCountLabel": "Video {currentVideo} of {totalVideos}",
-  "VideoPlayer.progressLabel": "Overall Progress: {percentage}%"
+  "VideoPlayer.progressLabel": "Overall Progress: {percentage}%",
+
+  "AgentTraining.backButtonLabel": "Previous",
+  "AgentTraining.nextButtonLabel": "Next Step",
+  "AgentTraining.quizSuccessTitle": "🎉 Success!",
+  "AgentTraining.quizSuccessMessage": "You passed the quiz with a score of {score} out of 10."
 }

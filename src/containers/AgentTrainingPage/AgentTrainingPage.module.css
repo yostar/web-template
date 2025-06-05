@@ -1,23 +1,51 @@
 @import '../../styles/customMediaQueries.css';
 
 .root {
-    
+    text-align: center;
+}
+.heading{
+    margin:100px 0 40px;
+    font-size: 140px;
+    color: var(--colorGrey300);
+    font-weight: 300;
 }
 .title{
     text-align: center;
     margin-bottom: 0;
 }
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:block;
   
     width: 100%;
     margin: auto;
-    padding: 20px 10px 20px 20px;
+    padding: 20px;
   
     @media (--viewportMedium) {
       max-width: calc(var(--contentMaxWidth) + 72px);
       padding: 0 36px 36px;
     }
   }
+
+.navButtonsContainer{  
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 40px;
+  margin: 20px 0;
+
+  .backButton, .nextButton {
+    width: 140px;
+  }
+  .backButton {
+    border:none;
+    background-color: transparent;
+    &:hover {
+      background-color: white;
+    }
+  }
+}
+
+.quizSuccessContainer {
+  text-align: center;
+  padding: 40px;
+}

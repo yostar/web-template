@@ -5,7 +5,7 @@
 }
 .title {
     text-align: center;
-    margin: 10px 20px 20px;
+    margin:  20px;
     opacity: 0;
     font-size: 16px;
 
@@ -16,7 +16,11 @@
 }
 .player {
     width: 100%;
-    height: 400px;
+    height: 300px;
+
+    @media (--viewportMedium) {
+        height: 400px;
+    }
 }
 .progress{
     height: 24px;
@@ -30,4 +34,36 @@
         font-size: 11px;
         line-height: 1;
     }
+}
+
+.playerWrapper {
+  position: relative;
+}
+
+.overlayTop, .overlayBottom, .overlayMiddle {
+    position: absolute;
+    background: transparent;
+    z-index: 10;
+}
+.overlayTop {
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    @media (--viewportMedium) {
+        width: calc(100% - 150px);
+    }
+}
+
+.overlayBottom {
+    bottom: 0;
+    right: 50px;
+    height: 40px;
+    width: 80px;
+}
+
+.overlayMiddle {
+    bottom: 70px;
+    width: calc(100% - 100px);
+    height: 100px;
 }

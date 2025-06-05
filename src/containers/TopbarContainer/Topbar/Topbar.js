@@ -312,7 +312,7 @@ class TopbarComponent extends Component {
             linkToExternalSite={config?.topbar?.logoLink}
           />
           { isAgent && isAgentTraining ? (
-            <AgentTrainingButton />
+            <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
           ) : (
             <>
               <Button

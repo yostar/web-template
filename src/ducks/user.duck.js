@@ -510,3 +510,28 @@ export const updateUserCurrency = currency => (dispatch, getState, sdk) => {
       dispatch(updateProfileError(storableError(e)));
     });
 };
+
+export const updateTrainingProfile = (trainingData) => (dispatch, getState, sdk) => {
+  dispatch(updateProfileRequest());
+
+  const bodyParams = {
+    data: { publicData: { training: trainingData } },
+  };
+
+  return updateCurrentUserProfile(bodyParams)
+    .then(response => {
+      dispatch(updateProfileSuccess(response));
+
+      const entities = denormalisedResponseEntities(response);
+      if (entities.length !== 1) {
+        throw new Error('Expected a resource in the updateProfile response');
+      }
+      const currentUser = entities[0];
+      // Update current user in state.user.currentUser through user.duck.js
+      dispatch(currentUserShowSuccess(currentUser));
+    })
+    .catch(e => {
+      log.error(e, 'update-training-profile-failed');
+      dispatch(updateProfileError(storableError(e)));
+    });
+};

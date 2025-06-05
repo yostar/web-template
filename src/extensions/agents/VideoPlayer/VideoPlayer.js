@@ -8,13 +8,13 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
   const titleRef = useRef(null);
   const [progress, setProgress] = useState({ currentVideo: 0, totalVideos: 0, percentage: 0 });
   const [showProgress, setShowProgress] = useState(false);
+  const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    let player;
     let progressInterval;
 
     const initializePlayer = () => {
-      player = new YT.Player('player', {
+      const newPlayer = new YT.Player('player', {
         videoId: videoId,
         playerVars: {
           listType: 'playlist',
@@ -33,9 +33,15 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
           'onStateChange': onPlayerStateChange
         }
       });
+      setPlayer(newPlayer);
     };
 
     const onPlayerReady = (event) => {
+      if (!event.target || typeof event.target.getCurrentTime !== 'function') {
+        console.error('Player is not ready');
+        return;
+      }
+
       const lastPosition = localStorage.getItem('lastPosition');
       const lastVideoIndex = localStorage.getItem('lastVideoIndex');
       if (lastVideoIndex) {
@@ -48,16 +54,19 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
             titleRef.current.style.transition = 'opacity 1s';
             titleRef.current.style.opacity = 1;
           }
-          setShowProgress(true);
 
         }, 1000);
-      } else {
-        setShowProgress(true);
       }
+      
       updateVideoTitle(event.target);
     };
 
     const onPlayerStateChange = (event) => {
+      if (!event.target || typeof event.target.getCurrentTime !== 'function') {
+        console.error('Player is not ready');
+        return;
+      }
+
       if (event.data === YT.PlayerState.PLAYING) {
         updateVideoTitle(event.target);
         updateProgress(event.target);
@@ -98,6 +107,9 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
       const newProgress = { currentVideo, totalVideos, percentage };
       setProgress(newProgress);
 
+      // Update showProgress based on the new progress values
+      setShowProgress(currentVideo > 0 && totalVideos > 0 && percentage > 0);
+
       // Call the callback function to send progress data to the parent
       if (onProgressUpdate) {
         onProgressUpdate(newProgress);
@@ -105,8 +117,10 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
     };
 
     if (window.YT && window.YT.Player) {
+      console.log('YT.Player is defined, initializing player');
       initializePlayer();
     } else {
+      console.log('YT.Player is not defined, loading API');
       const tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";
       const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -115,6 +129,8 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
       window.onYouTubeIframeAPIReady = initializePlayer;
     }
 
+    const playerElement = document.getElementById('player');
+    
     return () => {
       if (player) {
         player.destroy();
@@ -122,6 +138,13 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
       clearInterval(progressInterval);
     };
   }, [videoId, playlistId, onProgressUpdate]);
+
+  const handleOverlayClick = () => {
+    //console.log('handleOverlayClick', player);
+    if (player && typeof player.playVideo === 'function') {
+      player.playVideo();
+    }
+  };
 
   return (
     <div className={css.root}>
@@ -144,8 +167,12 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
                 </>
             )}
       </div>
-      <div id="player" className={css.player}></div>
-    
+      <div className={css.playerWrapper}>
+        <div id="player" className={css.player}></div>
+        <div className={css.overlayTop}></div>
+        <div className={css.overlayBottom}></div>
+        <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
+      </div>
     </div>
   );
 };
