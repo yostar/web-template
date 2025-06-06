@@ -32,18 +32,27 @@
   justify-content: space-between;
   height: 40px;
   margin: 20px 0;
+}
 
-  .backButton, .nextButton {
-    width: 140px;
-  }
-  .backButton {
-    border:none;
-    background-color: transparent;
-    &:hover {
-      background-color: white;
-    }
+.backButton, .nextButton {
+  width: 140px;
+}
+
+.backButton {
+  border-color: var(--colorGrey100);
+  background-color: transparent;
+  &:hover {
+    background-color: white;
   }
 }
+
+.progressMessage {
+  color: var(--colorGrey300);
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top:20px;
+}
+
 
 .quizSuccessContainer {
   text-align: center;

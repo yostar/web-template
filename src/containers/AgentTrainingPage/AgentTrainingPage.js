@@ -14,19 +14,22 @@ import {
   SecondaryButton,
 } from '../../components';
 
-
+import { isScrollingDisabled } from '../../ducks/ui.duck';
 import TopbarContainer from '../TopbarContainer/TopbarContainer';
 import FooterContainer from '../../containers/FooterContainer/FooterContainer';
 
 import ProgressBar from '../../extensions/transactionProcesses/components/ProgressBar/ProgressBar.js';
 import YouTubePlayer from '../../extensions/agents/VideoPlayer/VideoPlayer';
 import TrainingQuiz from '../../extensions/agents/TrainingQuiz/TrainingQuiz';
+import TrainingCalls from '../../extensions/agents/TrainingCalls/TrainingCalls';
+
 import NextStepButton from '../../extensions/agents/NextStepButton/NextStepButton';
 import { trainingSteps, externalIds } from '../../extensions/agents/config';
 
 import css from './AgentTrainingPage.module.css';
 
 export const AgentTrainingPageComponent = props => {
+  
   const { scrollingDisabled, intl, currentUser } = props;
   const { step } = useParams();
 
@@ -67,6 +70,7 @@ export const AgentTrainingPageComponent = props => {
   const currentStepNumber = steps.findIndex(s => s.routeName === step) + 1;
   
   const [nextStepReady, setNextStepReady] = useState(userTraining?.step > currentStepNumber); 
+  const [progressMessage, setProgressMessage] = useState('');
   
   console.log('nextStepReady', nextStepReady, userTraining?.step, currentStepNumber);
   console.log('Current step from URL:', step);
@@ -96,9 +100,12 @@ export const AgentTrainingPageComponent = props => {
   }, [userTraining, currentStepNumber]);
 
   const handleProgressUpdate = (newProgress) => {
-    //console.log('Progress update:', newProgress);
+    console.log('Progress update:', newProgress);
     if(newProgress.percentage > 95 && !nextStepReady){
       setNextStepReady(true);
+    }
+    if(newProgress.message){
+    setProgressMessage(newProgress.message)
     }
   };
 
@@ -144,6 +151,15 @@ export const AgentTrainingPageComponent = props => {
               )
             )}
 
+            {step === 'calls' && (
+              <TrainingCalls
+                currentUser={currentUser}
+                jotformId={externalIds.jotformCall}
+                youtubeVideoId={externalIds.youtubeCall}
+                onProgressUpdate={handleProgressUpdate}
+              />
+            )}
+
             <div className={css.navButtonsContainer}>
                 
                 <SecondaryButton 
@@ -154,6 +170,8 @@ export const AgentTrainingPageComponent = props => {
                    <ChevronLeft /> <FormattedMessage id="AgentTraining.backButtonLabel" />
 
                 </SecondaryButton> 
+                
+                <div className={css.progressMessage}>{progressMessage}</div>
                 
                 <div className={css.nextButton}>
                   <NextStepButton
@@ -186,7 +204,7 @@ AgentTrainingPageComponent.propTypes = {
 
 const mapStateToProps = state => {
   const { currentUser } = state.user;
-  return { currentUser };
+  return { currentUser, scrollingDisabled: isScrollingDisabled(state) };
 };
 
 const AgentTrainingPage = compose(

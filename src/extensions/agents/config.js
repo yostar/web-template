@@ -9,5 +9,6 @@ export const trainingSteps = [
 export const externalIds = {
     youtubePlaylist: 'PLrinyDyRpJyXpwR9padFWotgK9ZviTmT8',
     jotformQuiz: '251543943185057',
-    jotformCall: '251553597853065'
+    jotformCall: '251553597853065',
+    youtubeCall: 'X3PbJcXcFgg'
 };
