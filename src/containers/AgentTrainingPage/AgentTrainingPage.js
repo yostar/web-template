@@ -72,8 +72,8 @@ export const AgentTrainingPageComponent = props => {
   const [nextStepReady, setNextStepReady] = useState(userTraining?.step > currentStepNumber); 
   const [progressMessage, setProgressMessage] = useState('');
   
-  console.log('nextStepReady', nextStepReady, userTraining?.step, currentStepNumber);
-  console.log('Current step from URL:', step);
+  //console.log('nextStepReady', nextStepReady, userTraining?.step, currentStepNumber);
+  //console.log('Current step from URL:', step);
 
   const history = useHistory();
   const handleBackClick = () => {
@@ -86,18 +86,12 @@ export const AgentTrainingPageComponent = props => {
   const score = queryParams.get('score') ? parseInt(queryParams.get('score'), 10) : 0;
 
   useEffect(() => {
-    if (step === 'quiz' && score >= 8) {
-      setNextStepReady(true);
-    }
-  }, [step, score]);
-
-  useEffect(() => {
-    if (userTraining?.step > currentStepNumber) {
+    if (userTraining?.step > currentStepNumber || (step === 'quiz' && score >= 8)) {
       setNextStepReady(true);
     } else {
       setNextStepReady(false);
     }
-  }, [userTraining, currentStepNumber]);
+  }, [userTraining, currentStepNumber, step, score]);
 
   const handleProgressUpdate = (newProgress) => {
     console.log('Progress update:', newProgress);

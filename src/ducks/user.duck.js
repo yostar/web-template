@@ -514,8 +514,15 @@ export const updateUserCurrency = currency => (dispatch, getState, sdk) => {
 export const updateTrainingProfile = (trainingData) => (dispatch, getState, sdk) => {
   dispatch(updateProfileRequest());
 
+  const queryParams = {
+    expand: true,
+    include: ['profileImage'],
+    'fields.image': ['variants.square-small', 'variants.square-small2x'],
+  };
+
   const bodyParams = {
     data: { publicData: { training: trainingData } },
+    queryParams,
   };
 
   return updateCurrentUserProfile(bodyParams)

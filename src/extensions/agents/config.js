@@ -3,7 +3,7 @@ export const trainingSteps = [
   { displayName: 'Quiz', routeName: 'quiz' },
   { displayName: 'Calls', routeName: 'calls' },
   { displayName: 'CRM', routeName: 'crm' },
-  { displayName: 'Begin', routeName: 'begin' },
+  { displayName: 'Begin', routeName: 'complete' },
 ];
 
 export const externalIds = {
@@ -12,3 +12,8 @@ export const externalIds = {
     jotformCall: '251553597853065',
     youtubeCall: 'X3PbJcXcFgg'
 };
+
+export const externalEndpoints = {
+  googlePlacesWorker: 'https://agent-training-places.yoav-4e1.workers.dev',
+  zapierWebhook: 'https://hooks.zapier.com/hooks/catch/20055466/2vxqp3i/',
+}

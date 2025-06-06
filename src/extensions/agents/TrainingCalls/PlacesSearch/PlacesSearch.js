@@ -4,7 +4,7 @@ import { Modal,Button, SecondaryButton } from '../../../../components';
 import { FormattedMessage } from '../../../../util/reactIntl';
 import classNames from 'classnames';
 import { Phone, Search } from 'lucide-react';
-import { externalIds } from '../../config';
+import { externalIds, externalEndpoints } from '../../config';
 import css from './PlacesSearch.module.css';
 
 
@@ -18,7 +18,6 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [isFetchingNumber, setIsFetchingNumber] = useState(false);
 
-  const workerUrl = 'https://agent-training-places.yoav-4e1.workers.dev';
   
   const onManageDisableScrolling = (isDisabled) => {
     // Implement scrolling management logic if needed
@@ -27,7 +26,7 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
   const handleSearch = async () => {
     try {
       setIsSearching(true);
-      const response = await fetch(`${workerUrl}?q=${encodeURIComponent(query)}`);
+      const response = await fetch(`${externalEndpoints.googlePlacesWorker}?q=${encodeURIComponent(query)}`);
       const places = await response.json();
 
       if (Array.isArray(places)) {
@@ -60,7 +59,7 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
     try {
         console.log('FETCHING: place details');
         setIsFetchingNumber(true);
-        const response = await fetch(`${workerUrl}/?place_id=${result.place_id}`);
+        const response = await fetch(`${externalEndpoints.googlePlacesWorker}/?place_id=${result.place_id}`);
         const placeDetails = await response.json();
         const phoneNumber = placeDetails.phone;
 
@@ -176,10 +175,6 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
             className={css.modal} 
             border="0" 
             title="Modal Content" 
-            style={{ 
-                width: "770px", 
-                height: "calc(100vh - 50px)" 
-              }} 
         />
     </Modal>
 

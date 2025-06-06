@@ -214,7 +214,7 @@ export const signup = params => (dispatch, getState, sdk) => {
 
   // Add metadata for 'agent' user type
   if (params.publicData.userType === 'agent') {
-    params.publicData.training = { step: 1, module: 1, lesson: 1, completed: false };
+    params.publicData.training = { step: 1, completed: false };
   }
 
   // We must login the user if signup succeeds since the API doesn't

@@ -17,13 +17,13 @@ const TrainingCalls = ({ currentUser, youtubeVideoId, onProgressUpdate }) => {
     });
 
     const handlePlaceSelected = (place) => {
-        console.log('Selected place:', place);
+        //console.log('Selected place:', place);
         setPlaceCount(prevCount => {
             const newCount = prevCount + 1;
             localStorage.setItem('placeCount', newCount);
             return newCount;
         });
-        console.log('placeCount', placeCount);
+        //console.log('placeCount', placeCount);
         onProgressUpdate({
             percentage: (placeCount / 10) * 100,
             message: placeCount > 9 ? `${placeCount} calls made 🎉` : `${placeCount}/10 calls made`
