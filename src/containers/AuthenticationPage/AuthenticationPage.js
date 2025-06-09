@@ -58,6 +58,7 @@ import { TOS_ASSET_NAME, PRIVACY_POLICY_ASSET_NAME } from './AuthenticationPage.
 import css from './AuthenticationPage.module.css';
 import { FacebookLogo, GoogleLogo } from './socialLoginLogos';
 import { toastSuccess } from '../../extensions/common/components/Toast/Toast';
+import { trainingSteps } from '../../extensions/agents/config';
 
 // Social login buttons are needed by AuthenticationForms
 export const SocialLoginButtonsMaybe = props => {
@@ -538,7 +539,9 @@ export const AuthenticationPageComponent = props => {
     if (isAuthenticated && currentUserLoaded) {
       const userData = currentUser?.attributes?.profile?.publicData;
       if (userData?.training) {
-        history.push('/agent/training/videos');
+        const currentStepIndex = userData?.training?.step - 1;
+        const currentStepRouteName = trainingSteps[currentStepIndex].routeName;
+        history.push(`/agent/training/${currentStepRouteName}`);
       } else if (from) {
         history.push(from);
       } else {

@@ -9,17 +9,18 @@ import { trainingSteps } from '../config';
 import css from './TopbarButton.module.css';
 
 const AgentTrainingButton = ({currentStep}) => {
+  
   const history = useHistory();
   const location = useLocation();
 
   const currentStepIndex =currentStep ? currentStep -1 : 0;
+  const currentRouteName = trainingSteps[currentStepIndex].routeName;
 
   const handleAgentTrainingClick = () => {
-    history.push(`/agent/training/${trainingSteps[currentStepIndex].routeName}`);
+    history.push(`/agent/training/${currentRouteName}`);
   };
 
   const isTrainingPage = location.pathname.includes('/agent/training');
-  console.log("isTrainingPage", isTrainingPage);
   return (
     <div className={css.root}>
       <Button

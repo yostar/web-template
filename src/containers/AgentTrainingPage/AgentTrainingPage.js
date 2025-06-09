@@ -78,6 +78,7 @@ export const AgentTrainingPageComponent = props => {
   const history = useHistory();
   const handleBackClick = () => {
     const previousStep = steps[currentStepNumber - 2].routeName;
+    setProgressMessage('');
     history.push(`/agent/training/${previousStep}`);
   };
 
@@ -151,6 +152,7 @@ export const AgentTrainingPageComponent = props => {
                 jotformId={externalIds.jotformCall}
                 youtubeVideoId={externalIds.youtubeCall}
                 onProgressUpdate={handleProgressUpdate}
+                intl={intl}
               />
             )}
 

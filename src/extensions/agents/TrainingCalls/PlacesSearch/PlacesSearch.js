@@ -112,8 +112,7 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
             onClick={handleSearch} className={css.searchButton}
             disabled={isSearching}
             >
-                <Search/> &nbsp;
-                <FormattedMessage id="AgentTraining.searchButtonLabel" />
+                <Search/>
             </Button>
         </div>
 

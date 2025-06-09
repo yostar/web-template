@@ -64,3 +64,9 @@ export const regions = [
     {"label": "Yukon", "option": "Yukon"},
     {"label": "Other", "option":"Other"}
 ];
+
+export const countries = [
+    {"label": "United States", "option": "United States"},
+    {"label": "Canada", "option": "Canada"},
+    {"label": "Other", "option": "Other"}
+];

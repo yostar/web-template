@@ -1238,6 +1238,7 @@
   "AgentTraining.searchTitle": "Search for Tier 3 places near you",
   "AgentTraining.callButtonLabel": "Call",
   "AgentTraining.callTitle": "Your first 10 calls",
-  "AgentTraining.searchButtonLabel": "Search",
-  "AgentTraining.searching": "Searching..."
+  "AgentTraining.searching": "Searching...",
+  "AgentTraining.callMessage": "{placeCount}/10 calls made",
+  "AgentTraining.callMessageComplete": "{placeCount} calls made 🎉"
 }

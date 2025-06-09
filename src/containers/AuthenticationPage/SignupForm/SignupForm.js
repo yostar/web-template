@@ -10,7 +10,7 @@ import { FormattedMessage, injectIntl, intlShape } from '../../../util/reactIntl
 import { propTypes } from '../../../util/types';
 import * as validators from '../../../util/validators';
 import { getPropsForCustomUserFieldInputs } from '../../../util/userHelpers';
-import { regions } from '../../../config/regions';
+import { regions, countries } from '../../../config/regions';
 
 import { Form, PrimaryButton, FieldTextInput, CustomExtendedDataField } from '../../../components';
 
@@ -28,6 +28,7 @@ const getSoleUserTypeMaybe = userTypes =>
 const SignupFormComponent = props => {
   const [currency, setCurrency] = useState(null);
   const [region, setRegion] = useState(null);
+  const [country, setCountry] = useState(null);
   const [promoCode, setPromoCode] = useState(null);
   const [userType, setUserType] = useState(null);
   const [params, setParams] = useState(new URLSearchParams(window.location.search));
@@ -41,6 +42,9 @@ const SignupFormComponent = props => {
         }
         if (userLocationData.region) {
           setRegion(userLocationData.region);
+        }
+        if(userLocationData.country) {
+          setCountry(userLocationData.country);
         }
       } catch (error) {
         console.error('Error fetching user location data:', error);
@@ -82,6 +86,7 @@ const SignupFormComponent = props => {
         userType: userType || getSoleUserTypeMaybe(props.userTypes),
         pub_userCurrency: currency,
         pub_userLocation: region,
+        pub_userCountry: country,
         pub_userPromoCode: promoCode,
         email: params.get('email') ?? '',
         fname: params.get('fname') ?? '',
@@ -166,6 +171,16 @@ const SignupFormComponent = props => {
           .fieldConfig.schemaType='enum';
         userFieldProps.find(field => field.key == 'pub_userLocation')
           .fieldConfig.enumOptions= regions;
+
+        //modify country to be a list of countries
+        if(userFieldProps.find(field => field.key == 'pub_userCountry')){
+
+          userFieldProps.find(field => field.key == 'pub_userCountry')
+            .fieldConfig.schemaType='enum';
+          userFieldProps.find(field => field.key == 'pub_userCountry')
+          .fieldConfig.enumOptions= countries;
+          
+        }
 
         const noUserTypes = !userType && !(userTypes?.length > 0);
         const userTypeConfig = userTypes.find(config => config.userType === userType);

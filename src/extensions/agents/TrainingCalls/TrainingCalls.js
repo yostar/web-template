@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from '../../../util/reactIntl';
+import { FormattedMessage, intlShape } from '../../../util/reactIntl';
 
 import {YoutubeEmbed} from '../../../containers/PageBuilder/Primitives/YoutubeEmbed/YoutubeEmbed';
 import {H2} from '../../../components';
@@ -9,7 +9,7 @@ import PlacesSearch from './PlacesSearch/PlacesSearch';
 import css from './TrainingCalls.module.css';
 
 
-const TrainingCalls = ({ currentUser, youtubeVideoId, onProgressUpdate }) => {
+const TrainingCalls = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) => {
 
     const [placeCount, setPlaceCount] = useState(() => {
         const savedCount = localStorage.getItem('placeCount');
@@ -26,10 +26,12 @@ const TrainingCalls = ({ currentUser, youtubeVideoId, onProgressUpdate }) => {
         //console.log('placeCount', placeCount);
         onProgressUpdate({
             percentage: (placeCount / 10) * 100,
-            message: placeCount > 9 ? `${placeCount} calls made 🎉` : `${placeCount}/10 calls made`
+            message: placeCount > 9 ?   intl.formatMessage({ id: "AgentTraining.callMessageComplete"}, { placeCount }) : 
+                                        intl.formatMessage({ id: "AgentTraining.callMessage" }, { placeCount })
         });
     };
-;
+
+    const userCountry = currentUser?.attributes?.profile?.publicData?.userCountry;
     const userLocation = currentUser?.attributes?.profile?.publicData?.userLocation;
     const userEmail = currentUser?.attributes?.email;
 
@@ -47,7 +49,7 @@ const TrainingCalls = ({ currentUser, youtubeVideoId, onProgressUpdate }) => {
 
         <PlacesSearch 
             onPlaceSelected={handlePlaceSelected}
-            userLocation={userLocation}
+            userLocation={`${userLocation}, ${userCountry}`}
             userEmail={userEmail}
         />
 
@@ -59,6 +61,7 @@ TrainingCalls.propTypes = {
   currentUser: PropTypes.object,
   youtubeVideoId: PropTypes.string.isRequired,
   onProgressUpdate: PropTypes.func,
+  intl: intlShape.isRequired,
 };
 
 export default TrainingCalls; 
