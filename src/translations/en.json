@@ -1232,6 +1232,7 @@
 
   "AgentTraining.backButtonLabel": "Previous",
   "AgentTraining.nextButtonLabel": "Next Step",
+  "AgentTraining.nextButtonCompleteLabel": "Enter",
   "AgentTraining.quizSuccessTitle": "🎉 Success!",
   "AgentTraining.quizSuccessMessage": "You passed the quiz with a score of {score} out of 10.",
 
@@ -1240,5 +1241,14 @@
   "AgentTraining.callTitle": "Your first 10 calls",
   "AgentTraining.searching": "Searching...",
   "AgentTraining.callMessage": "{placeCount}/10 calls made",
-  "AgentTraining.callMessageComplete": "{placeCount} calls made 🎉"
+  "AgentTraining.callMessageComplete": "{placeCount} calls made 🎉",
+
+  "AgentTraining.crmTitle": "CRM Setup",
+  "AgentTraining.crmSignupTitle": "Sign up for a free 14 day trial",
+  "AgentTraining.crmApiKeyTitle": "Connect your Close.com account",
+  "AgentTraining.crmApiKeyButton": "Connect",
+  "AgentTraining.crmApiKeyLoading": "Connecting...",
+  "AgentTraining.crmApiKeySuccess": "Your close.com account is configured 🎉",
+  "AgentTraining.completeTitle": "Your training is complete 🎉",
+  "AgentTraining.completeMessage": "Your journey as a Vending Location Agent is about to begin..."
 }

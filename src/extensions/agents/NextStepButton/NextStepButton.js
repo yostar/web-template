@@ -9,12 +9,18 @@ import { ChevronRight } from 'lucide-react';
 import { FormattedMessage } from '../../../util/reactIntl';
 import { externalEndpoints } from '../config';
 
-const NextStepButton = ({ nextStepReady, currentStep, currentUser }) => {
-  
+const NextStepButton = ({ nextStepReady, currentStep, currentUser, onProgressUpdate }) => {
+
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const lastStep = currentStep === 'complete';
+
+  if(lastStep){
+    nextStepReady = true;
+  }
 
   const handleClick = async () => {
     
@@ -23,16 +29,18 @@ const NextStepButton = ({ nextStepReady, currentStep, currentUser }) => {
 
     const currentStepIndex = trainingSteps.findIndex(s => s.routeName === currentStep);
     const nextStepIndex = currentStepIndex + 1;
-
-    //route name
-    const nextStepRouteName = trainingSteps[nextStepIndex].routeName;
+    
+    const nextStepRouteName = lastStep ? '/listings' : `/agent/training/${trainingSteps[nextStepIndex].routeName}`;
 
     const userTraining = currentUser?.attributes?.profile?.publicData?.training || { step: 0 };
 
     //there's no need to update database nor zapier if user is just revisiting the same step
     if (userTraining.step > currentStepIndex + 1) {
       console.log('user is just revisiting the same step');
-      history.push(`/agent/training/${nextStepRouteName}`);
+      history.push(nextStepRouteName);
+      onProgressUpdate({
+        clearMessage: true
+      });
       setIsLoading(false);
       return;
     }
@@ -48,20 +56,23 @@ const NextStepButton = ({ nextStepReady, currentStep, currentUser }) => {
     } else {
 
       // Mark training as complete
-      userTraining.complete = true;
+      userTraining.completed = true;
       console.log('Training complete');
 
     }
 
     try {
-      dispatch(updateTrainingProfile(userTraining));
+      dispatch(updateTrainingProfile({public: userTraining}));
     
     } catch (error) {
       console.error('Error updating training profile:', error);
       // Handle the error, e.g., show a notification to the user
     }
 
-    history.push(`/agent/training/${nextStepRouteName}`);
+    history.push(nextStepRouteName);
+    onProgressUpdate({
+      clearMessage: true
+    });
     setIsLoading(false);
 
     //call zapier silent webhook inclusive of all the user data
@@ -90,7 +101,15 @@ const NextStepButton = ({ nextStepReady, currentStep, currentUser }) => {
 
   return (
     <Button disabled={!nextStepReady || isLoading} onClick={handleClick}>
-      <FormattedMessage id="AgentTraining.nextButtonLabel" /> <ChevronRight />
+      {lastStep ?
+      <>
+        <FormattedMessage id="AgentTraining.nextButtonCompleteLabel" /> <ChevronRight />
+        </>
+       : 
+        <>
+          <FormattedMessage id="AgentTraining.nextButtonLabel" /> <ChevronRight />
+        </>
+      }
     </Button>
   );
 };
@@ -98,7 +117,8 @@ const NextStepButton = ({ nextStepReady, currentStep, currentUser }) => {
 NextStepButton.propTypes = {
   nextStepReady: PropTypes.bool.isRequired,
   currentStep: PropTypes.string.isRequired,
-  currentUser: PropTypes.object
+  currentUser: PropTypes.object,
+  onProgressUpdate: PropTypes.func.isRequired
 };
 
 export default NextStepButton; 

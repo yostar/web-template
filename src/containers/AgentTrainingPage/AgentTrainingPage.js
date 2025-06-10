@@ -22,6 +22,8 @@ import ProgressBar from '../../extensions/transactionProcesses/components/Progre
 import YouTubePlayer from '../../extensions/agents/VideoPlayer/VideoPlayer';
 import TrainingQuiz from '../../extensions/agents/TrainingQuiz/TrainingQuiz';
 import TrainingCalls from '../../extensions/agents/TrainingCalls/TrainingCalls';
+import TrainingCRM from '../../extensions/agents/TrainingCRM/TrainingCRM';
+import TrainingComplete from '../../extensions/agents/TrainingComplete/TrainingComplete';
 
 import NextStepButton from '../../extensions/agents/NextStepButton/NextStepButton';
 import { trainingSteps, externalIds } from '../../extensions/agents/config';
@@ -42,7 +44,7 @@ export const AgentTrainingPageComponent = props => {
   const progressBarSteps = steps.map(step => step.displayName);
 
   const userTraining = currentUser?.attributes?.profile?.publicData?.training;
-  console.log('userTraining', userTraining);
+  //console.log('userTraining', userTraining);
 
   const progressBarStepInProgress = steps.findIndex(s => s.routeName === step);
 
@@ -100,7 +102,10 @@ export const AgentTrainingPageComponent = props => {
       setNextStepReady(true);
     }
     if(newProgress.message){
-    setProgressMessage(newProgress.message)
+      setProgressMessage(newProgress.message)
+    }
+    if(newProgress.clearMessage){
+      setProgressMessage('')
     }
   };
 
@@ -154,6 +159,23 @@ export const AgentTrainingPageComponent = props => {
                 onProgressUpdate={handleProgressUpdate}
                 intl={intl}
               />
+
+            )}
+
+            {step === 'crm' && (
+              <TrainingCRM
+                currentUser={currentUser}
+                onProgressUpdate={handleProgressUpdate}
+                youtubeVideoId={externalIds.youtubeCRM}
+                intl={intl}
+              />
+            )}
+
+            {step === 'complete' && (
+              <TrainingComplete
+                youtubeVideoId={externalIds.youtubeComplete}
+                intl={intl}
+              />
             )}
 
             <div className={css.navButtonsContainer}>
@@ -174,6 +196,7 @@ export const AgentTrainingPageComponent = props => {
                     nextStepReady={nextStepReady} 
                     currentStep={step} 
                     currentUser={currentUser} 
+                    onProgressUpdate={handleProgressUpdate}
                   />
                 </div>
             </div>

@@ -511,7 +511,7 @@ export const updateUserCurrency = currency => (dispatch, getState, sdk) => {
     });
 };
 
-export const updateTrainingProfile = (trainingData) => (dispatch, getState, sdk) => {
+export const updateTrainingProfile = (data) => (dispatch, getState, sdk) => {
   dispatch(updateProfileRequest());
 
   const queryParams = {
@@ -520,8 +520,20 @@ export const updateTrainingProfile = (trainingData) => (dispatch, getState, sdk)
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
   };
 
+  const bodyData = {};
+ 
+  if (data.public) {
+    bodyData.publicData = { training: data.public };
+  }
+
+  if (data.private) {
+    bodyData.privateData = { training: data.private };
+  }
+
+  console.log('bodyData', bodyData);
+
   const bodyParams = {
-    data: { publicData: { training: trainingData } },
+    data: bodyData,
     queryParams,
   };
 

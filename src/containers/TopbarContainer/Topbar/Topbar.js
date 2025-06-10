@@ -311,7 +311,7 @@ class TopbarComponent extends Component {
             alt={intl.formatMessage({ id: 'Topbar.logoIcon' })}
             linkToExternalSite={config?.topbar?.logoLink}
           />
-          { isAgent && isAgentTraining ? (
+          { isAgent && isAgentTraining && !isAgentTraining.completed ? (
             <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
           ) : (
             <>

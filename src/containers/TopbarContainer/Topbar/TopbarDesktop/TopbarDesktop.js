@@ -184,7 +184,7 @@ const TopbarDesktop = props => {
         appConfig={config}
       />
 
-      { isAgent && isAgentTraining ? (
+      { isAgent && isAgentTraining && !isAgentTraining.completed ? (
           
           <>
             <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
@@ -205,7 +205,9 @@ const TopbarDesktop = props => {
             {profileMenuMaybe}
             {signupLinkMaybe}
             {loginLinkMaybe}
-            <CurrencyDropdown />
+            {!isAgent && (
+              <CurrencyDropdown />
+            )}
 
       </>
       )}
