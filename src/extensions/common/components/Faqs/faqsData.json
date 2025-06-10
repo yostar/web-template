@@ -99,7 +99,7 @@
 
     {
         "question": "What are the fees for selling on Vending Village?",
-        "answer": "You can list locations and services for free. A transaction fee is charged only when you make a sale. We charge a 20% platform fee ($100 minimum) plus 3% transaction fee (for credit card processing) on locations and location finding services. For example, if you list and sell a location for $1,000, you will receive $770 ($1,000, less $200 platform fee, less $30 transaction fee) upon a sale. Location Bids have a minimum $200 platform fee.",
+        "answer": "You can list locations and services for free. A transaction fee is charged only when you make a sale. We charge a 20% platform fee ($100 minimum) plus 3% transaction fee (for credit card processing) on locations and location finding services. For example, if you list and sell a location for $1,000, you will receive $770 ($1,000, less $200 platform fee, less $30 transaction fee) upon a sale. Location Bids have a minimum $200 platform fee. Machines at locations (including ATMs) have a 10% platform fee.",
         "audience": "seller",
         "category": ["payment"]
     },
