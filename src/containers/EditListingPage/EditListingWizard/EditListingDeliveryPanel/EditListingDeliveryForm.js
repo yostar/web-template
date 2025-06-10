@@ -26,6 +26,8 @@ import {
   FieldCheckbox,
 } from '../../../../components';
 
+import { Info } from 'lucide-react';
+
 // Import modules from this directory
 import css from './EditListingDeliveryForm.module.css';
 
@@ -47,6 +49,7 @@ export const EditListingDeliveryFormComponent = props => (
         pristine,
         invalid,
         listingTypeConfig,
+        listingCategoryConfig,
         marketplaceCurrency,
         hasStockInUse,
         saveActionMsg,
@@ -69,7 +72,7 @@ export const EditListingDeliveryFormComponent = props => (
       const { pauseValidation, resumeValidation } = form;
       pauseValidation(false);
       useEffect(() => resumeValidation(), [values]);
-
+      
       const displayShipping = displayDeliveryShipping(listingTypeConfig);
       const displayPickup = displayDeliveryPickup(listingTypeConfig);
       const displayMultipleDelivery = displayShipping && displayPickup;
@@ -109,6 +112,10 @@ export const EditListingDeliveryFormComponent = props => (
         [css.hidden]: !displayShipping,
       });
       const currencyConfig = appSettings.getCurrencyFormatting(marketplaceCurrency);
+
+      //we only show property fields if this is a secured location
+      const showPropertyManagerFields = ['location','location-machine', 'atm-location'].indexOf(listingCategoryConfig.id) >= 0;
+      const propertyManagerFields = ['businessName', 'managerName', 'managerPhone', 'managerEmail'];
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
@@ -181,6 +188,39 @@ export const EditListingDeliveryFormComponent = props => (
               disabled={!pickupEnabled}
             />
           </div>
+
+          {showPropertyManagerFields && (
+            <>
+              <h4 className={css.sectionHeading}>
+                <FormattedMessage id="EditListingDeliveryForm.propertyManagerFieldsHeading" />
+              </h4>
+              <div className={css.propertyManagerNote}>
+                <Info className={css.infoIcon} /> 
+                <FormattedMessage id="EditListingDeliveryForm.propertyManagerNote" />
+              </div>
+
+              {propertyManagerFields.map(fieldName => (
+                <FieldTextInput
+                  key={fieldName}
+                  className={css.input}
+                  type="text"
+                  name={fieldName}
+                  id={`${formId}.${fieldName}`}
+                  label={intl.formatMessage({ id: `EditListingDeliveryForm.${fieldName}` })}
+                  placeholder={intl.formatMessage({
+                    id: `EditListingDeliveryForm.${fieldName}Placeholder`,
+                  })}
+                  validate={
+                    required(
+                      intl.formatMessage({
+                        id: `EditListingDeliveryForm.${fieldName}Required`,
+                      })
+                    )
+                  }
+                />
+              ))}
+            </>
+          )}
 
           <FieldCheckbox
             id={formId ? `${formId}.shipping` : 'shipping'}
@@ -263,16 +303,19 @@ export const EditListingDeliveryFormComponent = props => (
               />
             ) : null}
           </div>
+          <div className={css.buttonWrapper}>
 
-          <Button
-            className={css.submitButton}
-            type="submit"
-            inProgress={submitInProgress}
-            disabled={submitDisabled}
-            ready={submitReady}
-          >
-            {saveActionMsg}
-          </Button>
+            <Button
+              className={css.submitButton}
+              type="submit"
+              inProgress={submitInProgress}
+              disabled={submitDisabled}
+              ready={submitReady}
+            >
+              {saveActionMsg}
+            </Button>
+
+          </div>
         </Form>
       );
     }}
