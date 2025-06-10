@@ -24,14 +24,14 @@ const categoriesExtraConfig = {
   [CATEGORY_ID_ATM_LOCATION]: {
     minimumPrice: 20000,
     providerMinFlatFee: 10000,
-    providerFeePercentage: 20,
+    providerFeePercentage: 10,
     providerCommissionPercentage: 3,
     customerCommissionPercentage: 0,
   },
   [CATEGORY_ID_LOCATION_MACHINE]: {
     minimumPrice: 20000,
     providerMinFlatFee: 10000,
-    providerFeePercentage: 20,
+    providerFeePercentage: 10,
     providerCommissionPercentage: 3,
     customerCommissionPercentage: 0,
   },
