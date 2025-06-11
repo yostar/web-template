@@ -26,6 +26,40 @@
   }
 }
 
+.signupTitle {
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+svg.signupIcon {
+  width: 24px;
+  height: 24px;
+  @media (--viewportMedium) {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.signupSubtitle {
+
+  @media (--viewportMedium) {
+  font-size: 16px;
+  margin-bottom: 20px;
+  }
+}
+
+.agentSignupTopbar {
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  pointer-events: none;
+  position: relative;
+
+  div {
+    margin: auto;
+    justify-content: center;
+  }
+}
+
 /* ================ Tabs & Form ================ */
 
 .tabs {

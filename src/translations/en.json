@@ -1230,6 +1230,10 @@
   "VideoPlayer.videoCountLabel": "Video {currentVideo} of {totalVideos}",
   "VideoPlayer.progressLabel": "Overall Progress: {percentage}%",
 
+  "AuthenticationPage.agentSignupTitle": "Agent Training",
+  "AuthenticationPage.agentSignupSubtitle": "Compelete your profile to begin the training",
+
+
   "AgentTraining.backButtonLabel": "Previous",
   "AgentTraining.nextButtonLabel": "Next Step",
   "AgentTraining.nextButtonCompleteLabel": "Enter",

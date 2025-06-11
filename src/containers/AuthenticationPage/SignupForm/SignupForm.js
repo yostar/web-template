@@ -193,15 +193,12 @@ const SignupFormComponent = props => {
 
         return (
           <Form className={classes} onSubmit={handleSubmit}>
-            { userType &&params.get('userType') ? (
-              <>
-              <label>User Type</label>
-              <h5 className={css.userTypeLabel}>{userTypeLabel}</h5>
+            { userType && params.get('userType') ? (
               <FieldTextInput
                   type="hidden"
                   name="userType"
                 />
-                </>
+
             ) : (
               <FieldSelectUserType
                 name="userType"

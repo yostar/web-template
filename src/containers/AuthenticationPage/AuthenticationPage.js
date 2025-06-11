@@ -34,6 +34,7 @@ import {
   ResponsiveBackgroundImageContainer,
   Modal,
   LayoutSingleColumn,
+  LinkedLogo,
 } from '../../components';
 
 import TopbarContainer from '../../containers/TopbarContainer/TopbarContainer';
@@ -55,17 +56,21 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 import { TOS_ASSET_NAME, PRIVACY_POLICY_ASSET_NAME } from './AuthenticationPage.duck';
 
-import css from './AuthenticationPage.module.css';
 import { FacebookLogo, GoogleLogo } from './socialLoginLogos';
 import { toastSuccess } from '../../extensions/common/components/Toast/Toast';
 import { trainingSteps } from '../../extensions/agents/config';
+import { GraduationCap} from 'lucide-react';
+
+import css from './AuthenticationPage.module.css';
+
 
 // Social login buttons are needed by AuthenticationForms
 export const SocialLoginButtonsMaybe = props => {
   const routeConfiguration = useRouteConfiguration();
   const { isLogin, showFacebookLogin, showGoogleLogin, from, userType } = props;
   const queryParams = new URLSearchParams(window.location.search);
-  const showSocialLogins = (showFacebookLogin || showGoogleLogin) && !queryParams.get('hideSocial');
+  const isAgentSignup = userType === 'agent' || queryParams.get('userType') === 'agent';
+  const showSocialLogins = (showFacebookLogin || showGoogleLogin) && !isAgentSignup;
 
   const getDataForSSORoutes = () => {
     const baseUrl = apiBaseUrl();
@@ -175,6 +180,10 @@ export const AuthenticationForms = props => {
   const signupRouteName = !!preselectedUserType ? 'SignupForUserTypePage' : 'SignupPage';
   const userTypeMaybe = preselectedUserType ? { userType: preselectedUserType } : null;
   const fromState = { state: { ...fromMaybe, ...userTypeMaybe } };
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const isAgentSignup = userType === 'agent' || queryParams.get('userType') === 'agent';
+
   const tabs = [
     {
       text: (
@@ -262,7 +271,14 @@ export const AuthenticationForms = props => {
 
   return (
     <div className={css.content}>
-      <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
+      {isAgentSignup ? (
+        <>
+        <Heading as="h2" rootClassName={css.signupTitle}><GraduationCap className={css.signupIcon} /> <FormattedMessage id="AuthenticationPage.agentSignupTitle" /></Heading>
+        <div className={css.signupSubtitle}><FormattedMessage id="AuthenticationPage.agentSignupSubtitle" /></div>
+        </>
+      ) : (
+        <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
+      )}
       {loginOrSignupError}
 
       {isLogin ? (
@@ -459,6 +475,9 @@ export const AuthenticationPageComponent = props => {
   const config = useConfiguration();
   const history = useHistory();
 
+  const queryParams = new URLSearchParams(window.location.search);
+  const isAgentSignup = queryParams.get('userType') === 'agent';
+
   useEffect(() => {
     // Remove the autherror cookie once the content is saved to state
     // because we don't want to show the error message e.g. after page refresh
@@ -595,8 +614,8 @@ export const AuthenticationPageComponent = props => {
     >
       <LayoutSingleColumn
         mainColumnClassName={css.layoutWrapperMain}
-        topbar={<TopbarContainer className={topbarClasses} />}
-        footer={<FooterContainer />}
+        topbar={isAgentSignup ? <LinkedLogo className={css.agentSignupTopbar} /> : <TopbarContainer className={topbarClasses} />}
+        footer={isAgentSignup ? null : <FooterContainer />}
       >
         <ResponsiveBackgroundImageContainer
           className={css.root}
@@ -604,7 +623,7 @@ export const AuthenticationPageComponent = props => {
           as="section"
           image={config.branding.brandImage}
           sizes="100%"
-          useOverlay
+          useOverlay={false}
         >
           {showEmailVerification ? (
             <EmailVerificationInfo
