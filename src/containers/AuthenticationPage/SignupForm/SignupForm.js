@@ -30,9 +30,9 @@ const SignupFormComponent = props => {
   const [region, setRegion] = useState(null);
   const [country, setCountry] = useState(null);
   const [promoCode, setPromoCode] = useState(null);
-  const [userType, setUserType] = useState(null);
   const [params, setParams] = useState(new URLSearchParams(window.location.search));
 
+  
   useEffect(() => {
     const fetchLocationData = async position => {
       try {
@@ -66,10 +66,6 @@ const SignupFormComponent = props => {
     } else if (cookiePromoCode) {
       setPromoCode(cookiePromoCode);
     }
-
-    if( params.get('userType') && props.userTypes.find(type => type.userType === params.get('userType')) ){
-      setUserType( params.get('userType') )
-    }
     
     /*
     if(fprParam || cookiePromoCode){ 
@@ -83,7 +79,7 @@ const SignupFormComponent = props => {
       {...props}
       mutators={{ ...arrayMutators }}
       initialValues={{
-        userType: userType || getSoleUserTypeMaybe(props.userTypes),
+        userType: props.preselectedUserType || getSoleUserTypeMaybe(props.userTypes),
         pub_userCurrency: currency,
         pub_userLocation: region,
         pub_userCountry: country,

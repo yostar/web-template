@@ -67,9 +67,7 @@ import css from './AuthenticationPage.module.css';
 // Social login buttons are needed by AuthenticationForms
 export const SocialLoginButtonsMaybe = props => {
   const routeConfiguration = useRouteConfiguration();
-  const { isLogin, showFacebookLogin, showGoogleLogin, from, userType } = props;
-  const queryParams = new URLSearchParams(window.location.search);
-  const isAgentSignup = userType === 'agent' || queryParams.get('userType') === 'agent';
+  const { isLogin, showFacebookLogin, showGoogleLogin, from, userType, isAgentSignup } = props;
   const showSocialLogins = (showFacebookLogin || showGoogleLogin) && !isAgentSignup;
 
   const getDataForSSORoutes = () => {
@@ -181,8 +179,7 @@ export const AuthenticationForms = props => {
   const userTypeMaybe = preselectedUserType ? { userType: preselectedUserType } : null;
   const fromState = { state: { ...fromMaybe, ...userTypeMaybe } };
 
-  const queryParams = new URLSearchParams(window.location.search);
-  const isAgentSignup = userType === 'agent' || queryParams.get('userType') === 'agent';
+  const isAgentSignup = preselectedUserType === 'agent';
 
   const tabs = [
     {
@@ -299,6 +296,7 @@ export const AuthenticationForms = props => {
         isLogin={isLogin}
         showFacebookLogin={showFacebookLogin}
         showGoogleLogin={showGoogleLogin}
+        isAgentSignup={isAgentSignup}
         {...fromMaybe}
         {...userTypeMaybe}
       />
@@ -475,8 +473,7 @@ export const AuthenticationPageComponent = props => {
   const config = useConfiguration();
   const history = useHistory();
 
-  const queryParams = new URLSearchParams(window.location.search);
-  const isAgentSignup = queryParams.get('userType') === 'agent';
+  const isAgentSignup = props.params?.userType === 'agent';
 
   useEffect(() => {
     // Remove the autherror cookie once the content is saved to state
