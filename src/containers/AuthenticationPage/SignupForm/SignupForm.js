@@ -36,7 +36,7 @@ const SignupFormComponent = props => {
   const [phoneNumber, setPhoneNumber] = useState(null);
 
   let params = null;
-  params = new URLSearchParams(window.location.search);
+  params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
 
 
   useEffect(() => {
