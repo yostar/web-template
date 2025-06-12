@@ -35,11 +35,11 @@ const SignupFormComponent = props => {
   const [lastName, setLastName] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
 
-  let params = null;
-  params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
-
 
   useEffect(() => {
+
+    const params = new URLSearchParams(window.location.search);
+    
     const fetchLocationData = async position => {
       try {
         const userLocationData = await getUserLocationData(position);
@@ -207,21 +207,12 @@ const SignupFormComponent = props => {
 
         return (
           <Form className={classes} onSubmit={handleSubmit}>
-            { userType && params.get('userType') ? (
-              <FieldTextInput
-                  type="hidden"
-                  name="userType"
-                />
-
-            ) : (
-              <FieldSelectUserType
+            <FieldSelectUserType
                 name="userType"
                 userTypes={userTypes}
                 hasExistingUserType={!!preselectedUserType}
                 intl={intl}
               />
-            
-            )}
 
             {showDefaultUserFields ? (
               <div className={css.defaultUserFields}>
