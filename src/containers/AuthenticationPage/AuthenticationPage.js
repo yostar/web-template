@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { bool, func, object, oneOf, shape } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter, Redirect, useHistory } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
@@ -471,7 +471,6 @@ export const AuthenticationPageComponent = props => {
   const [authInfo, setAuthInfo] = useState(getAuthInfoFromCookies());
   const [authError, setAuthError] = useState(getAuthErrorFromCookies());
   const config = useConfiguration();
-  const history = useHistory();
 
   const isAgentSignup = props.params?.userType === 'agent';
 
@@ -551,22 +550,17 @@ export const AuthenticationPageComponent = props => {
     }
   }, [isAuthenticated, currentUserLoaded, location, intl]);
 
-  /*
-  useEffect(() => {
-    if (isAuthenticated && currentUserLoaded) {
-      const userData = currentUser?.attributes?.profile?.publicData;
-      if (userData?.training) {
-        const currentStepIndex = userData?.training?.step - 1;
-        const currentStepRouteName = trainingSteps[currentStepIndex].routeName;
-        history.push(`/agent/training/${currentStepRouteName}`);
-      } else if (from) {
-        history.push(from);
-      } else {
-        history.push('/');
-      }
+  
+  //custom agent redirect
+  if (isAuthenticated && currentUserLoaded) {
+    const userData = currentUser?.attributes?.profile?.publicData;
+    if (userData?.training) {
+      const currentStepIndex = userData?.training?.step - 1;
+      const currentStepRouteName = trainingSteps[currentStepIndex].routeName;
+      return <Redirect to={`/agent/training/${currentStepRouteName}`} />;
     }
-  }, [isAuthenticated, currentUserLoaded, from, history]);
-*/
+  }
+  
 
   // Move any conditional returns after hooks
   if (isAuthenticated && from) {
