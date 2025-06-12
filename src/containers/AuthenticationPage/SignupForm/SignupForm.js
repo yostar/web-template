@@ -30,9 +30,9 @@ const SignupFormComponent = props => {
   const [region, setRegion] = useState(null);
   const [country, setCountry] = useState(null);
   const [promoCode, setPromoCode] = useState(null);
-  const [params, setParams] = useState(new URLSearchParams(window.location.search));
 
-  
+  const params = new URLSearchParams(window.location.search);
+
   useEffect(() => {
     const fetchLocationData = async position => {
       try {
