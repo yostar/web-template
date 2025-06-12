@@ -551,6 +551,7 @@ export const AuthenticationPageComponent = props => {
     }
   }, [isAuthenticated, currentUserLoaded, location, intl]);
 
+  /*
   useEffect(() => {
     if (isAuthenticated && currentUserLoaded) {
       const userData = currentUser?.attributes?.profile?.publicData;
@@ -565,6 +566,7 @@ export const AuthenticationPageComponent = props => {
       }
     }
   }, [isAuthenticated, currentUserLoaded, from, history]);
+*/
 
   // Move any conditional returns after hooks
   if (isAuthenticated && from) {
