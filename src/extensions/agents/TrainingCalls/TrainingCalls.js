@@ -17,17 +17,14 @@ const TrainingCalls = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) 
     });
 
     const handlePlaceSelected = (place) => {
-        //console.log('Selected place:', place);
-        setPlaceCount(prevCount => {
-            const newCount = prevCount + 1;
-            localStorage.setItem('placeCount', newCount);
-            return newCount;
-        });
-        //console.log('placeCount', placeCount);
+        const newCount = placeCount + 1;
+        setPlaceCount(newCount);
+        localStorage.setItem('placeCount', newCount);
+
         onProgressUpdate({
-            percentage: (placeCount / 10) * 100,
-            message: placeCount > 9 ?   intl.formatMessage({ id: "AgentTraining.callMessageComplete"}, { placeCount }) : 
-                                        intl.formatMessage({ id: "AgentTraining.callMessage" }, { placeCount })
+            percentage: (newCount / 10) * 100,
+            message: newCount > 9 ?   intl.formatMessage({ id: "AgentTraining.callMessageComplete"}, { placeCount : newCount }) : 
+                                        intl.formatMessage({ id: "AgentTraining.callMessage" }, { placeCount : newCount })
         });
     };
 
