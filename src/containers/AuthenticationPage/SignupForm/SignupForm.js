@@ -30,8 +30,14 @@ const SignupFormComponent = props => {
   const [region, setRegion] = useState(null);
   const [country, setCountry] = useState(null);
   const [promoCode, setPromoCode] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
-  const params = new URLSearchParams(window.location.search);
+  let params = null;
+  params = new URLSearchParams(window.location.search);
+
 
   useEffect(() => {
     const fetchLocationData = async position => {
@@ -45,6 +51,18 @@ const SignupFormComponent = props => {
         }
         if(userLocationData.country) {
           setCountry(userLocationData.country);
+        }
+        if(params.get('email')){
+          setEmail(params.get('email'));
+        }
+        if(params.get('fname')){
+          setFirstName(params.get('fname'));
+        }
+        if(params.get('lname')){
+          setLastName(params.get('lname'));
+        }
+        if(params.get('phoneNumber')){
+          setPhoneNumber(params.get('phoneNumber'));
         }
       } catch (error) {
         console.error('Error fetching user location data:', error);
@@ -84,10 +102,10 @@ const SignupFormComponent = props => {
         pub_userLocation: region,
         pub_userCountry: country,
         pub_userPromoCode: promoCode,
-        email: params.get('email') ?? '',
-        fname: params.get('fname') ?? '',
-        lname: params.get('lname') ?? '',
-        phoneNumber: params.get('phoneNumber') ?? '',
+        email: email,
+        fname: firstName,
+        lname: lastName,
+        phoneNumber: phoneNumber,
       }}
       render={formRenderProps => {
         const {

@@ -620,7 +620,7 @@ export const AuthenticationPageComponent = props => {
           as="section"
           image={config.branding.brandImage}
           sizes="100%"
-          useOverlay
+          useOverlay={false}
         >
           {showEmailVerification ? (
             <EmailVerificationInfo
