@@ -5,6 +5,7 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
+import { IconSpinner } from '../../components';
 
 import {
     H1,
@@ -73,6 +74,7 @@ export const AgentTrainingPageComponent = props => {
   
   const [nextStepReady, setNextStepReady] = useState(userTraining?.step > currentStepNumber); 
   const [progressMessage, setProgressMessage] = useState('');
+  const [progressSpinner, setProgressSpinner] = useState(false);
   
   //console.log('nextStepReady', nextStepReady, userTraining?.step, currentStepNumber);
   //console.log('Current step from URL:', step);
@@ -89,7 +91,7 @@ export const AgentTrainingPageComponent = props => {
   const score = queryParams.get('score') ? parseInt(queryParams.get('score'), 10) : 0;
 
   useEffect(() => {
-    if (userTraining?.step > currentStepNumber || (step === 'quiz' && score >= 8)) {
+    if (userTraining?.step > currentStepNumber || (step === 'quiz' && score >= 8) || (step === 'crm' && currentUser?.attributes?.profile?.privateData?.training?.closeApiKey)) {
       setNextStepReady(true);
     } else {
       setNextStepReady(false);
@@ -106,7 +108,10 @@ export const AgentTrainingPageComponent = props => {
     }
     if(newProgress.clearMessage){
       setProgressMessage('')
+      setProgressSpinner(false);
     }
+    setProgressSpinner(newProgress.spinner || false);
+    
   };
 
   return (
@@ -189,7 +194,13 @@ export const AgentTrainingPageComponent = props => {
 
                 </SecondaryButton> 
                 
-                <div className={css.progressMessage}>{progressMessage}</div>
+                <div className={css.progressMessage}>
+                
+                  {progressSpinner && <IconSpinner className={css.progressSpinner} />}
+                
+                  {progressMessage}
+                  
+                  </div>
                 
                 <div className={css.nextButton}>
                   <NextStepButton

@@ -1248,11 +1248,11 @@
   "AgentTraining.callMessageComplete": "{placeCount} calls made 🎉",
 
   "AgentTraining.crmTitle": "CRM Setup",
-  "AgentTraining.crmSignupTitle": "Sign up for a free 14 day trial",
-  "AgentTraining.crmApiKeyTitle": "Connect your Close.com account",
+  "AgentTraining.crmSignupTitle": "Get your free trial of ",
+  "AgentTraining.crmApiKeyTitle": "Enter your API key",
   "AgentTraining.crmApiKeyButton": "Connect",
   "AgentTraining.crmApiKeyLoading": "Connecting...",
-  "AgentTraining.crmApiKeySuccess": "Your close.com account is configured 🎉",
+  "AgentTraining.crmApiKeySuccess": "Your Close CRM account is connected 🎉",
   "AgentTraining.completeTitle": "Your training is complete 🎉",
   "AgentTraining.completeMessage": "Your journey as a Vending Location Agent is about to begin..."
 }
