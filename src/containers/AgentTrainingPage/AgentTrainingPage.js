@@ -91,7 +91,11 @@ export const AgentTrainingPageComponent = props => {
   const score = queryParams.get('score') ? parseInt(queryParams.get('score'), 10) : 0;
 
   useEffect(() => {
-    if (userTraining?.step > currentStepNumber || (step === 'quiz' && score >= 8) || (step === 'crm' && currentUser?.attributes?.profile?.privateData?.training?.closeApiKey)) {
+    if (
+      userTraining?.step > currentStepNumber || 
+      (step === 'quiz' && score >= 8) || 
+      (step === 'crm' && currentUser?.attributes?.profile?.privateData?.training?.closeApiKey)
+    ) {
       setNextStepReady(true);
     } else {
       setNextStepReady(false);

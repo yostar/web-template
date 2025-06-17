@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import css from './TrainingQuiz.module.css';
 
 const TrainingQuiz = ({ quizId, currentUser }) => {
-    console.log('currentUser', currentUser);
+   
+  // console.log('currentUser', currentUser);
   const formUrl = `https://form.jotform.com/${quizId}?email=${encodeURIComponent(currentUser?.attributes?.email)}`;
 
   return (
