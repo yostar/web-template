@@ -47,3 +47,11 @@
 .bottomWrapper {
   composes: marketplaceModalBottomWrapper from global;
 }
+
+.userTypeLabel {
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--colorGrey900);
+}

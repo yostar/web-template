@@ -133,6 +133,8 @@ const TopbarMobileMenu = props => {
   };
   const inboxTab = currentUserHasListings ? 'sales' : 'orders';
 
+  const isAgent = user.attributes.profile.publicData?.userType === 'agent';
+  
   return (
     <div className={css.root}>
       <AvatarLarge className={css.avatar} user={currentUser} />
@@ -179,6 +181,16 @@ const TopbarMobileMenu = props => {
           >
             <FormattedMessage id="TopbarMobileMenu.accountSettingsLink" />
           </NamedLink>
+          {isAgent && (
+            <NamedLink
+              className={classNames(css.navigationLink, currentPageClass('AgentTrainingPage'))}
+              name="AgentTrainingPage"
+              params={{ step: 'videos' }}
+            >
+              <FormattedMessage id="TopbarButton.agentTraining" />
+            </NamedLink>
+          )}
+          
         </div>
         <div className={css.customLinksWrapper}>{extraLinks}</div>
         <div className={css.spacer} />
