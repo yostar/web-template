@@ -60,7 +60,8 @@ const InboxLink = ({ notificationCount, currentUserHasListings }) => {
   );
 };
 
-const ProfileMenu = ({ currentPage, currentUser, onLogout, isAgent, isAgentTraining }) => {
+const ProfileMenu = ({ currentPage, currentUser, onLogout }) => {
+
   const currentPageClass = page => {
     const isAccountSettingsPage =
       page === 'AccountSettingsPage' && ACCOUNT_SETTINGS_PAGES.includes(currentPage);
@@ -113,17 +114,6 @@ const ProfileMenu = ({ currentPage, currentUser, onLogout, isAgent, isAgentTrain
           </NamedLink>
         </MenuItem>
         
-        {isAgent && (
-          <MenuItem key="AgentTrainingPage">
-            <NamedLink
-            params={{ step: 'videos' }}
-            className={classNames(css.menuLink, currentPageClass('AgentTrainingPage'))}
-            name="AgentTrainingPage">
-              <FormattedMessage id="TopbarButton.agentTraining" />
-            </NamedLink>
-          </MenuItem>
-        )}
-
         <MenuItem key="logout">
           <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
             <span className={css.menuItemBorder} />
@@ -174,7 +164,7 @@ const TopbarDesktop = props => {
   ) : null;
 
   const profileMenuMaybe = authenticatedOnClientSide ? (
-    <ProfileMenu currentPage={currentPage} currentUser={currentUser} onLogout={onLogout} isAgent={isAgent} isAgentTraining={isAgentTraining} />
+    <ProfileMenu currentPage={currentPage} currentUser={currentUser} onLogout={onLogout} />
   ) : null;
 
   const signupLinkMaybe = isAuthenticatedOrJustHydrated ? null : <SignupLink />;
@@ -201,7 +191,7 @@ const TopbarDesktop = props => {
         appConfig={config}
       />
 
-      { isAgent && isAgentTraining && !isAgentTraining.completed ? (
+      { isAgent && isAgentTraining && !isAgentTraining?.completed ? (
           
           <>
             <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
@@ -222,6 +212,7 @@ const TopbarDesktop = props => {
             {profileMenuMaybe}
             {signupLinkMaybe}
             {loginLinkMaybe}
+            
             {!isAgent && (
               <CurrencyDropdown />
             )}
