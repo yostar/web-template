@@ -322,7 +322,9 @@ class TopbarComponent extends Component {
               >
                 <SearchIcon className={css.searchMenuIcon} />
               </Button>
-              <CurrencyDropdown />
+              {!isAgent && (
+                <CurrencyDropdown />
+              )}
           </>
           )}
         </div>

@@ -35,7 +35,7 @@ const NextStepButton = ({ nextStepReady, currentStep, currentUser, onProgressUpd
     const userTraining = currentUser?.attributes?.profile?.publicData?.training || { step: 0 };
 
     //there's no need to update database nor zapier if user is just revisiting the same step
-    if (userTraining.step > currentStepIndex + 1) {
+    if (userTraining.completed || userTraining.step > currentStepIndex + 1) {
       console.log('user is just revisiting the same step');
       history.push(nextStepRouteName);
       onProgressUpdate({
