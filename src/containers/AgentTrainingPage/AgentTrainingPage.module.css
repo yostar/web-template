@@ -22,16 +22,28 @@
   
     @media (--viewportMedium) {
       max-width: calc(var(--contentMaxWidth) + 72px);
-      padding: 0 36px 36px;
+      padding: 0 36px;
     }
   }
 
-.navButtonsContainer{  
+.navButtonsContainer{
+  margin: 40px 0;
+  @media (--viewportMedium) {
+    position: sticky;
+    bottom: 0px;
+    background: rgba(249,249,249,0.9);
+    border-top: 1px solid var(--colorGrey100);
+    padding: 20px 0 40px;
+    margin: 20px 0;
+  }
+
+}
+
+.navButtons{  
   display:flex;
   flex-direction: row;
   justify-content: space-between;
   height: 40px;
-  margin: 20px 0;
 }
 
 .backButton, .nextButton {
@@ -40,7 +52,7 @@
 
 .backButton {
   border-color: var(--colorGrey100);
-  background-color: transparent;
+  background-color: var(--colorGrey50);
   &:hover {
     background-color: white;
   }

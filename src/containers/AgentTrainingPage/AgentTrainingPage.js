@@ -188,32 +188,34 @@ export const AgentTrainingPageComponent = props => {
             )}
 
             <div className={css.navButtonsContainer}>
-                
-                <SecondaryButton 
-                disabled={currentStepNumber === 1} 
-                className={css.backButton}
-                onClick={handleBackClick}
-                > 
-                   <ChevronLeft /> <FormattedMessage id="AgentTraining.backButtonLabel" />
-
-                </SecondaryButton> 
-                
-                <div className={css.progressMessage}>
-                
-                  {progressSpinner && <IconSpinner className={css.progressSpinner} />}
-                
-                  {progressMessage}
+              <div className={css.navButtons}>
                   
+                  <SecondaryButton 
+                  disabled={currentStepNumber === 1} 
+                  className={css.backButton}
+                  onClick={handleBackClick}
+                  > 
+                    <ChevronLeft /> <FormattedMessage id="AgentTraining.backButtonLabel" />
+
+                  </SecondaryButton> 
+                  
+                  <div className={css.progressMessage}>
+                  
+                    {progressSpinner && <IconSpinner className={css.progressSpinner} />}
+                  
+                    {progressMessage}
+                    
+                    </div>
+                  
+                  <div className={css.nextButton}>
+                    <NextStepButton
+                      nextStepReady={nextStepReady} 
+                      currentStep={step} 
+                      currentUser={currentUser} 
+                      onProgressUpdate={handleProgressUpdate}
+                    />
                   </div>
-                
-                <div className={css.nextButton}>
-                  <NextStepButton
-                    nextStepReady={nextStepReady} 
-                    currentStep={step} 
-                    currentUser={currentUser} 
-                    onProgressUpdate={handleProgressUpdate}
-                  />
-                </div>
+              </div>
             </div>
 
           </div>

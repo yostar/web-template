@@ -10,9 +10,9 @@ export const externalIds = {
     youtubePlaylist: 'PLrinyDyRpJyVbuG40VrxFmFwOBCqU1R8p',
     jotformQuiz: '251543943185057',
     jotformCall: '251553597853065',
-    youtubeCall: 'X3PbJcXcFgg',
-    youtubeCRM: 'X3PbJcXcFgg',
-    youtubeComplete: 'X3PbJcXcFgg'
+    youtubeCall: 'dS-4W-nKPpg',
+    youtubeCRM: 'PvUHQIdhxLw',
+    youtubeComplete: 'E5UUebxx_6w'
 };
 
 export const externalEndpoints = {

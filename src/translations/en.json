@@ -1241,6 +1241,7 @@
   "AgentTraining.quizSuccessMessage": "You passed the quiz with a score of {score} out of 10.",
 
   "AgentTraining.searchTitle": "Search for Tier 3 places near you",
+  "AgentTraining.searchSubtitle": "e.g. Laundromats, Barbershops, Auto repair shops, Nail salons, Tattoo shops, etc.",
   "AgentTraining.callButtonLabel": "Call",
   "AgentTraining.callTitle": "Your first 10 calls",
   "AgentTraining.searching": "Searching...",

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal,Button, SecondaryButton } from '../../../../components';
+import { Modal,Button, SecondaryButton, IconSpinner } from '../../../../components';
 import { FormattedMessage } from '../../../../util/reactIntl';
 import classNames from 'classnames';
 import { Phone, Search } from 'lucide-react';
@@ -99,6 +99,8 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
   return (
     <div className={css.placesSearchContainer}>
         <div className={css.searchTitle}><FormattedMessage id="AgentTraining.searchTitle" /></div>
+        <div className={css.searchSubtitle}><FormattedMessage id="AgentTraining.searchSubtitle" /></div>
+
         <div className={css.searchBoxContainer}>
             <input
                 type="text"
@@ -112,13 +114,16 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
             onClick={handleSearch} className={css.searchButton}
             disabled={isSearching}
             >
-                <Search/>
+                <Search className={css.searchIcon}/>
             </Button>
         </div>
 
         <div className={css.resultsContainer}>
             {isSearching ? (
-                <div className={css.searching}><FormattedMessage id="AgentTraining.searching" /></div>
+                <div className={css.searching}>
+                  <IconSpinner className={css.progressSpinner} />
+                  <FormattedMessage id="AgentTraining.searching" />
+                </div>
             ) : 
 
                 results.map((result, index) => {
