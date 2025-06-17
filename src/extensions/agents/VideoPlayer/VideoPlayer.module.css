@@ -7,9 +7,12 @@
     text-align: center;
     margin:  20px;
     opacity: 0;
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.1;
 
     @media (--viewportMedium) {
+        margin-top:40px;
         font-size: 20px;
     }
 
