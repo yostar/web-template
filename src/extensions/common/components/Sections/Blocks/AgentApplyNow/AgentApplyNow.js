@@ -27,7 +27,7 @@ const [promoCode, setPromoCode] = useState(null);
     return (
         <div className={css.root}>
             <ModalIframeButton 
-                iframeUrl={`https://link.vendingvillage.com/agent-application-form?promoCode=${promoCode}`} 
+                iframeUrl={`https://link.vendingvillage.com/agent-training-signup?promoCode=${promoCode}`} 
                 buttonLabel={<FormattedMessage id="AgentApplyNow.buttonLabel" />} 
                 icon={FilePenLine}
                 buttonClassName="primaryButton"

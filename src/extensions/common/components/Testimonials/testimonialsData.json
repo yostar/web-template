@@ -52,7 +52,7 @@
         "name": "Zach V",
         "title": "Location Agent",
         "avatar": "https://sharetribe.imgix.net/66dcc19c-aa28-414e-aba4-bd3f5bfb9298/67f020b9-c87f-4f1c-9742-fb2347370fad?auto=format&crop=edges&fit=crop&h=240&w=240&s=0aaffc5150405afc918b53fe47057a08",
-        "testimonial": "Within two weeks of joining, I closed my first sale and made $400. It’s a great way to earn extra income fast!",
+        "testimonial": "Within two weeks of joining, I closed my first sale and made $400. It's a great way to earn extra income fast!",
         "profileID": "67f0203c-c5b2-431c-b385-79b30f4464c0",
         "category": ["recruiting"]
       },
@@ -63,5 +63,26 @@
         "testimonial": "I sold 5 locations and made $1,700 in my first month — working very part-time! It's easier than I expected.",
         "profileID": "67e6deeb-53ee-42db-96a6-b26f6d674f2e",
         "category": ["recruiting"]
-      }
+      },
+    {
+        "name": "Stan",
+        "title": "Property Manager",
+        "avatar": "https://sharetribe-assets.imgix.net/665d2413-bb2c-4976-a79b-92874b1868bb/raw/b9/0d0993ab251bc5ef199892ce5e18b87fad9d63?auto=format&crop=edges&fit=crop&h=2400&w=2400&s=2a68d37cab5d60934cde51dcff3284d8",
+        "testimonial": "Working with Vending Village has been great. The installation was seamless, and our team loves being able to grab something quick - there aren't a lot of options around here.",
+        "category": ["free-machine"]
+    },
+    {
+        "name": "Mark",
+        "title": "Facility Manager",
+        "avatar": "https://sharetribe-assets.imgix.net/665d2413-bb2c-4976-a79b-92874b1868bb/raw/5b/7102812f5eb291810abf18a1d9ad63a38374c0?auto=format&crop=edges&fit=crop&h=2400&w=2400&s=7712af2242773e1cdb96b79b895f6259",
+        "testimonial": "Our staff and customers are pleased with our combo machine. The setup was quick, and Arun is always responsive to our needs. Vending Village delivered as promised.",
+        "category": ["free-machine"]
+    },
+    {
+        "name": "Linda",
+        "title": "Community Manager",
+        "avatar": "https://sharetribe-assets.imgix.net/665d2413-bb2c-4976-a79b-92874b1868bb/raw/82/cefd3692b0f04e49b44f2c88bdb7b277451c9c?auto=format&crop=edges&fit=crop&h=2400&w=2400&s=05aa834621d6d22febdd54d01cad8f78",
+        "testimonial": "Vending Village made the process so easy. The machine is always stocked with popular items, and our residents appreciate the convenience. Highly recommend their service!",
+        "category": ["free-machine"]
+    }
   ]

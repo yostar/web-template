@@ -9,7 +9,7 @@ const EmailVerificationBanner = () => {
   const history = useHistory();
   const location = useLocation();
 
-  if (location.pathname === '/account/contact-details' || location.pathname === '/signup') {
+  if (location.pathname === '/account/contact-details' || location.pathname === '/signup' || location.pathname.includes('/agent/training')) {
     return null;
   }
 

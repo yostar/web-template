@@ -7,6 +7,7 @@
 .contentContainer {
   composes: marketplaceModalRootStyles from global;
   min-height: calc(100vh - 60px);
+  background-color: var(--colorLightBackground);
   height: auto;
 
   @media (--viewportMedium) {
@@ -23,6 +24,39 @@
     margin-top: 5vh;
     margin-bottom: 7.5vh;
     min-height: 700px;
+  }
+}
+
+.signupTitle {
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+svg.signupIcon {
+  width: 24px;
+  height: 24px;
+  @media (--viewportMedium) {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.signupSubtitle {
+
+  @media (--viewportMedium) {
+  font-size: 16px;
+  margin-bottom: 20px;
+  }
+}
+
+.agentSignupTopbar {
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+
+  div {
+    margin: auto;
+    justify-content: center;
   }
 }
 

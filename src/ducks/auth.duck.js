@@ -211,7 +211,11 @@ export const signup = params => (dispatch, getState, sdk) => {
     return Promise.reject(new Error('Login or logout already in progress'));
   }
   dispatch(signupRequest());
-  // Note: params are already structured on AuthenticationPage (handleSubmitSignup)
+
+  // Add metadata for 'agent' user type
+  if (params.publicData.userType === 'agent') {
+    params.publicData.training = { step: 1, completed: false };
+  }
 
   // We must login the user if signup succeeds since the API doesn't
   // do that automatically.
