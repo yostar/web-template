@@ -555,9 +555,14 @@ export const AuthenticationPageComponent = props => {
   if (isAuthenticated && currentUserLoaded) {
     const userData = currentUser?.attributes?.profile?.publicData;
     if (userData?.training) {
-      const currentStepIndex = userData?.training?.step - 1;
-      const currentStepRouteName = trainingSteps[currentStepIndex].routeName;
-      return <Redirect to={`/agent/training/${currentStepRouteName}`} />;
+
+      if(userData?.training?.completed) {
+        return <Redirect to={`/listings`} />;
+      } else {
+        const currentStepIndex = userData?.training?.step - 1;
+        const currentStepRouteName = trainingSteps[currentStepIndex].routeName;
+        return <Redirect to={`/agent/training/${currentStepRouteName}`} />;
+      }
     }
   }
   
