@@ -15,3 +15,15 @@
 .priceCurrencyInvalid {
   color: var(--colorFail);
 }
+
+svg.infoIcon {
+  margin-right: 5px;
+  width: 13px;
+  height: 13px;
+}
+
+.locationNote {
+  color: var(--colorGrey500);
+  margin-bottom: 40px;
+  font-size: 13px;
+}
