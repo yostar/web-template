@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from '../../../util/reactIntl';
 
+import { SecondaryButton } from '../../../components';
+
 import css from './VideoPlayer.module.css';
 
 const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
@@ -9,31 +11,125 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
   const [progress, setProgress] = useState({ currentVideo: 0, totalVideos: 0, percentage: 0 });
   const [showProgress, setShowProgress] = useState(false);
   const [player, setPlayer] = useState(null);
+  const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
     let progressInterval;
 
     const initializePlayer = () => {
-      const newPlayer = new YT.Player('player', {
-        videoId: videoId,
-        playerVars: {
-          listType: 'playlist',
-          list: playlistId,
-          enablejsapi: 1,
-          rel: 0,
-          controls: 1,
-          showinfo: 0,
-          loop: 0,
-          modestbranding: 1,
-          playsinline: 1,
-          autoplay: 0,
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
+      console.log('initializePlayer', videoId, playlistId);
+      
+      // Check if we've already tried reloading too many times
+      const reloadAttempts = parseInt(localStorage.getItem('youtubeReloadAttempts') || '0');
+      if (reloadAttempts >= 2) {
+        console.log('Too many reload attempts, showing fallback');
+        setShowFallback(true);
+        localStorage.removeItem('youtubeReloadAttempts');
+        return;
+      }
+      
+      // Validate video ID before creating player
+      if (!videoId || typeof videoId !== 'string' || videoId.trim() === '') {
+        console.error('Invalid video ID provided');
+        return;
+      }
+
+      try {
+        const newPlayer = new YT.Player('player', {
+          videoId: videoId,
+          playerVars: {
+            listType: 'playlist',
+            list: playlistId,
+            enablejsapi: 1,
+            rel: 0,
+            controls: 1,
+            showinfo: 0,
+            loop: 0,
+            modestbranding: 1,
+            playsinline: 1,
+            autoplay: 0,
+            origin: window.location.origin,
+            host: 'https://www.youtube-nocookie.com',
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError
+          }
+        });
+        setPlayer(newPlayer);
+        
+        // Clear reload attempts on successful initialization
+        localStorage.removeItem('youtubeReloadAttempts');
+      } catch (err) {
+        console.error('Error initializing YouTube player:', err);
+        
+        // Check if this is the specific "Invalid video id" error
+        if (err.message && err.message.includes('Invalid video id')) {
+          console.log('Detected "Invalid video id" error, clearing YouTube cookies and reloading...');
+          
+          // Increment reload attempts
+          const currentAttempts = parseInt(localStorage.getItem('youtubeReloadAttempts') || '0');
+          localStorage.setItem('youtubeReloadAttempts', (currentAttempts + 1).toString());
+          
+          // Clear YouTube cookies
+          clearYouTubeCookies();
+          
+          // Reload the page after a short delay
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          // For other errors, just show the fallback
+          setShowFallback(true);
         }
-      });
-      setPlayer(newPlayer);
+      }
+    };
+
+    const clearYouTubeCookies = () => {
+      try {
+        // Get all cookies on the current domain
+        const cookies = document.cookie.split(';');
+        cookies.forEach(cookie => {
+          const [name] = cookie.split('=');
+          const cookieName = name.trim();
+          
+          // Clear the specific YouTube cookies that are most likely to cause the "Invalid video id" error
+          if (cookieName && (
+            cookieName.startsWith('__Secure-') ||
+            cookieName.startsWith('VISITOR_INFO') ||
+            cookieName.startsWith('LOGIN_INFO') ||
+            cookieName === 'GPS' ||
+            cookieName === 'PREF' ||
+            cookieName === 'YSC' ||
+            cookieName === 'VISITOR_PRIVACY_METADATA'
+          )) {
+            // Delete cookie by setting expiration to past date on current domain
+            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+          }
+        });
+        
+        console.log('YouTube cookies cleared from current domain');
+      } catch (e) {
+        console.warn('Error clearing YouTube cookies:', e);
+      }
+    };
+
+    const onPlayerError = (event) => {
+      console.error('YouTube player error event:', event);
+      
+      // Silently retry once after a short delay
+      setTimeout(() => {
+        if (player) {
+          try {
+            player.destroy();
+          } catch (e) {
+            console.warn('Error destroying player:', e);
+          }
+        }
+        setPlayer(null);
+        initializePlayer();
+      }, 3000);
     };
 
     const onPlayerReady = (event) => {
@@ -54,7 +150,6 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
             titleRef.current.style.transition = 'opacity 1s';
             titleRef.current.style.opacity = 1;
           }
-
         }, 1000);
       }
       
@@ -140,10 +235,14 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
   }, [videoId, playlistId, onProgressUpdate]);
 
   const handleOverlayClick = () => {
-    //console.log('handleOverlayClick', player);
     if (player && typeof player.playVideo === 'function') {
       player.playVideo();
     }
+  };
+
+  const handleFallbackClick = () => {
+    window.open(`https://www.youtube.com/playlist?list=${playlistId}`, '_blank');
+    onProgressUpdate({ percentage: 100, message: 'Continue when you are done watching the videos on YouTube' });
   };
 
   return (
@@ -167,12 +266,22 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
                 </>
             )}
       </div>
+      {showFallback && (
+        <div className={css.fallback}>
+          We had a problem loading the video. 
+          <SecondaryButton onClick={handleFallbackClick}>
+            Watching the videos on YouTube
+          </SecondaryButton>
+        </div>
+      )}
       <div className={css.playerWrapper}>
         <div id="player" className={css.player}></div>
         <div className={css.overlayTop}></div>
         <div className={css.overlayBottom}></div>
         <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
       </div>
+
+      
     </div>
   );
 };

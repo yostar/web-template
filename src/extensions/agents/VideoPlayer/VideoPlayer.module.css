@@ -70,3 +70,12 @@
     width: calc(100% - 100px);
     height: 100px;
 }
+
+.fallback {
+   max-width: 600px;
+   padding: 20px;
+   background-color: var(--colorGrey100);
+   margin: 20px auto;
+
+   
+}
