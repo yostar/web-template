@@ -79,9 +79,9 @@ const SignupFormComponent = props => {
     //if the value is set, make the field readonly
     const fprParam = params.get('fpr');
     const cookiePromoCode = Cookies.get('_fprom_ref');
-    if (fprParam) {
+    if (fprParam && fprParam !== 'null') {
       setPromoCode(fprParam);
-    } else if (cookiePromoCode) {
+    } else if (cookiePromoCode && cookiePromoCode !== 'null') {
       setPromoCode(cookiePromoCode);
     }
     

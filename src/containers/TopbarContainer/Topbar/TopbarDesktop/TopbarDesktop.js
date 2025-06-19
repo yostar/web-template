@@ -22,6 +22,8 @@ import TopbarSearchForm from '../TopbarSearchForm/TopbarSearchForm';
 import CustomLinksMenu from './CustomLinksMenu/CustomLinksMenu';
 import CurrencyDropdown from '../../../../extensions/MultipleCurrency/components/CurrencyDropdown/CurrencyDropdown';
 
+import { Inbox } from 'lucide-react';
+
 import css from './TopbarDesktop.module.css';
 
 const SignupLink = () => {
@@ -53,6 +55,7 @@ const InboxLink = ({ notificationCount, currentUserHasListings }) => {
       params={{ tab: currentUserHasListings ? 'sales' : 'orders' }}
     >
       <span className={css.topbarLinkLabel}>
+        <Inbox className={css.inboxIcon} /> 
         <FormattedMessage id="TopbarDesktop.inbox" />
         {notificationDot}
       </span>
@@ -60,7 +63,7 @@ const InboxLink = ({ notificationCount, currentUserHasListings }) => {
   );
 };
 
-const ProfileMenu = ({ currentPage, currentUser, onLogout }) => {
+const ProfileMenu = ({ currentPage, currentUser, onLogout, isAgent }) => {
 
   const currentPageClass = page => {
     const isAccountSettingsPage =
@@ -113,6 +116,19 @@ const ProfileMenu = ({ currentPage, currentUser, onLogout }) => {
             <FormattedMessage id="TopbarDesktop.accountSettingsLink" />
           </NamedLink>
         </MenuItem>
+
+        <MenuItem key="AgentTrainingPage">
+        {isAgent && (
+            <NamedLink
+              className={classNames(css.menuLink, currentPageClass('AgentTrainingPage'))}
+              name="AgentTrainingPage"
+              params={{ step: 'videos' }}
+            >
+              <span className={css.menuItemBorder} />
+              <FormattedMessage id="TopbarButton.agentTraining" />
+            </NamedLink>
+          )}
+          </MenuItem>
         
         <MenuItem key="logout">
           <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
@@ -164,7 +180,7 @@ const TopbarDesktop = props => {
   ) : null;
 
   const profileMenuMaybe = authenticatedOnClientSide ? (
-    <ProfileMenu currentPage={currentPage} currentUser={currentUser} onLogout={onLogout} />
+    <ProfileMenu currentPage={currentPage} currentUser={currentUser} onLogout={onLogout} isAgent={isAgent} />
   ) : null;
 
   const signupLinkMaybe = isAuthenticatedOrJustHydrated ? null : <SignupLink />;
@@ -200,7 +216,6 @@ const TopbarDesktop = props => {
           ) : (
             <>
             
-
             <CustomLinksMenu
               currentPage={currentPage}
               customLinks={customLinks}
