@@ -10,7 +10,7 @@ import { FormattedMessage, injectIntl, intlShape } from '../../../util/reactIntl
 import { propTypes } from '../../../util/types';
 import * as validators from '../../../util/validators';
 import { getPropsForCustomUserFieldInputs } from '../../../util/userHelpers';
-import { regions } from '../../../config/regions';
+import { regions, countries } from '../../../config/regions';
 
 import { Form, PrimaryButton, FieldTextInput, CustomExtendedDataField } from '../../../components';
 
@@ -29,6 +29,7 @@ const ConfirmSignupFormComponent = props => {
 
   const [currency, setCurrency] = useState(null);
   const [region, setRegion] = useState(null);
+  const [country, setCountry] = useState(null);
   const [promoCode, setPromoCode] = useState(null);
 
 useEffect(() => {
@@ -40,6 +41,9 @@ useEffect(() => {
       }
       if (userLocationData.region) {
         setRegion(userLocationData.region);
+      }
+      if(userLocationData.country) {
+        setCountry(userLocationData.country);
       }
     } catch (error) {
       console.error('Error fetching user location data:', error);
@@ -73,6 +77,7 @@ return (
       userType: props.preselectedUserType || getSoleUserTypeMaybe(props.userTypes),
       pub_userCurrency: currency,
       pub_userLocation: region,
+      pub_userCountry: country,
       pub_userPromoCode: promoCode
     }}
     render={formRenderProps => {
@@ -117,6 +122,14 @@ return (
       userFieldProps.find(field => field.key == 'pub_userLocation')
        .fieldConfig.enumOptions= regions;
 
+      //modify country to be a list of countries
+      if(userFieldProps.find(field => field.key == 'pub_userCountry')){
+      userFieldProps.find(field => field.key == 'pub_userCountry')
+        .fieldConfig.schemaType='enum';
+      userFieldProps.find(field => field.key == 'pub_userCountry')
+        .fieldConfig.enumOptions= countries;
+      }
+      
       const noUserTypes = !userType && !(userTypes?.length > 0);
       const userTypeConfig = userTypes.find(config => config.userType === userType);
       const showDefaultUserFields = userType || noUserTypes;

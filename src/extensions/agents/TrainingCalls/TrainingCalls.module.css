@@ -1,0 +1,12 @@
+@import '../../../styles/customMediaQueries.css';
+
+/* Add styles for the TrainingCalls component here */
+
+.root {
+ 
+}
+
+.youtubeContainer {
+  margin: 16px auto;
+  max-width: 600px;
+}
