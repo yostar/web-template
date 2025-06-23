@@ -19,11 +19,7 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
     const initializePlayer = () => {
       console.log('initializePlayer', videoId, playlistId);
       
-      // Validate video ID before creating player
-      if (!videoId || typeof videoId !== 'string' || videoId.trim() === '') {
-        console.error('Invalid video ID provided');
-        return;
-      }
+      
 
       try {
         const newPlayer = new YT.Player('player', {
@@ -194,11 +190,6 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
     }
   };
 
-  const handleFallbackClick = () => {
-    window.open(`https://www.youtube.com/playlist?list=${playlistId}`, '_blank');
-    onProgressUpdate({ percentage: 100, message: 'Continue when you are done watching the videos on YouTube' });
-  };
-
   return (
     <div className={css.root}>
       <h4 ref={titleRef} className={css.title}>{videoTitle}</h4>
@@ -221,12 +212,12 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
             )}
       </div>
       {showFallback && (
-        <div>
+        <div className={css.playerWrapper}>
           <iframe 
             className={css.player}
             src={`https://www.youtube.com/embed/videoseries?si=6VHWq40Ap---Jdxb&amp;list=${playlistId}&rel=0&autoplay=1&modestbranding=1`} title="YouTube video player" 
-            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
           </div>
       )}
 

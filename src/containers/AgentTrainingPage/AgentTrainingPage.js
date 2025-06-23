@@ -90,6 +90,16 @@ export const AgentTrainingPageComponent = props => {
   const queryParams = new URLSearchParams(location.search);
   const score = queryParams.get('score') ? parseInt(queryParams.get('score'), 10) : 0;
 
+  // Remove score from URL query parameters if it exists
+  useEffect(() => {
+    if (queryParams.has('score')) {
+      queryParams.delete('score');
+      const newSearch = queryParams.toString();
+      const newUrl = newSearch ? `${location.pathname}?${newSearch}` : location.pathname;
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [location.pathname, location.search]);
+
   useEffect(() => {
     if (
       userTraining?.step > currentStepNumber || 

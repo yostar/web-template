@@ -1237,7 +1237,7 @@
   "AgentTraining.backButtonLabel": "Previous",
   "AgentTraining.nextButtonLabel": "Next Step",
   "AgentTraining.nextButtonCompleteLabel": "Enter",
-  "AgentTraining.quizSuccessTitle": "🎉 Success!",
+  "AgentTraining.quizSuccessTitle": "🎉 You passed!",
   "AgentTraining.quizSuccessMessage": "You passed the quiz with a score of {score} out of 10.",
 
   "AgentTraining.searchTitle": "Search for Tier 3 places near you",
