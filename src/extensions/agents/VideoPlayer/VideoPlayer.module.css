@@ -41,6 +41,7 @@
 
 .playerWrapper {
   position: relative;
+  padding-bottom: 20px;
 }
 
 .overlayTop, .overlayBottom, .overlayMiddle {
