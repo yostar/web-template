@@ -19,15 +19,6 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
     const initializePlayer = () => {
       console.log('initializePlayer', videoId, playlistId);
       
-      // Check if we've already tried reloading too many times
-      const reloadAttempts = parseInt(localStorage.getItem('youtubeReloadAttempts') || '0');
-      if (reloadAttempts >= 2) {
-        console.log('Too many reload attempts, showing fallback');
-        setShowFallback(true);
-        localStorage.removeItem('youtubeReloadAttempts');
-        return;
-      }
-      
       // Validate video ID before creating player
       if (!videoId || typeof videoId !== 'string' || videoId.trim() === '') {
         console.error('Invalid video ID provided');
@@ -67,53 +58,16 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
         // Check if this is the specific "Invalid video id" error
         if (err.message && err.message.includes('Invalid video id')) {
           console.log('Detected "Invalid video id" error, clearing YouTube cookies and reloading...');
-          
-          // Increment reload attempts
-          const currentAttempts = parseInt(localStorage.getItem('youtubeReloadAttempts') || '0');
-          localStorage.setItem('youtubeReloadAttempts', (currentAttempts + 1).toString());
-          
-          // Clear YouTube cookies
-          clearYouTubeCookies();
-          
-          // Reload the page after a short delay
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        } else {
-          // For other errors, just show the fallback
+         
           setShowFallback(true);
+          setTimeout(() => {
+            onProgressUpdate({ percentage: 100, message: 'Please watch all the videos before continuing' });
+          }, 10000);
         }
+
       }
     };
 
-    const clearYouTubeCookies = () => {
-      try {
-        // Get all cookies on the current domain
-        const cookies = document.cookie.split(';');
-        cookies.forEach(cookie => {
-          const [name] = cookie.split('=');
-          const cookieName = name.trim();
-          
-          // Clear the specific YouTube cookies that are most likely to cause the "Invalid video id" error
-          if (cookieName && (
-            cookieName.startsWith('__Secure-') ||
-            cookieName.startsWith('VISITOR_INFO') ||
-            cookieName.startsWith('LOGIN_INFO') ||
-            cookieName === 'GPS' ||
-            cookieName === 'PREF' ||
-            cookieName === 'YSC' ||
-            cookieName === 'VISITOR_PRIVACY_METADATA'
-          )) {
-            // Delete cookie by setting expiration to past date on current domain
-            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-          }
-        });
-        
-        console.log('YouTube cookies cleared from current domain');
-      } catch (e) {
-        console.warn('Error clearing YouTube cookies:', e);
-      }
-    };
 
     const onPlayerError = (event) => {
       console.error('YouTube player error event:', event);
@@ -267,20 +221,22 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
             )}
       </div>
       {showFallback && (
-        <div className={css.fallback}>
-          We had a problem loading the video. 
-          <SecondaryButton onClick={handleFallbackClick}>
-            Watching the videos on YouTube
-          </SecondaryButton>
-        </div>
+        <div>
+          <iframe 
+            className={css.player}
+            src={`https://www.youtube.com/embed/videoseries?si=6VHWq40Ap---Jdxb&amp;list=${playlistId}&rel=0&autoplay=1&modestbranding=1`} title="YouTube video player" 
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
       )}
-      <div className={css.playerWrapper}>
+
+      <div className={showFallback ? css.hide : css.playerWrapper}>
         <div id="player" className={css.player}></div>
         <div className={css.overlayTop}></div>
         <div className={css.overlayBottom}></div>
         <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
       </div>
-
+      
       
     </div>
   );
