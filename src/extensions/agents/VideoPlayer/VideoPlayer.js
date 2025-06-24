@@ -6,8 +6,6 @@ import { SecondaryButton } from '../../../components';
 import css from './VideoPlayer.module.css';
 
 const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
-  const [videoTitle, setVideoTitle] = useState('loading...');
-  const titleRef = useRef(null);
   const [progress, setProgress] = useState({ currentVideo: 0, totalVideos: 0, percentage: 0 });
   const [showProgress, setShowProgress] = useState(false);
   const [player, setPlayer] = useState(null);
@@ -96,14 +94,8 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
       if (lastPosition) {
         setTimeout(() => {
           event.target.seekTo(parseFloat(lastPosition), true);
-          if (titleRef.current) {
-            titleRef.current.style.transition = 'opacity 1s';
-            titleRef.current.style.opacity = 1;
-          }
         }, 1000);
       }
-      
-      updateVideoTitle(event.target);
     };
 
     const onPlayerStateChange = (event) => {
@@ -113,7 +105,6 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
       }
 
       if (event.data === YT.PlayerState.PLAYING) {
-        updateVideoTitle(event.target);
         updateProgress(event.target);
 
         // Start interval to update progress continuously
@@ -132,10 +123,6 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
       }
     };
 
-    const updateVideoTitle = (playerInstance) => {
-      const videoData = playerInstance.getVideoData();
-      setVideoTitle(videoData.title);
-    };
 
     const updateProgress = (playerInstance) => {
       const totalVideos = playerInstance.getPlaylist().length;
@@ -192,7 +179,7 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
 
   return (
     <div className={css.root}>
-      <h4 ref={titleRef} className={css.title}>{videoTitle}</h4>
+      
       <div className={css.progress}>
             {showProgress && (
                 <>
