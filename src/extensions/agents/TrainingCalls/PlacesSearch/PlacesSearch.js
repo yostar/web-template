@@ -7,10 +7,12 @@ import { Phone, Search } from 'lucide-react';
 import { externalIds, externalEndpoints } from '../../config';
 import css from './PlacesSearch.module.css';
 
+const businessTypes = ['Laundromats', 'Barbershops', 'Auto repair shops', 'Nail salons', 'Tattoo shops'];
 
-const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
+const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail, disabled }) => {
 
-  const [query, setQuery] = useState(`Laundromats in ${userLocation} open now`);
+  const randomBusinessType = businessTypes[Math.floor(Math.random() * businessTypes.length)];
+  const [query, setQuery] = useState(`${randomBusinessType} in ${userLocation} open now`);
   const [results, setResults] = useState([]);
   const [iframeUrl, setIframeUrl] = useState('');
   const [iframeUrls, setIframeUrls] = useState({});
@@ -108,11 +110,12 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={`Salons in Miami, FL open now`}
                 className={css.searchInput}
+                disabled={disabled}
             />
             <Button 
             type="submit" 
             onClick={handleSearch} className={css.searchButton}
-            disabled={isSearching}
+            disabled={isSearching || disabled}
             >
                 <Search className={css.searchIcon}/>
             </Button>
@@ -147,8 +150,9 @@ const PlacesSearch = ({ onPlaceSelected, userLocation, userEmail }) => {
                                             
                         <span>
                             <SecondaryButton 
-                            onClick={() => handlePlaceSelected(result)} 
-                            className={css.callButton}
+                              onClick={() => handlePlaceSelected(result)} 
+                              className={css.callButton}
+                              disabled={disabled}
                             >
                                 <Phone/> <FormattedMessage id="AgentTraining.callButtonLabel" />
                             </SecondaryButton>
