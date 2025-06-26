@@ -114,6 +114,8 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
 
   const { categoryLevel1: rawCategoryLevel1 } = transaction.listing.attributes.publicData;
   const categoryLevel1 = rawCategoryLevel1?.replaceAll('-', '_');
+  const listingLocation = transaction?.listing?.attributes?.publicData?.location;
+  const listingGeolocation = transaction?.listing?.attributes?.geolocation;
 
   const {
     isCustomer,
@@ -176,7 +178,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
       };
     })
     .cond([states.PURCHASE_CONFIRMED_BY_BUYER, PROVIDER], () => {
-      const getFieldTextConfig = (name, validators = []) => ({
+      const getFieldTextConfig = (name, validators = [], initialValue = '') => ({
         type: FIELD_TEXT,
         labelTranslationId: `TransactionPage.sell-purchase.${name}.label`,
         name: `protectedData.${name}`,
@@ -187,6 +189,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
           },
           ...validators,
         ],
+        initialValue,
       });
 
       return {
@@ -196,16 +199,16 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
           isConfirmNeeded: true,
           showReminderStatement: true,
           formConfigs: [
-            getFieldTextConfig('managerBusinessName'),
-            getFieldTextConfig('managerName'),
-            getFieldTextConfig('managerPhoneNumber'),
+            getFieldTextConfig('managerBusinessName', [], listingLocation?.businessName ),
+            getFieldTextConfig('managerName', [], listingLocation?.managerName),
+            getFieldTextConfig('managerPhoneNumber', [], listingLocation?.managerPhone),
             getFieldTextConfig('managerEmail', [
               {
                 validatorFn: emailFormatValid,
                 messageTranslationId:
                   'TransactionPage.sell-purchase.managerEmail.emailInvalidMesage',
               },
-            ]),
+            ], listingLocation?.managerEmail),
             {
               type: FIELD_LOCATION,
               labelTranslationId: 'TransactionPage.sell-purchase.managerAddress.label',
@@ -222,6 +225,13 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
                     'TransactionPage.sell-purchase.managerAddress.placeInvalidMessage',
                 },
               ],
+              initialValue: {
+                search:listingLocation?.address,
+                selectedPlace: {
+                  address: listingLocation?.address,
+                  origin: listingGeolocation,
+                },
+              },
             },
           ],
           confirmModalTitleTranslationId:
