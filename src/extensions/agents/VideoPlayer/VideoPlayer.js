@@ -3,7 +3,7 @@ import { FormattedMessage } from '../../../util/reactIntl';
 
 import css from './VideoPlayer.module.css';
 
-const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate, userTraining }) => {
+const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
   const [progress, setProgress] = useState({ currentVideo: 0, totalVideos: 0, percentage: 0 });
   const [showProgress, setShowProgress] = useState(false);
   const [player, setPlayer] = useState(null);
@@ -13,13 +13,12 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate, userTraining }) 
     let progressInterval;
 
     const initializePlayer = () => {
-      console.log('initializePlayer', videoId, playlistId);
+      console.log('initializePlayer', playlistId);
       
       
 
       try {
         const newPlayer = new YT.Player('player', {
-          videoId: videoId,
           playerVars: {
             listType: 'playlist',
             list: playlistId,
@@ -171,7 +170,7 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate, userTraining }) 
       }
       clearInterval(progressInterval);
     };
-  }, [videoId, playlistId, onProgressUpdate]);
+  }, [ playlistId, onProgressUpdate]);
 
   const handleOverlayClick = () => {
     if (player && typeof player.playVideo === 'function') {
