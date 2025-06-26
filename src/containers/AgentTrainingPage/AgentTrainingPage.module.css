@@ -59,18 +59,21 @@
 }
 
 .progressMessage {
-  color: var(--colorGrey300);
+  color: var(--colorGrey900);
   font-size: 16px;
   margin-bottom: 10px;
   position: absolute;
   width: calc(100% - 40px);
-  margin-top: -40px;
-  height: 30px;
+  margin-top: -50px;
+  height: 35px;
+  padding: 5px 20px;
+  background-color: var(--colorGrey75);
+  border-radius: 6px;
 
   @media (--viewportMedium) {
-    position:relative;
+    position: relative;
     width: auto;
-    margin-top:20px;
+    margin-top: 12px;
   }
 }
 
@@ -78,16 +81,4 @@
   width: 16px;
   height: 16px;
   margin-right: 10px;
-}
-
-.quizSuccessContainer {
-    text-align: center;
-    padding: 60px 40px;
-    color: var(--colorSuccessDark);
-    max-width: 500px;
-    margin: 40px auto;
-    border-radius: 12px;
-    border: 1px solid var(--colorSuccess);
-    background: white;
-    box-shadow: var(--boxShadowListingCard);
 }

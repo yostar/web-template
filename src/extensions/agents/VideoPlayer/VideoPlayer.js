@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from '../../../util/reactIntl';
 
-import { SecondaryButton } from '../../../components';
-
 import css from './VideoPlayer.module.css';
 
-const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
+const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate, userTraining }) => {
   const [progress, setProgress] = useState({ currentVideo: 0, totalVideos: 0, percentage: 0 });
   const [showProgress, setShowProgress] = useState(false);
   const [player, setPlayer] = useState(null);
@@ -54,9 +52,13 @@ const YouTubePlayer = ({ videoId, playlistId, onProgressUpdate }) => {
           console.log('Detected "Invalid video id" error, clearing YouTube cookies and reloading...');
          
           setShowFallback(true);
-          setTimeout(() => {
-            onProgressUpdate({ percentage: 100, message: 'Please watch all the videos before continuing' });
-          }, 10000);
+
+          //only force next step if necessary
+          if(userTraining?.step === 1){
+            setTimeout(() => {
+              onProgressUpdate({ percentage: 100, message: 'Please watch all 20 videos before continuing' });
+            }, 10000);
+          }
         }
 
       }

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { IconSpinner } from '../../components';
 
 import {
-    H1,
+  H1,
   H2,
   Page,
   LayoutSingleColumn,
@@ -86,35 +86,29 @@ export const AgentTrainingPageComponent = props => {
     history.push(`/agent/training/${previousStep}`);
   };
 
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const score = queryParams.get('score') ? parseInt(queryParams.get('score'), 10) : 0;
-
-  // Remove score from URL query parameters if it exists
-  useEffect(() => {
-    if (queryParams.has('score')) {
-      queryParams.delete('score');
-      const newSearch = queryParams.toString();
-      const newUrl = newSearch ? `${location.pathname}?${newSearch}` : location.pathname;
-      window.history.replaceState(null, '', newUrl);
-    }
-  }, [location.pathname, location.search]);
-
   useEffect(() => {
     if (
       userTraining?.step > currentStepNumber || 
-      (step === 'quiz' && score >= 8) || 
       (step === 'crm' && currentUser?.attributes?.profile?.privateData?.training?.closeApiKey)
     ) {
       setNextStepReady(true);
     } else {
       setNextStepReady(false);
     }
-  }, [userTraining, currentStepNumber, step, score]);
+
+    //don't allow users in a step they havent reached
+    if(userTraining?.step < currentStepNumber){
+      //redirect user back to their correct current step
+      const currentStep = steps[userTraining?.step - 1].routeName;
+      history.push(`/agent/training/${currentStep}`);
+
+    }
+
+  }, [userTraining, currentStepNumber, step]);
 
   const handleProgressUpdate = (newProgress) => {
     console.log('Progress update:', newProgress);
-    if(newProgress.percentage > 95 && !nextStepReady){
+    if(newProgress.percentage > 95 ){
       setNextStepReady(true);
     }
     if(newProgress.message){
@@ -128,6 +122,8 @@ export const AgentTrainingPageComponent = props => {
     
   };
 
+  
+
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
        
@@ -135,7 +131,6 @@ export const AgentTrainingPageComponent = props => {
         className={css.pageRoot}
         mainColumnClassName={css.pageMainColumn}
         topbar={<TopbarContainer />}
-        footer={<FooterContainer />}
       >
         
         <ProgressBar
@@ -153,21 +148,16 @@ export const AgentTrainingPageComponent = props => {
                     videoId="agentTrainingVideos" 
                     playlistId={externalIds.youtubePlaylist}
                     onProgressUpdate={handleProgressUpdate}
+                    userTraining={userTraining}
                 />
             )}
 
             {step === 'quiz' && (
-              !nextStepReady || !score ? (
                 <TrainingQuiz 
                     quizId={externalIds.jotformQuiz} 
                     currentUser={currentUser}
+                    onProgressUpdate={handleProgressUpdate}
                 />
-              ) : (
-                <div className={css.quizSuccessContainer}>
-                  <H2 as="h3"><FormattedMessage id="AgentTraining.quizSuccessTitle" /></H2>
-                  <p><FormattedMessage id="AgentTraining.quizSuccessMessage" values={{ score: score }} /></p>
-                </div>
-              )
             )}
 
             {step === 'calls' && (
@@ -209,13 +199,14 @@ export const AgentTrainingPageComponent = props => {
 
                   </SecondaryButton> 
                   
+                  {progressMessage.length > 0 && (
                   <div className={css.progressMessage}>
                   
                     {progressSpinner && <IconSpinner className={css.progressSpinner} />}
-                  
                     {progressMessage}
                     
-                    </div>
+                  </div>
+                  )}
                   
                   <div className={css.nextButton}>
                     <NextStepButton
