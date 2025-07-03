@@ -41,7 +41,7 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
     setTimeout(() => {
     onProgressUpdate({
             percentage: 50,
-            message: "Adding your first 100 leads...", 
+            message: "Adding your free leads...", 
             spinner: true
         });
     }, 5000);
