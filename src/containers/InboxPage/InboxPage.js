@@ -41,6 +41,8 @@ import {
   LayoutSideNavigation,
 } from '../../components';
 
+import { Inbox } from 'lucide-react';
+
 import TopbarContainer from '../../containers/TopbarContainer/TopbarContainer';
 import FooterContainer from '../../containers/FooterContainer/FooterContainer';
 import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
@@ -383,7 +385,7 @@ export const InboxPageComponent = props => {
           <>
             <div className={css.titleContainer}>
               <H2 as="h1" className={css.title}>
-                <FormattedMessage id="InboxPage.title" />
+                <Inbox className={css.inboxIcon} /> <FormattedMessage id="InboxPage.title" />
               </H2>
               <div className={css.searchContainer}>
                 <Search className={css.searchIcon} />

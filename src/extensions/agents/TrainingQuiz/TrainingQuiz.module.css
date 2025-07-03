@@ -1,0 +1,60 @@
+@import '../../../styles/customMediaQueries.css';
+
+.quizContainer {
+    margin:0;
+    padding:0;
+
+    height: calc(100vh - 230px);
+    min-height: 400px;
+
+    @media (--viewportMedium) {
+        margin:5px -30px 0 -30px;
+        height: calc(100vh - 450px);
+    }
+
+    @media (--viewportLarge) {
+        height: calc(100vh - 450px);
+    }
+}
+
+.quizIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.quizSuccessContainer {
+    text-align: center;
+    padding: 60px 40px;
+    color: var(--colorSuccessDark);
+    max-width: 500px;
+    margin: 40px auto;
+    border-radius: 12px;
+    border: 1px solid var(--colorSuccess);
+    background: white;
+    box-shadow: var(--boxShadowListingCard);
+}
+
+.quizFailContainer {
+    text-align: center;
+    padding: 60px 40px;
+    color: var(--colorFailDark);
+    max-width: 500px;
+    margin: 40px auto;
+    border-radius: 12px;
+    border: 1px solid var(--colorFail);
+    background: white;
+    box-shadow: var(--boxShadowListingCard);
+}
+
+.quizBlockedContainer {
+    text-align: center;
+    padding: 60px 40px;
+    color: var(--colorAttentionDark);
+    max-width: 500px;
+    margin: 40px auto;
+    border-radius: 12px;
+    border: 1px solid var(--colorAttention);
+    background: white;
+    box-shadow: var(--boxShadowListingCard);
+}
