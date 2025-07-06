@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, object, shape, string } from 'prop-types';
 import pickBy from 'lodash/pickBy';
 import classNames from 'classnames';
-
 import appSettings from '../../../config/settings';
 import { useConfiguration } from '../../../context/configurationContext';
 import { useRouteConfiguration } from '../../../context/routeConfigurationContext';
@@ -19,6 +18,7 @@ import {
   Modal,
   ModalMissingInformation,
 } from '../../../components';
+import AgentTrainingButton from '../../../extensions/agents/TopbarButton/TopbarButton';
 
 import MenuIcon from './MenuIcon';
 import SearchIcon from './SearchIcon';
@@ -282,6 +282,9 @@ class TopbarComponent extends Component {
 
     const classes = classNames(rootClassName || css.root, className);
 
+    const isAgent = currentUser?.attributes?.profile?.publicData?.userType === 'agent';
+    const isAgentTraining = currentUser?.attributes?.profile?.publicData?.training;
+
     return (
       <div className={classes}>
         <LimitedAccessBanner
@@ -308,14 +311,22 @@ class TopbarComponent extends Component {
             alt={intl.formatMessage({ id: 'Topbar.logoIcon' })}
             linkToExternalSite={config?.topbar?.logoLink}
           />
-          <Button
-            rootClassName={css.searchMenu}
-            onClick={this.handleMobileSearchOpen}
-            title={intl.formatMessage({ id: 'Topbar.searchIcon' })}
-          >
-            <SearchIcon className={css.searchMenuIcon} />
-          </Button>
-          <CurrencyDropdown />
+          { isAgent && isAgentTraining && !isAgentTraining?.completed ? (
+            <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
+          ) : (
+            <>
+              <Button
+                rootClassName={css.searchMenu}
+                onClick={this.handleMobileSearchOpen}
+                title={intl.formatMessage({ id: 'Topbar.searchIcon' })}
+              >
+                <SearchIcon className={css.searchMenuIcon} />
+              </Button>
+              {!isAgent && (
+                <CurrencyDropdown />
+              )}
+          </>
+          )}
         </div>
         <div className={css.desktop}>
           <TopbarDesktop
