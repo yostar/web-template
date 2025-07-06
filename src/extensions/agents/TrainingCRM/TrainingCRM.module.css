@@ -58,3 +58,27 @@
   color: var(--colorGrey500);
   text-align: center;
 }
+
+.important {
+  padding: 5px 10px;
+  background: var(--colorAttentionLight);
+  border: 1px solid var(--colorGrey100);
+  border-radius: 4px;
+  margin-top: 7px;
+  margin-left: -20px;
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  gap: 5px;
+
+  & > svg {
+    margin-top: 8px;
+    margin-right: 5px;
+  }
+
+  & > p {
+    font-size: 85%;
+    line-height: 1.2;
+    margin: 0;
+  }
+}

@@ -4,7 +4,7 @@ import { FormattedMessage, intlShape } from '../../../util/reactIntl';
 import {YoutubeEmbed} from '../../../containers/PageBuilder/Primitives/YoutubeEmbed/YoutubeEmbed';
 import { updateTrainingProfile } from '../../../ducks/user.duck'; 
 import { useDispatch } from 'react-redux';
-import { Check, Info } from 'lucide-react';
+import { Check, Info, TriangleAlert } from 'lucide-react';
 
 import { H2, H4, Button } from '../../../components';
 import { externalEndpoints } from '../config';
@@ -22,15 +22,22 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
   
   const handleCrmApiKey = async () => {
     
-    setWasSubmitted(true);
     
     if(!apiKey) {
         alert("Please enter your API key");
         return;
     }
     
+    // Validate Close CRM API key format
+    const apiKeyRegex = /^api_[a-zA-Z0-9]{18,22}\.[a-zA-Z0-9]{18,22}$/;
+    if (!apiKeyRegex.test(apiKey)) {
+        alert("Please enter a valid Close CRM API key. \n\nFormat: api_xxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxx\n\nYou have to use the 'copy to clipboard' feature right after creating the key. \n\nIf you closed the modal that displays the key, please create a new key.");
+        return;
+    }
+    
     console.log("API Key:", apiKey);
     setIsLoading(true);
+    setWasSubmitted(true);
 
     onProgressUpdate({
         percentage: 0,
@@ -113,7 +120,12 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
                     <li><a href={externalEndpoints.closeReferralLink} target="_blank" rel="noopener noreferrer">Sign up for a free 14 day trial</a></li>
                     <li>After signing up, navigate to the <a href="https://app.close.com/settings/developer/api-keys/" target="_blank" rel="noopener noreferrer">API settings</a> page</li>
                     <li>Create an API Key, then copy and paste it into the field below</li>
+                    <div className={css.important}>
+                        <TriangleAlert/> 
+                        <p><strong>You have to use the 'copy to clipboard' feature right after creating the key.</strong><br/> If you closed the modal that displays the key and forgot to copy it, create a new key.</p>
+                    </div>
                 </ol>
+                
             </div>
 
             <H4 as="h4"><FormattedMessage id="AgentTraining.crmApiKeyTitle" /></H4>
@@ -127,7 +139,7 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
                 name="crmApiKey"
                 label="API Key"
                 disabled={isLoading || alreadyConnected}
-                placeholder="api_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                placeholder="api_xxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxx"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
             />
