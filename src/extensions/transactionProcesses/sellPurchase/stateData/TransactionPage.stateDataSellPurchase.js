@@ -20,7 +20,9 @@ import {
 import {
   getDisputeReasonField,
   getRefundReasonField,
+  getRefundSelectField,
 } from '../../common/helpers/getActionModalFormField';
+import { allRefundReasons } from '../../common/helpers/getRefundReasons';
 import { getSellPurchaseProgressStep } from '../../common/helpers/getSellPurchaseProgressStep';
 import { states, transitions } from '../transactions/transactionProcessSellPurchase';
 
@@ -265,6 +267,8 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
 
       const processStatePostfix = buyerMarkMetManager ? '' : `.${MARK_MET_MANAGER_TRANSITION_NAME}`;
 
+      const disputeOptions = allRefundReasons();
+
       return {
         ...defaultStateData,
         showRefundAvailabileNotice: true,
@@ -284,7 +288,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.modalTitle',
             confirmButtonTranslationId:
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.confirmButton',
-            formConfigs: [getRefundReasonField({ role: CUSTOMER })],
+            formConfigs: [getRefundSelectField({ role: CUSTOMER, options: disputeOptions }), getRefundReasonField({ role: CUSTOMER })],
           }
         ),
         nextStepTranslationId: `TransactionPage.sell-purchase.${transactionRole}.${processState}${processStatePostfix}.nextStep`,
@@ -335,6 +339,8 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
       });
 
       const processStatePostfix = buyerMarkMetManager ? '' : `.${MARK_MET_MANAGER_TRANSITION_NAME}`;
+      const disputeOptions = allRefundReasons();
+
       return {
         ...defaultStateData,
         showRefundAvailabileNotice: true,
@@ -354,7 +360,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.modalTitle',
             confirmButtonTranslationId:
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.confirmButton',
-            formConfigs: [getRefundReasonField({ name: 'disputeReason' })],
+            formConfigs: [ getRefundSelectField({ role: CUSTOMER, options: disputeOptions }), getRefundReasonField({ name: 'disputeReason' })],
           }
         ),
         nextStepTranslationId: `TransactionPage.sell-purchase.${transactionRole}.${processState}${processStatePostfix}.nextStep`,
