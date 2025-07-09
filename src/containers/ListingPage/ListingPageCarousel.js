@@ -329,8 +329,8 @@ export const ListingPageComponent = props => {
       ...config.maps.fuzzy,
       enabled: isLocationType || config.maps.fuzzy.enabled,
       circleColor: isLocationType ? '#fe7327' : config.maps.fuzzy.circleColor,
-      offset: 3000,
-      defaultZoomLevel: 11,
+      offset: 1500,
+      defaultZoomLevel: 12.5,
     },
   };
 
