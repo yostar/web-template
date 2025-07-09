@@ -11,7 +11,7 @@
   "NoticeRefundAvailable.title": "Notice: ",
   "NoticeRefundAvailable.content": "Please note that refunds are available for 20 days after the manager is introduced – let us know if you need help.",
   "TransactionPage.RefundSelectField.label": "Please select a reason",
-  "TransactionPage.RefundSelectField.requiredMessage": "Please select a valid reason.",
+  "TransactionPage.RefundSelectField.requiredMessage": "Sorry, this is not a valid reason.",
   "TransactionPage.RefundSelectField.select": " - Select a reason -",
   "TransactionPage.RefundSelectField.badDescription": "The listing was not as described",
   "TransactionPage.RefundSelectField.managerUnresponsive": "I could not connect with the manager",
