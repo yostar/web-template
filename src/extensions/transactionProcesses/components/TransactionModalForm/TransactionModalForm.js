@@ -2,8 +2,8 @@ import React from 'react';
 import { Form as FinalForm } from 'react-final-form';
 import { useIntl } from 'react-intl';
 
-import { FieldLocationAutocompleteInput, FieldTextInput, Form } from '../../../../components';
-import { FIELD_LOCATION, FIELD_TEXT, FIELD_TEXTAREA } from '../../common/constants';
+import { FieldLocationAutocompleteInput, FieldTextInput, Form, FieldSelect } from '../../../../components';
+import { FIELD_LOCATION, FIELD_TEXT, FIELD_TEXTAREA, FIELD_SELECT } from '../../common/constants';
 import { composeValidators } from '../../../../util/validators';
 
 import css from './TransactionModalForm.module.css';
@@ -15,7 +15,9 @@ const getField = ({ config, configIndex, intl, values }) => {
     labelTranslationId,
     placeholderTranslationId,
     name,
+    initialValue,
     validators: validatorsConfig = [],
+    options,
   } = config;
 
   const validators = Array.isArray(validatorsConfig)
@@ -32,6 +34,7 @@ const getField = ({ config, configIndex, intl, values }) => {
           id={name}
           name={name}
           type="text"
+          initialValue={initialValue}
           label={labelTranslationId && intl.formatMessage({ id: labelTranslationId })}
           placeholder={
             placeholderTranslationId && intl.formatMessage({ id: placeholderTranslationId })
@@ -57,6 +60,23 @@ const getField = ({ config, configIndex, intl, values }) => {
         />
       );
 
+      case FIELD_SELECT:
+      return (
+        <FieldSelect
+          key={configIndex}
+          id={name}
+          name={name}
+          label={labelTranslationId && intl.formatMessage({ id: `${labelTranslationId}.label` })}
+          validate={composeValidators(...validators)}
+          className={css.fieldSelect}
+        >
+          {options.map(option => (
+            <option key={option} value={option}>
+              {intl.formatMessage({ id: `${labelTranslationId}.${option}` })}
+            </option>
+          ))}
+        </FieldSelect>
+      );
     case FIELD_LOCATION:
       return (
         <FieldLocationAutocompleteInput
@@ -66,6 +86,7 @@ const getField = ({ config, configIndex, intl, values }) => {
           placeholder={
             placeholderTranslationId && intl.formatMessage({ id: placeholderTranslationId })
           }
+          initialValue={initialValue}
           useDefaultPredictions={false}
           format={v => v}
           valueFromForm={values[name]}

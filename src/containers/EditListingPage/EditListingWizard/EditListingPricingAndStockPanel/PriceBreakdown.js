@@ -57,7 +57,9 @@ const PriceBreakdownComponent = props => {
 
   const flatFeeRenderMaybe = providerFlatFee ? (
     <div className={css.row}>
-      <FormattedMessage id="EditListingPriceBreakdown.providerFlatFee" />
+      <FormattedMessage id="EditListingPriceBreakdown.providerFlatFee"
+      values={{ minFee: providerFlatFeeConfig.providerMinFlatFee/100, fee: providerFlatFeeConfig.providerFeePercentage }}
+       />
       <span>{formatMoneyWithIntl(flatFeeAsMoney)}</span>
     </div>
   ) : null;
