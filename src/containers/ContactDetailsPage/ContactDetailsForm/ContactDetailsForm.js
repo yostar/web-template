@@ -17,7 +17,7 @@ import {
 } from '../../../util/errors';
 
 import {
-  FieldPhoneNumberInput,
+  FieldNorthAmericanPhoneInput,
   Form,
   PrimaryButton,
   FieldTextInput,
@@ -41,16 +41,29 @@ const PhoneNumberMaybe = props => {
 
   const validateMaybe = isRequired
     ? {
-        validate: validators.required(
-          intl.formatMessage({
-            id: 'ContactDetailsForm.phoneRequired',
-          })
+        validate: validators.composeValidators(
+          validators.required(
+            intl.formatMessage({
+              id: 'ContactDetailsForm.phoneRequired',
+            })
+          ),
+          validators.validNorthAmericanPhone(
+            intl.formatMessage({
+              id: 'ContactDetailsForm.phoneInvalid',
+            })
+          )
         ),
       }
-    : {};
+    : {
+        validate: validators.validNorthAmericanPhone(
+          intl.formatMessage({
+            id: 'ContactDetailsForm.phoneInvalid',
+          })
+        ),
+      };
 
   return (
-    <FieldPhoneNumberInput
+    <FieldNorthAmericanPhoneInput
       className={css.phone}
       name="phoneNumber"
       id={formId ? `${formId}.phoneNumber` : 'phoneNumber'}

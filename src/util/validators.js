@@ -251,5 +251,33 @@ export const validSGID = message => value => {
   return value.length === 9 ? VALID : message;
 };
 
+export const validNorthAmericanPhone = message => value => {
+  if (!value) {
+    return VALID; // Allow empty values, use required validator if needed
+  }
+  
+  // Extract only digits
+  const digits = value.replace(/[^\d]/g, '');
+  
+  // North American phone numbers must be exactly 10 digits
+  if (digits.length !== 10) {
+    return message;
+  }
+  
+  // Area code cannot start with 0 or 1
+  const areaCode = digits.slice(0, 3);
+  if (areaCode[0] === '0' || areaCode[0] === '1') {
+    return message;
+  }
+  
+  // Check for invalid area codes (N11 codes like 911, 411, etc.)
+  const n11Codes = ['911', '411', '311', '211', '511', '611', '711', '811'];
+  if (n11Codes.includes(areaCode)) {
+    return message;
+  }
+  
+  return VALID;
+};
+
 export const composeValidators = (...validators) => value =>
   validators.reduce((error, validator) => error || validator(value), VALID);
