@@ -1,5 +1,12 @@
 import { required } from '../../../../util/validators';
-import { FIELD_TEXTAREA } from '../constants';
+import { FIELD_TEXTAREA, FIELD_SELECT } from '../constants';
+import { validRefundReasons } from './getRefundReasons';
+
+export const validateRefundReason = (message) => (value) => {
+  const validReasons = validRefundReasons();
+  const VALID = undefined;
+  return validReasons.includes(value) ? VALID : message;
+};
 
 export const getRefundReasonField = ({ role, name }) => ({
   type: FIELD_TEXTAREA,
@@ -7,6 +14,16 @@ export const getRefundReasonField = ({ role, name }) => ({
   name: name || `protectedData.${role}DisputeReason`,
   validators: [
     { validatorFn: required, messageTranslationId: 'TransactionPage.RefundField.requiredMessage' },
+  ],
+});
+
+export const getRefundSelectField = ({ role, name, options }) => ({
+  type: FIELD_SELECT,
+  labelTranslationId: 'TransactionPage.RefundSelectField',
+  name: name || `protectedData.${role}DisputeReasonSelect`,
+  options: options,
+  validators: [
+    { validatorFn: validateRefundReason, messageTranslationId: 'TransactionPage.RefundSelectField.requiredMessage' },
   ],
 });
 

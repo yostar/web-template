@@ -3,6 +3,7 @@ import { Phone, FilePenLine } from 'lucide-react';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../../../util/reactIntl';
 import ModalIframeButton from '../ModalIframeButton/ModalIframeButton';
+import Cookies from 'js-cookie';
 
 import css from './RegionalPartnerPromo.module.css';
 
@@ -23,12 +24,18 @@ const RegionalPartnerPromo = ({ address, varient }) => {
     const region = regionMatch ? regionMatch[1].trim() : null;
 
     useEffect(() => {
-        if (region) {
+        
+        const params = new URLSearchParams(window.location.search);
+        const fprParam = params.get('fpr');
+        const fprCookie = Cookies.get('_fprom_ref');
+        const partnerId = fprParam || fprCookie;
+
+        if (region || (partnerId && partnerId.indexOf('ppv-') === 0)) {
             setLoading(true);
-            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}`)
+            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partnerId=${partnerId}`)
                 .then(response => response.json())
                 .then(data => {
-                    //console.log(region, data)
+                    //console.log("partner-promo-data", region, partnerId, data)
                     if (data?.id) {
                         setPromoData(data);
                     } else {

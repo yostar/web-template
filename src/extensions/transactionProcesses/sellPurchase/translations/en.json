@@ -183,7 +183,7 @@
   
   "TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.modalTitle":            "Request a refund",
   "TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.confirmButton":         "Request a refund",
-  "TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.reminderStatement":     "I acknowledge that any costs associated with placing the machine(s) on site and removing it/them after canceling are solely my costs to bear.",
+  "TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.reminderStatement":     "By requesting a refund, you confirm that you've tried to resolve any issues with the property manager and, if value was the concern, attempted to negotiate a new price with the seller.",
   
   "TransactionPage.sell-purchase.provider.transition-seller-refund-before-capture-intent.actionButton": "Cancel order",
   "TransactionPage.sell-purchase.provider.transition-seller-refund-before-capture-intent.actionError":  "Oops, dispute failed. Please try again.",
@@ -199,7 +199,7 @@
 
   "TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.modalTitle":         "Request a refund",
   "TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.confirmButton":      "Request a refund",
-  "TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.reminderStatement":  "I acknowledge that any costs associated with placing the machine(s) on site and removing it/them after canceling are solely my costs to bear.",
+  "TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.reminderStatement":  "By requesting a refund, you confirm that you've tried to resolve any issues with the property manager and, if value was the concern, attempted to negotiate a new price with the seller.",
   
   "TransactionPage.sell-purchase.provider.transition-seller-issue-refund.actionButton": "Cancel order",
   "TransactionPage.sell-purchase.provider.transition-seller-issue-refund.actionError":  "Oops, dispute failed. Please try again.",
