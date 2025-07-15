@@ -14,7 +14,7 @@ const iconMap = {
     // Add more icons as needed
 };
 
-const RegionalPartnerPromo = ({ address, varient }) => {
+const RegionalPartnerPromo = ({ address, varient, user }) => {
     const [promoData, setPromoData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(true);
@@ -24,11 +24,17 @@ const RegionalPartnerPromo = ({ address, varient }) => {
     const region = regionMatch ? regionMatch[1].trim() : null;
 
     useEffect(() => {
-        
-        const params = new URLSearchParams(window.location.search);
-        const fprParam = params.get('fpr');
-        const fprCookie = Cookies.get('_fprom_ref');
-        const partnerId = fprParam || fprCookie;
+        let partnerId = '';
+        if (user?.attributes?.profile?.publicData?.userPromoCode?.indexOf('ppv-') === 0) {
+            partnerId = user?.attributes?.profile?.publicData?.userPromoCode;
+        } else {
+            const params = new URLSearchParams(window.location.search);
+            const fprParam = params.get('fpr');
+            const fprCookie = Cookies.get('_fprom_ref');
+            partnerId = fprParam || fprCookie;
+        }
+
+        //console.log(' RegionalPartnerPromo partnerId', partnerId)
 
         if (region || (partnerId && partnerId.indexOf('ppv-') === 0)) {
             setLoading(true);
