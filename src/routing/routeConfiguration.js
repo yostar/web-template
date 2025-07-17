@@ -43,6 +43,7 @@ const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePag
 const FavoriteListingsPage = loadable(() => import(/* webpackChunkName: "FavoriteListingsPage" */ '../containers/FavoriteListingsPage/FavoriteListingsPage'));
 
 const AgentTrainingPage = loadable(() => import(/* webpackChunkName: "AgentTrainingPage" */ '../containers/AgentTrainingPage/AgentTrainingPage'));
+const PMPortalPage = loadable(() => import(/* webpackChunkName: "PMPortalPage" */ '../containers/PMPortalPage/PMPortalPage'));
 
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
@@ -419,6 +420,11 @@ const routeConfiguration = (layoutConfig, accessControlConfig) => {
       auth: true, // user must be signed in to view this page
       authPage: 'LoginPage',
       component: AgentTrainingPage,
+    },
+    {
+      path: '/pm/portal',
+      name: 'PMPortalPage',
+      component: PMPortalPage,
     },
   ];
 };

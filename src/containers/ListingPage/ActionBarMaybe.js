@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool, oneOfType, object, string, shape } from 'prop-types';
+import { bool, oneOfType, object, string, shape, func } from 'prop-types';
 import classNames from 'classnames';
 
 import { useConfiguration } from '../../context/configurationContext';
@@ -120,6 +120,20 @@ export const ActionBarMaybe = props => {
         <p className={classNames(ownListingTextClasses, { [css.CTAEnabled]: isCTAEnabled })}>
           <FormattedMessage id={ownListingTextTranslationId} />
         </p>
+        {isPendingApproval && inviteStatus ? (
+          <p className={css.pmInviteStatus}>
+            <FormattedMessage id={`ListingPage.pmInviteStatus.${inviteStatus}`} />
+          </p>
+        ) : null}
+        {isPendingApproval && onResendInvite ? (
+          <button className={css.resendButton} disabled={resendingInvite} onClick={onResendInvite}>
+            {resendingInvite ? (
+              <FormattedMessage id="ListingPage.resendingInvite" />
+            ) : (
+              <FormattedMessage id="ListingPage.resendInvite" />
+            )}
+          </button>
+        ) : null}
         <span className={isCTAEnabled ? css.linkContainer : css.noShrink}>
           <NamedLink
             className={classNames(css.editListingLink, { [css.CTAEnabled]: isCTAEnabled })}
@@ -154,6 +168,9 @@ export const ActionBarMaybe = props => {
 ActionBarMaybe.defaultProps = {
   rootClassName: null,
   className: null,
+  inviteStatus: null,
+  onResendInvite: null,
+  resendingInvite: false,
 };
 
 ActionBarMaybe.propTypes = {
@@ -167,6 +184,9 @@ ActionBarMaybe.propTypes = {
     type: string,
     tab: string,
   }),
+  inviteStatus: string,
+  onResendInvite: func,
+  resendingInvite: bool,
 };
 
 ActionBarMaybe.displayName = 'ActionBarMaybe';

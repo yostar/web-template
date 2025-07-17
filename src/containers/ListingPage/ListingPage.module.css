@@ -202,6 +202,16 @@
   color: var(--colorAttention);
 }
 
+.pmInviteStatus {
+  margin: 4px 24px;
+  color: var(--colorGrey100);
+}
+
+.resendButton {
+  composes: buttonSmall from global;
+  margin: 8px 24px;
+}
+
 .payoutDetailsWarning {
   display: flex;
   flex-direction: column;

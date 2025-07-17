@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { array, arrayOf, bool, func, shape, string, oneOf, object } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -95,6 +95,7 @@ import CustomListingFields from './CustomListingFields';
 import { convertListingPrices } from '../../extensions/MultipleCurrency/utils/currency.js';
 import ProgressBar from '../../extensions/transactionProcesses/components/ProgressBar/ProgressBar.js';
 import Faqs from '../../extensions/common/components/Faqs/Faqs.js';
+import { fetchInviteStatus, resendPMInvite } from '../../extensions/PMPortal/api';
 
 import css from './ListingPage.module.css';
 
@@ -106,6 +107,8 @@ export const ListingPageComponent = props => {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(
     props.inquiryModalOpenForListingId === props.params.id
   );
+  const [inviteStatus, setInviteStatus] = useState(null);
+  const [resending, setResending] = useState(false);
 
   const {
     isAuthenticated,
@@ -227,6 +230,27 @@ export const ListingPageComponent = props => {
   const isBooking = isBookingProcess(processName);
   const isPurchase = isPurchaseProcess(processName);
   const processType = isBooking ? 'booking' : isPurchase ? 'purchase' : 'inquiry';
+
+  useEffect(() => {
+    if (
+      isOwnListing &&
+      rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT &&
+      currentListing.id
+    ) {
+      fetchInviteStatus(currentListing.id.uuid)
+        .then(res => setInviteStatus(res.data.inviteStatus))
+        .catch(() => setInviteStatus('error'));
+    }
+  }, [isOwnListing, rawParams.variant, currentListing.id]);
+
+  const handleResendInvite = () => {
+    if (!currentListing.id) return;
+    setResending(true);
+    resendPMInvite(currentListing.id.uuid)
+      .then(() => setInviteStatus('sent'))
+      .catch(() => setInviteStatus('error'))
+      .finally(() => setResending(false));
+  };
   const isLocationType = listingType === 'sell';
   const categoryLabel = getCategoryLabel(publicData?.categoryLevel1);
 
@@ -380,6 +404,9 @@ export const ListingPageComponent = props => {
                 listing={currentListing}
                 showNoPayoutDetailsSet={noPayoutDetailsSetWithOwnListing}
                 currentUser={currentUser}
+                inviteStatus={inviteStatus}
+                onResendInvite={handleResendInvite}
+                resendingInvite={resending}
               />
             ) : null}
             {currentListing.id ? (
@@ -388,6 +415,9 @@ export const ListingPageComponent = props => {
                 isOwnListing={isOwnListing}
                 listing={currentListing}
                 currentUser={currentUser}
+                inviteStatus={inviteStatus}
+                onResendInvite={handleResendInvite}
+                resendingInvite={resending}
                 editParams={{
                   id: listingId.uuid,
                   slug: listingSlug,
