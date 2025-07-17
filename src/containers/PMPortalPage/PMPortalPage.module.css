@@ -1,0 +1,15 @@
+.root {
+  padding: 2rem;
+}
+
+.heading {
+  margin-bottom: 1rem;
+}
+
+.infoText {
+  font-size: 1rem;
+}
+
+.approveButton {
+  margin-top: 1.5rem;
+}
