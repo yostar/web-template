@@ -1,0 +1,17 @@
+.root {
+  padding: 2rem;
+}
+
+.heading {
+  margin-bottom: 1rem;
+}
+
+.infoText {
+  font-size: 1rem;
+}
+
+.button {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
