@@ -1215,9 +1215,9 @@
   "AgentApplyNow.buttonLabel": "Apply now",
   "ManagerApplyNow.buttonLabel": "Apply now",
 
- "AuthenticationPage.login.toastTitle": "Welcome to the village!",
+  "AuthenticationPage.login.toastTitle": "Welcome to the village!",
   "AuthenticationPage.login.toastContent": " ",
-  "TopbarButton.agentTraining": "Agent Training", 
+  "TopbarButton.agentTraining": "Agent Training",
 
   "AgentTrainingPage.title": "Agent Training Course",
 
@@ -1232,7 +1232,6 @@
 
   "AuthenticationPage.agentSignupTitle": "Agent Training",
   "AuthenticationPage.agentSignupSubtitle": "Compelete your profile to begin the training",
-
 
   "AgentTraining.backButtonLabel": "Previous",
   "AgentTraining.nextButtonLabel": "Next Step",
@@ -1263,5 +1262,23 @@
   "AgentTraining.crmApiKeyLoading": "Connecting...",
   "AgentTraining.crmApiKeySuccess": "Your Close CRM account is connected 🎉",
   "AgentTraining.completeTitle": "Your training is complete 🎉",
-  "AgentTraining.completeMessage": "Your journey as a Vending Location Agent is about to begin..."
+  "AgentTraining.completeMessage": "Your journey as a Vending Location Agent is about to begin...",
+  "PMPortalPage.title": "PM Portal",
+  "PMPortalPage.heading": "Property Manager Portal",
+  "PMPortalPage.info": "This page allows property managers to approve listings and communicate with agents.",
+  "PMPortalPage.pendingHeading": "Review listing details",
+  "PMPortalPage.pendingInfo": "Please confirm the information or chat with the agent.",
+  "PMPortalPage.approvedHeading": "Listing approved",
+  "PMPortalPage.approvedInfo": "The listing is now live.",
+  "PMPortalPage.salePendingHeading": "Buyer interested",
+  "PMPortalPage.salePendingInfo": "Chat with the agent and buyer to coordinate next steps.",
+  "PMPortalPage.schedulingHeading": "Schedule a meeting",
+  "PMPortalPage.schedulingInfo": "Select a suitable time slot.",
+  "PMPortalPage.scheduledHeading": "Meeting scheduled",
+  "PMPortalPage.scheduledInfo": "Check your email for the calendar invite.",
+  "PMPortalPage.finalizedHeading": "All set",
+  "PMPortalPage.finalizedInfo": "Thank you for working with us.",
+  "PMPortalPage.loading": "Loading portal...",
+  "PMPortalPage.error": "Invalid link or listing not found.",
+  "PMPortalPage.approveButton": "Approve listing"
 }

@@ -1,0 +1,4 @@
+const OPENPHONE_API_KEY = process.env.OPENPHONE_API_KEY;
+const OPENPHONE_FROM_NUMBER = process.env.OPENPHONE_FROM_NUMBER || '';
+
+module.exports = { OPENPHONE_API_KEY, OPENPHONE_FROM_NUMBER };
