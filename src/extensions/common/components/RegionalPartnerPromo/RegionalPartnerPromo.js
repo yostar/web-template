@@ -38,7 +38,7 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
 
         if (region || (partnerId && partnerId.indexOf('ppv-') === 0)) {
             setLoading(true);
-            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partnerId=${partnerId}`)
+            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partner=${partnerId}`)
                 .then(response => response.json())
                 .then(data => {
                     //console.log("partner-promo-data", region, partnerId, data)
