@@ -422,7 +422,7 @@ export class TransactionPanelComponent extends Component {
               />
              
              {!isProvider && (
-              <RegionalPartnerPromo varient="transaction" address={managerAddress || listing?.attributes?.publicData?.location?.address} />
+              <RegionalPartnerPromo user={customer} varient="transaction" address={managerAddress || listing?.attributes?.publicData?.location?.address} />
              )}
            
             </div>
