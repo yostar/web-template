@@ -20,7 +20,9 @@ import {
 import {
   getDisputeReasonField,
   getRefundReasonField,
+  getRefundSelectField,
 } from '../../common/helpers/getActionModalFormField';
+import { allRefundReasons } from '../../common/helpers/getRefundReasons';
 import { getSellPurchaseProgressStep } from '../../common/helpers/getSellPurchaseProgressStep';
 import { states, transitions } from '../transactions/transactionProcessSellPurchase';
 
@@ -114,6 +116,8 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
 
   const { categoryLevel1: rawCategoryLevel1 } = transaction.listing.attributes.publicData;
   const categoryLevel1 = rawCategoryLevel1?.replaceAll('-', '_');
+  const listingLocation = transaction?.listing?.attributes?.publicData?.location;
+  const listingGeolocation = transaction?.listing?.attributes?.geolocation;
 
   const {
     isCustomer,
@@ -176,7 +180,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
       };
     })
     .cond([states.PURCHASE_CONFIRMED_BY_BUYER, PROVIDER], () => {
-      const getFieldTextConfig = (name, validators = []) => ({
+      const getFieldTextConfig = (name, validators = [], initialValue = '') => ({
         type: FIELD_TEXT,
         labelTranslationId: `TransactionPage.sell-purchase.${name}.label`,
         name: `protectedData.${name}`,
@@ -187,6 +191,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
           },
           ...validators,
         ],
+        initialValue,
       });
 
       return {
@@ -196,16 +201,16 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
           isConfirmNeeded: true,
           showReminderStatement: true,
           formConfigs: [
-            getFieldTextConfig('managerBusinessName'),
-            getFieldTextConfig('managerName'),
-            getFieldTextConfig('managerPhoneNumber'),
+            getFieldTextConfig('managerBusinessName', [], listingLocation?.businessName ),
+            getFieldTextConfig('managerName', [], listingLocation?.managerName),
+            getFieldTextConfig('managerPhoneNumber', [], listingLocation?.managerPhone),
             getFieldTextConfig('managerEmail', [
               {
                 validatorFn: emailFormatValid,
                 messageTranslationId:
                   'TransactionPage.sell-purchase.managerEmail.emailInvalidMesage',
               },
-            ]),
+            ], listingLocation?.managerEmail),
             {
               type: FIELD_LOCATION,
               labelTranslationId: 'TransactionPage.sell-purchase.managerAddress.label',
@@ -222,6 +227,13 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
                     'TransactionPage.sell-purchase.managerAddress.placeInvalidMessage',
                 },
               ],
+              initialValue: {
+                search:listingLocation?.address,
+                selectedPlace: {
+                  address: listingLocation?.address,
+                  origin: listingGeolocation,
+                },
+              },
             },
           ],
           confirmModalTitleTranslationId:
@@ -255,6 +267,8 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
 
       const processStatePostfix = buyerMarkMetManager ? '' : `.${MARK_MET_MANAGER_TRANSITION_NAME}`;
 
+      const disputeOptions = allRefundReasons();
+
       return {
         ...defaultStateData,
         showRefundAvailabileNotice: true,
@@ -274,7 +288,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.modalTitle',
             confirmButtonTranslationId:
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.purchased.customer.confirmButton',
-            formConfigs: [getRefundReasonField({ role: CUSTOMER })],
+            formConfigs: [getRefundSelectField({ role: CUSTOMER, options: disputeOptions }), getRefundReasonField({ role: CUSTOMER })],
           }
         ),
         nextStepTranslationId: `TransactionPage.sell-purchase.${transactionRole}.${processState}${processStatePostfix}.nextStep`,
@@ -325,6 +339,8 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
       });
 
       const processStatePostfix = buyerMarkMetManager ? '' : `.${MARK_MET_MANAGER_TRANSITION_NAME}`;
+      const disputeOptions = allRefundReasons();
+
       return {
         ...defaultStateData,
         showRefundAvailabileNotice: true,
@@ -344,7 +360,7 @@ export const getStateDataForSellPurchaseProcess = (txInfo, processInfo) => {
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.modalTitle',
             confirmButtonTranslationId:
               'TransactionPage.SecondaryConfirmActionModal.sell-purchase.stripe-intent-captured.customer.confirmButton',
-            formConfigs: [getRefundReasonField({ name: 'disputeReason' })],
+            formConfigs: [ getRefundSelectField({ role: CUSTOMER, options: disputeOptions }), getRefundReasonField({ name: 'disputeReason' })],
           }
         ),
         nextStepTranslationId: `TransactionPage.sell-purchase.${transactionRole}.${processState}${processStatePostfix}.nextStep`,

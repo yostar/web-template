@@ -542,6 +542,7 @@ const EditListingDetailsFormComponent = props => (
             </p>
           )}
 
+          <div className={css.buttonWrapper}>
           <Button
             className={css.submitButton}
             type="submit"
@@ -551,6 +552,7 @@ const EditListingDetailsFormComponent = props => (
           >
             {saveActionMsg}
           </Button>
+          </div>
         </Form>
       );
     }}

@@ -280,6 +280,7 @@ export class SearchPageComponent extends Component {
       routeConfiguration,
       config,
       uiCurrency,
+      currentUser,
     } = this.props;
 
     const { listingFields } = config?.listing || {};
@@ -572,7 +573,7 @@ export class SearchPageComponent extends Component {
                   setActiveListing={onActivateListing}
                   isMapVariant
                 />
-<RegionalPartnerPromo address={searchParamsInURL.address} varient="search" />
+                <RegionalPartnerPromo address={searchParamsInURL.address} varient="search" user={currentUser} />
               </div>
             )}
           </div>
@@ -630,6 +631,7 @@ SearchPageComponent.propTypes = {
   searchInProgress: bool.isRequired,
   searchListingsError: propTypes.error,
   searchParams: object,
+  currentUser: propTypes.currentUser,
 
   // from useHistory
   history: shape({
@@ -698,6 +700,7 @@ const EnhancedSearchPage = props => {
       intl={intl}
       history={history}
       location={location}
+      currentUser={currentUser}
       {...restOfProps}
     />
   );

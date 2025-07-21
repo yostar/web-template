@@ -10,6 +10,7 @@ import BlockSocialMediaLink from './BlockSocialMediaLink';
 import SearchRequestLinks from '../../../extensions/common/components/Sections/Blocks/SearchRequestLinks/SearchRequestLinks';
 import SocialProofReviews from '../../../extensions/common/components/Sections/Blocks/SocialProofReviews/SocialProofReviews';
 import AgentApplyNow from '../../../extensions/common/components/Sections/Blocks/AgentApplyNow/AgentApplyNow';
+import ManagerApplyNow from '../../../extensions/common/components/Sections/Blocks/ManagerApplyNow/ManagerApplyNow';
 
 
 
@@ -25,7 +26,8 @@ const defaultBlockComponents = {
 const customBlockComponents = {
   searchRequestLinks: <SearchRequestLinks />, 
   socialProofReviews: <SocialProofReviews/>,
-  agentApplyNow: <AgentApplyNow/>
+  agentApplyNow: <AgentApplyNow/>,
+  managerApplyNow: <ManagerApplyNow/>,
 };
 ////////////////////
 // Blocks builder //

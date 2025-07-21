@@ -42,6 +42,7 @@ const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePag
 
 const FavoriteListingsPage = loadable(() => import(/* webpackChunkName: "FavoriteListingsPage" */ '../containers/FavoriteListingsPage/FavoriteListingsPage'));
 
+const AgentTrainingPage = loadable(() => import(/* webpackChunkName: "AgentTrainingPage" */ '../containers/AgentTrainingPage/AgentTrainingPage'));
 
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
@@ -411,6 +412,13 @@ const routeConfiguration = (layoutConfig, accessControlConfig) => {
       authPage: 'LoginPage',
       component: FavoriteListingsPage,
       loadData: pageDataLoadingAPI.FavoriteListingsPage.loadData,
+    },
+    {
+      path: '/agent/training/:step',
+      name: 'AgentTrainingPage',
+      auth: true, // user must be signed in to view this page
+      authPage: 'LoginPage',
+      component: AgentTrainingPage,
     },
   ];
 };

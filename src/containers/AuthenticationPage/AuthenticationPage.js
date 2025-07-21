@@ -34,6 +34,7 @@ import {
   ResponsiveBackgroundImageContainer,
   Modal,
   LayoutSingleColumn,
+  LinkedLogo,
 } from '../../components';
 
 import TopbarContainer from '../../containers/TopbarContainer/TopbarContainer';
@@ -55,14 +56,19 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 import { TOS_ASSET_NAME, PRIVACY_POLICY_ASSET_NAME } from './AuthenticationPage.duck';
 
-import css from './AuthenticationPage.module.css';
 import { FacebookLogo, GoogleLogo } from './socialLoginLogos';
+import { toastSuccess } from '../../extensions/common/components/Toast/Toast';
+import { trainingSteps } from '../../extensions/agents/config';
+import { GraduationCap} from 'lucide-react';
+
+import css from './AuthenticationPage.module.css';
+
 
 // Social login buttons are needed by AuthenticationForms
 export const SocialLoginButtonsMaybe = props => {
   const routeConfiguration = useRouteConfiguration();
-  const { isLogin, showFacebookLogin, showGoogleLogin, from, userType } = props;
-  const showSocialLogins = showFacebookLogin || showGoogleLogin;
+  const { isLogin, showFacebookLogin, showGoogleLogin, from, userType, isAgentSignup } = props;
+  const showSocialLogins = (showFacebookLogin || showGoogleLogin) && !isAgentSignup;
 
   const getDataForSSORoutes = () => {
     const baseUrl = apiBaseUrl();
@@ -172,6 +178,9 @@ export const AuthenticationForms = props => {
   const signupRouteName = !!preselectedUserType ? 'SignupForUserTypePage' : 'SignupPage';
   const userTypeMaybe = preselectedUserType ? { userType: preselectedUserType } : null;
   const fromState = { state: { ...fromMaybe, ...userTypeMaybe } };
+
+  const isAgentSignup = preselectedUserType === 'agent';
+
   const tabs = [
     {
       text: (
@@ -259,7 +268,14 @@ export const AuthenticationForms = props => {
 
   return (
     <div className={css.content}>
-      <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
+      {isAgentSignup ? (
+        <>
+        <Heading as="h2" rootClassName={css.signupTitle}><GraduationCap className={css.signupIcon} /> <FormattedMessage id="AuthenticationPage.agentSignupTitle" /></Heading>
+        <div className={css.signupSubtitle}><FormattedMessage id="AuthenticationPage.agentSignupSubtitle" /></div>
+        </>
+      ) : (
+        <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
+      )}
       {loginOrSignupError}
 
       {isLogin ? (
@@ -280,6 +296,7 @@ export const AuthenticationForms = props => {
         isLogin={isLogin}
         showFacebookLogin={showFacebookLogin}
         showGoogleLogin={showGoogleLogin}
+        isAgentSignup={isAgentSignup}
         {...fromMaybe}
         {...userTypeMaybe}
       />
@@ -455,6 +472,8 @@ export const AuthenticationPageComponent = props => {
   const [authError, setAuthError] = useState(getAuthErrorFromCookies());
   const config = useConfiguration();
 
+  const isAgentSignup = props.params?.userType === 'agent';
+
   useEffect(() => {
     // Remove the autherror cookie once the content is saved to state
     // because we don't want to show the error message e.g. after page refresh
@@ -518,7 +537,37 @@ export const AuthenticationPageComponent = props => {
   // flag only when the current user is fully loaded.
   const showEmailVerification = !isLogin && currentUserLoaded && !user.attributes.emailVerified;
 
-  // Already authenticated, redirect away from auth page
+  // Ensure useEffect is not conditional
+  useEffect(() => {
+    
+    if (isAuthenticated && currentUserLoaded) {
+      toastSuccess({
+        titleId: 'AuthenticationPage.login.toastTitle',
+        contentId: 'AuthenticationPage.login.toastContent',
+        intl,
+      });
+
+    }
+  }, [isAuthenticated, currentUserLoaded, location, intl]);
+
+  
+  //custom agent redirect
+  if (isAuthenticated && currentUserLoaded) {
+    const userData = currentUser?.attributes?.profile?.publicData;
+    if (userData?.training) {
+
+      if(userData?.training?.completed) {
+        return <Redirect to={`/listings`} />;
+      } else {
+        const currentStepIndex = userData?.training?.step - 1;
+        const currentStepRouteName = trainingSteps[currentStepIndex].routeName;
+        return <Redirect to={`/agent/training/${currentStepRouteName}`} />;
+      }
+    }
+  }
+  
+
+  // Move any conditional returns after hooks
   if (isAuthenticated && from) {
     return <Redirect to={from} />;
   } else if (isAuthenticated && currentUserLoaded && !showEmailVerification) {
@@ -563,8 +612,8 @@ export const AuthenticationPageComponent = props => {
     >
       <LayoutSingleColumn
         mainColumnClassName={css.layoutWrapperMain}
-        topbar={<TopbarContainer className={topbarClasses} />}
-        footer={<FooterContainer />}
+        topbar={isAgentSignup ? <LinkedLogo className={css.agentSignupTopbar} /> : <TopbarContainer className={topbarClasses} />}
+        footer={isAgentSignup ? null : <FooterContainer />}
       >
         <ResponsiveBackgroundImageContainer
           className={css.root}
@@ -572,7 +621,7 @@ export const AuthenticationPageComponent = props => {
           as="section"
           image={config.branding.brandImage}
           sizes="100%"
-          useOverlay
+          useOverlay={false}
         >
           {showEmailVerification ? (
             <EmailVerificationInfo

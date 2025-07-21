@@ -16,9 +16,13 @@ import {
   NamedLink,
 } from '../../../../components';
 
+import AgentTrainingButton from '../../../../extensions/agents/TopbarButton/TopbarButton';
+
 import TopbarSearchForm from '../TopbarSearchForm/TopbarSearchForm';
 import CustomLinksMenu from './CustomLinksMenu/CustomLinksMenu';
 import CurrencyDropdown from '../../../../extensions/MultipleCurrency/components/CurrencyDropdown/CurrencyDropdown';
+
+import { Inbox } from 'lucide-react';
 
 import css from './TopbarDesktop.module.css';
 
@@ -51,6 +55,7 @@ const InboxLink = ({ notificationCount, currentUserHasListings }) => {
       params={{ tab: currentUserHasListings ? 'sales' : 'orders' }}
     >
       <span className={css.topbarLinkLabel}>
+        <Inbox className={css.inboxIcon} /> 
         <FormattedMessage id="TopbarDesktop.inbox" />
         {notificationDot}
       </span>
@@ -58,7 +63,8 @@ const InboxLink = ({ notificationCount, currentUserHasListings }) => {
   );
 };
 
-const ProfileMenu = ({ currentPage, currentUser, onLogout }) => {
+const ProfileMenu = ({ currentPage, currentUser, onLogout, isAgent }) => {
+
   const currentPageClass = page => {
     const isAccountSettingsPage =
       page === 'AccountSettingsPage' && ACCOUNT_SETTINGS_PAGES.includes(currentPage);
@@ -100,6 +106,7 @@ const ProfileMenu = ({ currentPage, currentUser, onLogout }) => {
             <FormattedMessage id="TopbarDesktop.profileSettingsLink" />
           </NamedLink>
         </MenuItem>
+
         <MenuItem key="AccountSettingsPage">
           <NamedLink
             className={classNames(css.menuLink, currentPageClass('AccountSettingsPage'))}
@@ -109,6 +116,20 @@ const ProfileMenu = ({ currentPage, currentUser, onLogout }) => {
             <FormattedMessage id="TopbarDesktop.accountSettingsLink" />
           </NamedLink>
         </MenuItem>
+
+        <MenuItem key="AgentTrainingPage">
+        {isAgent && (
+            <NamedLink
+              className={classNames(css.menuLink, currentPageClass('AgentTrainingPage'))}
+              name="AgentTrainingPage"
+              params={{ step: 'videos' }}
+            >
+              <span className={css.menuItemBorder} />
+              <FormattedMessage id="TopbarButton.agentTraining" />
+            </NamedLink>
+          )}
+          </MenuItem>
+        
         <MenuItem key="logout">
           <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
             <span className={css.menuItemBorder} />
@@ -137,6 +158,8 @@ const TopbarDesktop = props => {
     initialSearchFormValues,
   } = props;
   const [mounted, setMounted] = useState(false);
+  const [isAgent, setIsAgent] = useState(false);
+  const [isAgentTraining, setIsAgentTraining] = useState({});
 
   useEffect(() => {
     setMounted(true);
@@ -157,11 +180,16 @@ const TopbarDesktop = props => {
   ) : null;
 
   const profileMenuMaybe = authenticatedOnClientSide ? (
-    <ProfileMenu currentPage={currentPage} currentUser={currentUser} onLogout={onLogout} />
+    <ProfileMenu currentPage={currentPage} currentUser={currentUser} onLogout={onLogout} isAgent={isAgent} />
   ) : null;
 
   const signupLinkMaybe = isAuthenticatedOrJustHydrated ? null : <SignupLink />;
   const loginLinkMaybe = isAuthenticatedOrJustHydrated ? null : <LoginLink />;
+
+  useEffect(() => {
+    setIsAgent(currentUser?.attributes?.profile?.publicData?.userType === 'agent');
+    setIsAgentTraining(currentUser?.attributes?.profile?.publicData?.training);
+  }, [currentUser]);
 
   return (
     <nav className={classes}>
@@ -179,18 +207,33 @@ const TopbarDesktop = props => {
         appConfig={config}
       />
 
-      <CustomLinksMenu
-        currentPage={currentPage}
-        customLinks={customLinks}
-        intl={intl}
-        hasClientSideContentReady={authenticatedOnClientSide || !isAuthenticatedOrJustHydrated}
-      />
+      { isAgent && isAgentTraining && !isAgentTraining?.completed ? (
+          
+          <>
+            <AgentTrainingButton currentStep={currentUser?.attributes?.profile?.publicData?.training?.step} />
+            {profileMenuMaybe}
+          </>
+          ) : (
+            <>
+            
+            <CustomLinksMenu
+              currentPage={currentPage}
+              customLinks={customLinks}
+              intl={intl}
+              hasClientSideContentReady={authenticatedOnClientSide || !isAuthenticatedOrJustHydrated}
+            />
 
-      {inboxLinkMaybe}
-      {profileMenuMaybe}
-      {signupLinkMaybe}
-      {loginLinkMaybe}
-      <CurrencyDropdown />
+            {inboxLinkMaybe}
+            {profileMenuMaybe}
+            {signupLinkMaybe}
+            {loginLinkMaybe}
+            
+            {!isAgent && (
+              <CurrencyDropdown />
+            )}
+
+      </>
+      )}
     </nav>
   );
 };
