@@ -20,4 +20,5 @@ export const externalEndpoints = {
   zapierWebhook: 'https://hooks.zapier.com/hooks/catch/20055466/2vxqp3i/',
   closeReferralLink: 'https://refer.close.com/h5nx7eols2ku',
   closeLeadsWorker: 'https://close-crm-add-leads.yoav-4e1.workers.dev/',
+  closeCloner: 'https://close-crm-clone.yoav-4e1.workers.dev/'
 }

@@ -45,21 +45,29 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
         spinner: true
     });
 
-    setTimeout(() => {
+   await setTimeout(() => {
     onProgressUpdate({
-            percentage: 50,
+            percentage: 30,
             message: "Adding your free leads...", 
             spinner: true
         });
-    }, 5000);
+    }, 2000);
 
     await assignLeadsToClose(apiKey, currentUser?.attributes?.email);
+
+    onProgressUpdate({
+        percentage: 40,
+        message: "Setting up workflows and emails...", 
+        spinner: true
+    });
+    await cloneCloseCrm(apiKey, ['saved_search','email_template','sms_template','sequence']);
 
     onProgressUpdate({
         percentage: 80,
         message: "Finishing up...", 
         spinner: true
     });
+    
     
     await dispatch(updateTrainingProfile({private: {closeApiKey: apiKey}}));
 
@@ -75,7 +83,6 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
   };
 
   const assignLeadsToClose = async (apiKey, email) => {
-    const endpoint = externalEndpoints.googleAppsScript;
 
     if(!apiKey || !email) {
         alert("Invalid API key and/or email");
@@ -100,6 +107,47 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
         alert("Something went wrong with gifting leads: " + err.message);
     }
   }
+
+
+  async function cloneCloseCrm(toApiKey, typeList) {
+    const templateMap = {};
+  
+    for (const type of typeList) {
+      const listRes = await fetch(`${externalEndpoints.closeCloner}?type=${type}`);
+      const items = await listRes.json();
+  
+      for (let i = 0; i < items.length; i++) {
+        const { id } = items[i];
+        
+        // show progress
+        onProgressUpdate({
+          percentage: 50,
+          message: `Cloning ${type} ${i + 1}/${items.length}`,
+          spinner: true
+        });
+  
+        // build payload and include templateMap for sequences
+        const payload = { toApiKey, type, id };
+        if (type === 'sequence') {
+          payload.templateMap = templateMap;
+        }
+  
+        const response = await fetch(externalEndpoints.closeCloner, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+  
+        // capture new template IDs
+        if (type === 'email_template' || type === 'sms_template') {
+          templateMap[id] = result.id;
+        }
+      }
+    }
+  }
+  
+  
 
   return (
     <div className={css.root}>
