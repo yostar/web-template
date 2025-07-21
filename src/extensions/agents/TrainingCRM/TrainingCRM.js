@@ -113,36 +113,46 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
     const templateMap = {};
   
     for (const type of typeList) {
-      const listRes = await fetch(`${externalEndpoints.closeCloner}?type=${type}`);
-      const items = await listRes.json();
-  
-      for (let i = 0; i < items.length; i++) {
-        const { id } = items[i];
-        
-        // show progress
-        onProgressUpdate({
-          percentage: 50,
-          message: `Cloning ${type} ${i + 1}/${items.length}`,
-          spinner: true
-        });
-  
-        // build payload and include templateMap for sequences
-        const payload = { toApiKey, type, id };
-        if (type === 'sequence') {
-          payload.templateMap = templateMap;
+      try {
+        const listRes = await fetch(`${externalEndpoints.closeCloner}?type=${type}`);
+        const items = await listRes.json();
+    
+        for (let i = 0; i < items.length; i++) {
+          const { id } = items[i];
+          
+          // show progress
+          onProgressUpdate({
+            percentage: 50,
+            message: `Cloning ${type} ${i + 1}/${items.length}`,
+            spinner: true
+          });
+    
+          try {
+            // build payload and include templateMap for sequences
+            const payload = { toApiKey, type, id };
+            if (type === 'sequence') {
+              payload.templateMap = templateMap;
+            }
+    
+            const response = await fetch(externalEndpoints.closeCloner, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+    
+            // capture new template IDs
+            if (type === 'email_template' || type === 'sms_template') {
+              templateMap[id] = result.id;
+            }
+          } catch (error) {
+            console.error(`Error cloning ${type} item ${id}:`, error);
+            // Continue to next item instead of stopping
+          }
         }
-  
-        const response = await fetch(externalEndpoints.closeCloner, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await response.json();
-  
-        // capture new template IDs
-        if (type === 'email_template' || type === 'sms_template') {
-          templateMap[id] = result.id;
-        }
+      } catch (error) {
+        console.error(`Error fetching ${type} list:`, error);
+        // Continue to next type instead of stopping
       }
     }
   }
@@ -204,7 +214,6 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
             <div className={css.alreadyConnected}>
                 <p><Check/> You already connected your Close CRM account.</p>
             </div>
-            <p className={css.crmInfo}><Info /> Your workflows and emails will be set up within 24 hours if not already.</p>
             </>
         )}
     </div>
