@@ -45,13 +45,13 @@ const TrainingCRM = ({ currentUser, youtubeVideoId, onProgressUpdate, intl }) =>
         spinner: true
     });
 
-   await setTimeout(() => {
+    setTimeout(() => {
     onProgressUpdate({
             percentage: 30,
             message: "Adding your free leads...", 
             spinner: true
         });
-    }, 2000);
+    }, 3000);
 
     await assignLeadsToClose(apiKey, currentUser?.attributes?.email);
 
