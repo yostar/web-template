@@ -31,7 +31,7 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             const params = new URLSearchParams(window.location.search);
             const fprParam = params.get('fpr');
             const fprCookie = Cookies.get('_fprom_ref');
-            partnerId = fprParam || fprCookie;
+            partnerId = fprParam || fprCookie || '';
         }
 
         //console.log(' RegionalPartnerPromo partnerId', partnerId)
