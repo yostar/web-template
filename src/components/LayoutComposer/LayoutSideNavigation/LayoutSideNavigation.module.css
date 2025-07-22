@@ -74,9 +74,10 @@
   box-shadow: var(--boxShadow);
 
   flex-direction: column;
-  padding: 0 0 0 16px;
+  padding: 0 16px;
   margin: 0;
   width: auto;
+  max-width: calc(100vw - 32px);
 
   @media (--viewportLarge) {
     padding: 20px 0 0 20px;

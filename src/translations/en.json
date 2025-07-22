@@ -455,6 +455,7 @@
   "LayoutWrapperAccountSettingsSideNav.passwordTabTitle": "Password",
   "LayoutWrapperAccountSettingsSideNav.paymentMethodsTabTitle": "Payment methods",
   "LayoutWrapperAccountSettingsSideNav.paymentsTabTitle": "Payout details",
+  "LayoutWrapperAccountSettingsSideNav.emailSubscriptionsTabTitle": "Email subscriptions",
   "LimitedAccessBanner.fallbackMessage": "You're logged in as {firstName} {lastName}.",
   "LimitedAccessBanner.fullRightsMessage": "You're logged in as {firstName} {lastName}. You have full access rights. In a Live environment, you will have limited rights.",
   "LimitedAccessBanner.logout": "Log out",
@@ -670,6 +671,9 @@
   "PaymentMethodsForm.submitPaymentInfo": "Save payment card",
   "PaymentMethodsPage.heading": "Payment methods",
   "PaymentMethodsPage.title": "Payment methods",
+  "EmailSubscriptionsPage.heading": "Regional Email Subscriptions",
+  "EmailSubscriptionsPage.title": "Regional Email Subscriptions",
+  "EmailSubscriptionsPage.description": "Select the regions you want to receive new location alerts for.",
   "PriceFilter.clear": "Clear",
   "PriceFilter.label": "Price",
   "PriceFilter.labelSelectedButton": "{minPrice} - {maxPrice}",
@@ -1218,9 +1222,9 @@
   "AgentApplyNow.buttonLabel": "Apply now",
   "ManagerApplyNow.buttonLabel": "Apply now",
 
- "AuthenticationPage.login.toastTitle": "Welcome to the village!",
+  "AuthenticationPage.login.toastTitle": "Welcome to the village!",
   "AuthenticationPage.login.toastContent": " ",
-  "TopbarButton.agentTraining": "Agent Training", 
+  "TopbarButton.agentTraining": "Agent Training",
 
   "AgentTrainingPage.title": "Agent Training Course",
 
@@ -1235,7 +1239,6 @@
 
   "AuthenticationPage.agentSignupTitle": "Agent Training",
   "AuthenticationPage.agentSignupSubtitle": "Compelete your profile to begin the training",
-
 
   "AgentTraining.backButtonLabel": "Previous",
   "AgentTraining.nextButtonLabel": "Next Step",
