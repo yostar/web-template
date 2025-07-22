@@ -21,6 +21,7 @@ const EmailSubscriptionsPageComponent = (props) => {
     fetchSubscriptionsError,
     updateInProgress,
     updateError,
+    updatingBubbles,
     onFetchSubscriptions,
     onUpdateSubscription,
     scrollingDisabled,
@@ -34,29 +35,51 @@ const EmailSubscriptionsPageComponent = (props) => {
   const user = ensureCurrentUser(currentUser);
   const title = intl.formatMessage({ id: 'EmailSubscriptionsPage.title' });
 
-  const handleChange = (e) => {
-    const { name, checked } = e.target;
-    onUpdateSubscription(name, checked);
+  const handleBubbleClick = (tag, checked) => {
+    // Only allow click if this specific bubble is not currently updating
+    if (!updatingBubbles[tag]) {
+      onUpdateSubscription(tag, !checked);
+    }
   };
 
-  const checkboxes = regions
+  // Group regions by country
+  const regionsByCountry = regions
     .filter((r) => r.option !== 'Other')
-    .map((r) => {
+    .reduce((acc, region) => {
+      const country = region.country || 'Other';
+      if (!acc[country]) {
+        acc[country] = [];
+      }
+      acc[country].push(region);
+      return acc;
+    }, {});
+
+  const bubbleGroups = Object.entries(regionsByCountry).map(([country, countryRegions]) => {
+    const countryBubbles = countryRegions.map((r) => {
       const tag = `Alert:${r.option}`;
       const checked = subscriptions.includes(tag);
+      const isUpdating = updatingBubbles[tag];
       return (
-        <label key={r.option} className={css.checkboxLabel}>
-          <input
-            type="checkbox"
-            name={tag}
-            checked={checked}
-            disabled={updateInProgress}
-            onChange={handleChange}
-          />
+        <button
+          key={r.option}
+          type="button"
+          className={`${css.bubble} ${checked ? css.bubbleChecked : ''} ${isUpdating ? css.bubbleDisabled : ''}`}
+          onClick={() => handleBubbleClick(tag, checked)}
+          disabled={isUpdating}
+          aria-pressed={checked}
+        >
           {r.label}
-        </label>
+        </button>
       );
     });
+
+    return (
+      <div key={country} className={css.countryGroup}>
+        <h4 className={css.countryTitle}>{country}</h4>
+        <div className={css.bubbleList}>{countryBubbles}</div>
+      </div>
+    );
+  });
 
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
@@ -79,11 +102,13 @@ const EmailSubscriptionsPageComponent = (props) => {
           <H3 as="h1">
             <FormattedMessage id="EmailSubscriptionsPage.heading" />
           </H3>
+          <p className={css.description}><FormattedMessage id="EmailSubscriptionsPage.description" /></p>
+
           {fetchSubscriptionsError ? (
             <p className={css.error}>{fetchSubscriptionsError.message}</p>
           ) : null}
           {updateError ? <p className={css.error}>{updateError.message}</p> : null}
-          <div className={css.checkboxList}>{checkboxes}</div>
+          <div className={css.bubbleGroupsContainer}>{bubbleGroups}</div>
         </div>
       </LayoutSideNavigation>
     </Page>
@@ -104,6 +129,7 @@ EmailSubscriptionsPageComponent.propTypes = {
   fetchSubscriptionsError: object,
   updateInProgress: bool.isRequired,
   updateError: object,
+  updatingBubbles: object,
   onFetchSubscriptions: func.isRequired,
   onUpdateSubscription: func.isRequired,
   scrollingDisabled: bool.isRequired,
@@ -112,7 +138,7 @@ EmailSubscriptionsPageComponent.propTypes = {
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
-  const { subscriptions, fetchInProgress, fetchError, updateInProgress, updateError } =
+  const { subscriptions, fetchInProgress, fetchError, updateInProgress, updateError, updatingBubbles } =
     state.EmailSubscriptionsPage;
   return {
     currentUser,
@@ -121,6 +147,7 @@ const mapStateToProps = (state) => {
     fetchSubscriptionsError: fetchError,
     updateInProgress,
     updateError,
+    updatingBubbles,
     scrollingDisabled: isScrollingDisabled(state),
   };
 };

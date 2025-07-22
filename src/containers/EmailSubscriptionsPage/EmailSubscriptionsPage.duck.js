@@ -17,6 +17,7 @@ const initialState = {
   fetchError: null,
   updateInProgress: false,
   updateError: null,
+  updatingBubbles: {}, // Track individual bubble states
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -28,8 +29,15 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, fetchInProgress: false, subscriptions: payload };
     case FETCH_SUBSCRIPTIONS_ERROR:
       return { ...state, fetchInProgress: false, fetchError: payload };
-    case UPDATE_SUBSCRIPTION_REQUEST:
-      return { ...state, updateInProgress: true, updateError: null };
+    case UPDATE_SUBSCRIPTION_REQUEST: {
+      const { tag } = payload;
+      return { 
+        ...state, 
+        updateInProgress: true, 
+        updateError: null,
+        updatingBubbles: { ...state.updatingBubbles, [tag]: true }
+      };
+    }
     case UPDATE_SUBSCRIPTION_SUCCESS: {
       const { tag, active } = payload;
       let subs = state.subscriptions.slice();
@@ -38,10 +46,24 @@ export default function reducer(state = initialState, action = {}) {
       } else {
         subs = subs.filter((t) => t !== tag);
       }
-      return { ...state, updateInProgress: false, subscriptions: subs };
+      const { [tag]: removed, ...remainingUpdatingBubbles } = state.updatingBubbles;
+      return { 
+        ...state, 
+        updateInProgress: false, 
+        subscriptions: subs,
+        updatingBubbles: remainingUpdatingBubbles
+      };
     }
-    case UPDATE_SUBSCRIPTION_ERROR:
-      return { ...state, updateInProgress: false, updateError: payload };
+    case UPDATE_SUBSCRIPTION_ERROR: {
+      const { tag } = payload;
+      const { [tag]: removed, ...remainingUpdatingBubbles } = state.updatingBubbles;
+      return { 
+        ...state, 
+        updateInProgress: false, 
+        updateError: payload,
+        updatingBubbles: remainingUpdatingBubbles
+      };
+    }
     default:
       return state;
   }
@@ -59,15 +81,18 @@ export const fetchSubscriptionsError = (e) => ({
   payload: e,
 });
 
-export const updateSubscriptionRequest = () => ({ type: UPDATE_SUBSCRIPTION_REQUEST });
+export const updateSubscriptionRequest = (tag) => ({ 
+  type: UPDATE_SUBSCRIPTION_REQUEST, 
+  payload: { tag } 
+});
 export const updateSubscriptionSuccess = (payload) => ({
   type: UPDATE_SUBSCRIPTION_SUCCESS,
   payload,
 });
-export const updateSubscriptionError = (e) => ({
+export const updateSubscriptionError = (e, tag) => ({
   type: UPDATE_SUBSCRIPTION_ERROR,
   error: true,
-  payload: e,
+  payload: { ...e, tag },
 });
 
 // ================ Thunks ================ //
@@ -79,10 +104,10 @@ export const fetchSubscriptions = () => (dispatch) => {
 };
 
 export const updateSubscription = (tag, active) => (dispatch) => {
-  dispatch(updateSubscriptionRequest());
+  dispatch(updateSubscriptionRequest(tag));
   return updateEmailSubscription({ tag, active })
     .then(() => dispatch(updateSubscriptionSuccess({ tag, active })))
-    .catch((e) => dispatch(updateSubscriptionError(storableError(e))));
+    .catch((e) => dispatch(updateSubscriptionError(storableError(e), tag)));
 };
 
 export const loadData = () => fetchSubscriptions();
