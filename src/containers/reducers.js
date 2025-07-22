@@ -13,13 +13,13 @@ import PasswordChangePage from './PasswordChangePage/PasswordChangePage.duck';
 import PasswordRecoveryPage from './PasswordRecoveryPage/PasswordRecoveryPage.duck';
 import PasswordResetPage from './PasswordResetPage/PasswordResetPage.duck';
 import PaymentMethodsPage from './PaymentMethodsPage/PaymentMethodsPage.duck';
+import EmailSubscriptionsPage from './EmailSubscriptionsPage/EmailSubscriptionsPage.duck';
 import ProfilePage from './ProfilePage/ProfilePage.duck';
 import ProfileSettingsPage from './ProfileSettingsPage/ProfileSettingsPage.duck';
 import SearchPage from './SearchPage/SearchPage.duck';
 import StripePayoutPage from './StripePayoutPage/StripePayoutPage.duck';
 import TransactionPage from './TransactionPage/TransactionPage.duck';
 import FavoriteListingsPage from './FavoriteListingsPage/FavoriteListingsPage.duck';
-
 
 export {
   CheckoutPage,
@@ -38,4 +38,5 @@ export {
   StripePayoutPage,
   TransactionPage,
   FavoriteListingsPage,
+  EmailSubscriptionsPage,
 };
