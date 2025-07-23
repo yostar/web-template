@@ -28,6 +28,7 @@
             color: var(--colorGrey800);
             line-height: 1.1;
             text-align: left;
+            margin-bottom: 6px;
 
         }
         & button.ctaButton {
@@ -171,6 +172,19 @@
         }
     }
 
+    &.listing{
+        margin: 30px 20px;
+
+        & .promoContainer {
+            border: 1px solid var(--colorGrey100);
+            border-radius: 6px;
+        }
+
+        @media (--viewportMedium) {
+            margin: 30px 0;
+        }
+       
+    }
 }
 
 @keyframes fadeIn {
