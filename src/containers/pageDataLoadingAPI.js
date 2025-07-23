@@ -12,6 +12,7 @@ import { loadData as InboxPageLoader } from './InboxPage/InboxPage.duck';
 import { loadData as ListingPageLoader } from './ListingPage/ListingPage.duck';
 import { loadData as ManageListingsPageLoader } from './ManageListingsPage/ManageListingsPage.duck';
 import { loadData as PaymentMethodsPageLoader } from './PaymentMethodsPage/PaymentMethodsPage.duck';
+import { loadData as EmailSubscriptionsPageLoader } from './EmailSubscriptionsPage/EmailSubscriptionsPage.duck';
 import { loadData as PrivacyPolicyPageLoader } from './PrivacyPolicyPage/PrivacyPolicyPage.duck';
 import { loadData as ProfilePageLoader } from './ProfilePage/ProfilePage.duck';
 import { loadData as SearchPageLoader } from './SearchPage/SearchPage.duck';
@@ -23,7 +24,6 @@ import {
 } from './TransactionPage/TransactionPage.duck';
 
 import { loadData as FavoriteListingsPageLoader } from './FavoriteListingsPage/FavoriteListingsPage.duck';
-
 
 const getPageDataLoadingAPI = () => {
   return {
@@ -59,6 +59,9 @@ const getPageDataLoadingAPI = () => {
     },
     PaymentMethodsPage: {
       loadData: PaymentMethodsPageLoader,
+    },
+    EmailSubscriptionsPage: {
+      loadData: EmailSubscriptionsPageLoader,
     },
     PrivacyPolicyPage: {
       loadData: PrivacyPolicyPageLoader,

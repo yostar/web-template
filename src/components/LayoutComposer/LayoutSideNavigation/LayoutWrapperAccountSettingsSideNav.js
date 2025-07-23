@@ -56,7 +56,7 @@ const scrollToTab = (currentPage, scrollLeft, setScrollLeft) => {
   }
 };
 
-const LayoutWrapperAccountSettingsSideNavComponent = props => {
+const LayoutWrapperAccountSettingsSideNavComponent = (props) => {
   const [mounted, setMounted] = useState(false);
   const [scrollLeft, setScrollLeft] = useGlobalState('scrollLeft');
 
@@ -112,6 +112,16 @@ const LayoutWrapperAccountSettingsSideNavComponent = props => {
       id: 'PaymentMethodsPageTab',
       linkProps: {
         name: 'PaymentMethodsPage',
+      },
+    },
+    {
+      text: (
+        <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.emailSubscriptionsTabTitle" />
+      ),
+      selected: currentPage === 'EmailSubscriptionsPage',
+      id: 'EmailSubscriptionsPageTab',
+      linkProps: {
+        name: 'EmailSubscriptionsPage',
       },
     },
   ];

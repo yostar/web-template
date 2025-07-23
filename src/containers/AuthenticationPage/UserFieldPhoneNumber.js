@@ -6,7 +6,7 @@ import { intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import * as validators from '../../util/validators';
 
-import { FieldPhoneNumberInput } from '../../components';
+import { FieldNorthAmericanPhoneInput } from '../../components';
 
 const UserFieldPhoneNumber = props => {
   const { rootClassName, className, formId, formName, userTypeConfig, intl } = props;
@@ -22,16 +22,29 @@ const UserFieldPhoneNumber = props => {
   const isRequired = required === true;
   const validateMaybe = isRequired
     ? {
-        validate: validators.required(
-          intl.formatMessage({
-            id: `${formName}.phoneNumberRequired`,
-          })
+        validate: validators.composeValidators(
+          validators.required(
+            intl.formatMessage({
+              id: `${formName}.phoneNumberRequired`,
+            })
+          ),
+          validators.validNorthAmericanPhone(
+            intl.formatMessage({
+              id: `${formName}.phoneNumberInvalid`,
+            })
+          )
         ),
       }
-    : {};
+    : {
+        validate: validators.validNorthAmericanPhone(
+          intl.formatMessage({
+            id: `${formName}.phoneNumberInvalid`,
+          })
+        ),
+      };
 
   return (
-    <FieldPhoneNumberInput
+    <FieldNorthAmericanPhoneInput
       className={classNames(className, { [rootClassName]: !!rootClassName })}
       type="text"
       id={formId ? `${formId}.phoneNumber` : 'phoneNumber'}
