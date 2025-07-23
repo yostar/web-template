@@ -98,7 +98,7 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             </div>
 
             <div className={css.selfPromo}>
-                <a target="_blank" href="/p/partnership"><FormattedMessage id="RegionalPartnerPromo.selfPromo" /></a>
+                <a target="_blank" href="mailto:dave@vendingvillage.com?subject=Partner Promo Inquiry"><FormattedMessage id="RegionalPartnerPromo.selfPromo" /></a>
             </div>
         </div>
     );
