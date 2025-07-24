@@ -66,6 +66,9 @@ export const ActionBarMaybe = props => {
     currentUser,
     editParams,
     showNoPayoutDetailsSet,
+    inviteStatus,
+    onResendInvite,
+    resendingInvite,
   } = props;
   const classes = classNames(rootClassName || css.actionBar, className);
 
