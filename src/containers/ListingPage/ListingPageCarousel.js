@@ -158,6 +158,26 @@ export const ListingPageComponent = props => {
   const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
   const params = { slug: listingSlug, ...rawParams };
 
+  const authorAvailable = currentListing && currentListing.author;
+  const userAndListingAuthorAvailable = !!(currentUser && authorAvailable);
+  const isOwnListing =
+    userAndListingAuthorAvailable && currentListing.author.id.uuid === currentUser.id.uuid;
+
+  useEffect(() => {
+    if (
+      isOwnListing &&
+      rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT &&
+      currentListing.id
+    ) {
+      fetchInviteStatus(currentListing.id.uuid)
+        .then(res => setInviteStatus(res.data.inviteStatus))
+        .catch(() => setInviteStatus('error'));
+    }
+  }, [isOwnListing, rawParams.variant, currentListing.id]);
+
+
+
+
   const listingPathParamType = isDraftVariant
     ? LISTING_PAGE_PARAM_TYPE_DRAFT
     : LISTING_PAGE_PARAM_TYPE_EDIT;
@@ -214,11 +234,6 @@ export const ListingPageComponent = props => {
     </span>
   );
 
-  const authorAvailable = currentListing && currentListing.author;
-  const userAndListingAuthorAvailable = !!(currentUser && authorAvailable);
-  const isOwnListing =
-    userAndListingAuthorAvailable && currentListing.author.id.uuid === currentUser.id.uuid;
-
   const { listingType, transactionProcessAlias, unitType } = publicData;
   if (!(listingType && transactionProcessAlias && unitType)) {
     // Listing should always contain listingType, transactionProcessAlias and unitType)
@@ -230,19 +245,6 @@ export const ListingPageComponent = props => {
   const isBooking = isBookingProcess(processName);
   const isPurchase = isPurchaseProcess(processName);
   const processType = isBooking ? 'booking' : isPurchase ? 'purchase' : 'inquiry';
-
-  useEffect(() => {
-    if (
-      isOwnListing &&
-      rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT &&
-      currentListing.id
-    ) {
-      fetchInviteStatus(currentListing.id.uuid)
-        .then(res => setInviteStatus(res.data.inviteStatus))
-        .catch(() => setInviteStatus('error'));
-    }
-  }, [isOwnListing, rawParams.variant, currentListing.id]);
-
   const handleResendInvite = () => {
     if (!currentListing.id) return;
     setResending(true);
