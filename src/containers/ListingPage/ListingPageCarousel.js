@@ -95,6 +95,7 @@ import CustomListingFields from './CustomListingFields';
 import { convertListingPrices } from '../../extensions/MultipleCurrency/utils/currency.js';
 import ProgressBar from '../../extensions/transactionProcesses/components/ProgressBar/ProgressBar.js';
 import Faqs from '../../extensions/common/components/Faqs/Faqs.js';
+import RegionalPartnerPromo from '../../extensions/common/components/RegionalPartnerPromo/RegionalPartnerPromo.js';
 
 import css from './ListingPage.module.css';
 
@@ -336,6 +337,8 @@ export const ListingPageComponent = props => {
 
   const descriptionTitle = intl.formatMessage({ id: 'ListingPage.descriptionTitle' });
 
+  const locationAddress = currentListing?.attributes?.publicData?.location?.address;
+
   return (
     <Page
       title={schemaTitle}
@@ -484,6 +487,8 @@ export const ListingPageComponent = props => {
               currentUser={currentUser}
               onManageDisableScrolling={onManageDisableScrolling}
             />
+
+            <RegionalPartnerPromo address={locationAddress} user={currentUser} varient="listing" />
 
             <div className={css.faqsContainer}>
               <H4 as="h1" className={css.faqsTitle}>Frequently Asked Questions</H4>

@@ -9,6 +9,13 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
   const [player, setPlayer] = useState(null);
   const [showFallback, setShowFallback] = useState(false);
 
+  // Move error handling outside useEffect so it can be accessed by the button
+  const handlePlayerError = () => {
+    console.error('YouTube player error triggered manually');
+    setShowFallback(true);
+    onProgressUpdate({ percentage: 100, message: 'Please watch all 20 videos before continuing' });
+  };
+
   useEffect(() => {
     let progressInterval;
 
@@ -66,19 +73,7 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
 
     const onPlayerError = (event) => {
       console.error('YouTube player error event:', event);
-      
-      // Silently retry once after a short delay
-      setTimeout(() => {
-        if (player) {
-          try {
-            player.destroy();
-          } catch (e) {
-            console.warn('Error destroying player:', e);
-          }
-        }
-        setPlayer(null);
-        initializePlayer();
-      }, 3000);
+      handlePlayerError();
     };
 
     const onPlayerReady = (event) => {
@@ -182,7 +177,7 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
     <div className={css.root}>
       
       <div className={css.progress}>
-            {showProgress && (
+            {showProgress && !showFallback && (
                 <>
                 <label>
                     <FormattedMessage 
@@ -199,23 +194,29 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
                 </>
             )}
       </div>
-      {showFallback && (
+
+      {showFallback ? (
         <div className={css.playerWrapper}>
           <iframe 
             className={css.player}
             src={`https://www.youtube.com/embed/videoseries?si=6VHWq40Ap---Jdxb&amp;list=${playlistId}&rel=0&autoplay=1&modestbranding=1`} title="YouTube video player" 
             frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
             referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+            <p className={css.fallbackText}>If you're taken to the beginning, use the playlist button/menu to return to the correct video. When you're done watching all the videos, click "Next steps" to continue.</p>
           </div>
-      )}
-
-      <div className={showFallback ? css.hide : css.playerWrapper}>
-        <div id="player" className={css.player}></div>
-        <div className={css.overlayTop}></div>
-        <div className={css.overlayBottom}></div>
-        <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
-      </div>
-      
+        ) : 
+        (
+          <>
+          <div className={css.playerWrapper}>
+            <div id="player" className={css.player}></div>
+            <div className={css.overlayTop}></div>
+            <div className={css.overlayBottom}></div>
+            <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
+          </div>
+          <p className={css.fallbackText}>if the video player crashes, <button onClick={handlePlayerError}>click here</button></p>
+          </>
+        )
+      }
       
     </div>
   );

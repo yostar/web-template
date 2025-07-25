@@ -31,14 +31,14 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             const params = new URLSearchParams(window.location.search);
             const fprParam = params.get('fpr');
             const fprCookie = Cookies.get('_fprom_ref');
-            partnerId = fprParam || fprCookie;
+            partnerId = fprParam || fprCookie || '';
         }
 
         //console.log(' RegionalPartnerPromo partnerId', partnerId)
 
         if (region || (partnerId && partnerId.indexOf('ppv-') === 0)) {
             setLoading(true);
-            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partnerId=${partnerId}`)
+            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partner=${partnerId}`)
                 .then(response => response.json())
                 .then(data => {
                     //console.log("partner-promo-data", region, partnerId, data)
@@ -98,7 +98,7 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             </div>
 
             <div className={css.selfPromo}>
-                <a target="_blank" href="/p/partnership"><FormattedMessage id="RegionalPartnerPromo.selfPromo" /></a>
+                <a target="_blank" href="mailto:dave@vendingvillage.com?subject=Partner Promo Inquiry"><FormattedMessage id="RegionalPartnerPromo.selfPromo" /></a>
             </div>
         </div>
     );
