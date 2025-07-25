@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from '../../../util/reactIntl';
-import { SecondaryButton } from '../../../components';
 
 import css from './VideoPlayer.module.css';
 
