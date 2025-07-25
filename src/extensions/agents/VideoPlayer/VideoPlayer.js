@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from '../../../util/reactIntl';
+import { SecondaryButton } from '../../../components';
 
 import css from './VideoPlayer.module.css';
 
@@ -182,7 +183,7 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
     <div className={css.root}>
       
       <div className={css.progress}>
-            {showProgress && (
+            {showProgress && !showFallback && (
                 <>
                 <label>
                     <FormattedMessage 
@@ -199,23 +200,29 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
                 </>
             )}
       </div>
-      {showFallback && (
+
+      {showFallback ? (
         <div className={css.playerWrapper}>
           <iframe 
             className={css.player}
             src={`https://www.youtube.com/embed/videoseries?si=6VHWq40Ap---Jdxb&amp;list=${playlistId}&rel=0&autoplay=1&modestbranding=1`} title="YouTube video player" 
             frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
             referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+            <p className={css.fallbackText}>If you're taken to the beginning, use the playlist button/menu to return to the correct video. When you're done watching all the videos, click "Next steps" to continue.</p>
           </div>
-      )}
-
-      <div className={showFallback ? css.hide : css.playerWrapper}>
-        <div id="player" className={css.player}></div>
-        <div className={css.overlayTop}></div>
-        <div className={css.overlayBottom}></div>
-        <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
-      </div>
-      
+        ) : 
+        (
+          <>
+          <div className={css.playerWrapper}>
+            <div id="player" className={css.player}></div>
+            <div className={css.overlayTop}></div>
+            <div className={css.overlayBottom}></div>
+            <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
+          </div>
+          <p className={css.fallbackText}>if the video player crashes, <a href="#" onClick={() => setShowFallback(true)}>click here</a></p>
+          </>
+        )
+      }
       
     </div>
   );
