@@ -105,6 +105,7 @@
   "ConfirmSignupForm.phoneNumberLabel": "Phone number",
   "ConfirmSignupForm.phoneNumberPlaceholder": "Enter your phone number.",
   "ConfirmSignupForm.phoneNumberRequired": "You need to add a phone number.",
+  "ConfirmSignupForm.phoneNumberInvalid": "Please enter a valid North American phone number in format (XXX) XXX-XXXX.",
   "ConfirmSignupForm.signUp": "Continue with {idp}",
   "ContactDetailsForm.confirmChangesInfo": "To change your email address, please enter your current password.",
   "ContactDetailsForm.confirmChangesTitle": "Confirm your changes",
@@ -128,6 +129,7 @@
   "ContactDetailsForm.phoneLabel": "Phone number",
   "ContactDetailsForm.phonePlaceholder": "Enter your phone number.",
   "ContactDetailsForm.phoneRequired": "A phone number is required.",
+  "ContactDetailsForm.phoneInvalid": "Please enter a valid North American phone number in format (XXX) XXX-XXXX.",
   "ContactDetailsForm.resendEmailVerificationText": "Resend verification email.",
   "ContactDetailsForm.resendPasswordLinkText": "Resend instructions.",
   "ContactDetailsForm.resetPasswordInfo": "Forgot your password or don't have one? {resetPasswordLink}",
@@ -453,6 +455,7 @@
   "LayoutWrapperAccountSettingsSideNav.passwordTabTitle": "Password",
   "LayoutWrapperAccountSettingsSideNav.paymentMethodsTabTitle": "Payment methods",
   "LayoutWrapperAccountSettingsSideNav.paymentsTabTitle": "Payout details",
+  "LayoutWrapperAccountSettingsSideNav.emailSubscriptionsTabTitle": "Email subscriptions",
   "LimitedAccessBanner.fallbackMessage": "You're logged in as {firstName} {lastName}.",
   "LimitedAccessBanner.fullRightsMessage": "You're logged in as {firstName} {lastName}. You have full access rights. In a Live environment, you will have limited rights.",
   "LimitedAccessBanner.logout": "Log out",
@@ -668,6 +671,9 @@
   "PaymentMethodsForm.submitPaymentInfo": "Save payment card",
   "PaymentMethodsPage.heading": "Payment methods",
   "PaymentMethodsPage.title": "Payment methods",
+  "EmailSubscriptionsPage.heading": "Regional Email Subscriptions",
+  "EmailSubscriptionsPage.title": "Regional Email Subscriptions",
+  "EmailSubscriptionsPage.description": "Select the regions you want to receive new location alerts for.",
   "PriceFilter.clear": "Clear",
   "PriceFilter.label": "Price",
   "PriceFilter.labelSelectedButton": "{minPrice} - {maxPrice}",
@@ -839,6 +845,7 @@
   "SignupForm.phoneNumberLabel": "Phone number",
   "SignupForm.phoneNumberPlaceholder": "Enter your phone number.",
   "SignupForm.phoneNumberRequired": "You need to add a phone number.",
+  "SignupForm.phoneNumberInvalid": "Please enter a valid North American phone number in format (XXX) XXX-XXXX.",
   "SignupForm.signUp": "Sign up",
   "SortBy.heading": "Sort by",
   "SortBy.highestPrice": "Highest price",
@@ -1207,6 +1214,7 @@
   "EmailVerificationBanner.title": "Please verify your email address.",
   "EmailVerificationBanner.buttonLabel": "Verify now",
   "RegionalPartnerPromo.selfPromo": "Become a partner",
+  "RegionalPartnerPromo.badgeLabel": "sponsored",
   "SearchRequestLinks.findLocations": "Find locations for sale",
   "SearchRequestLinks.requestLocation": "Request a location",
   "SearchRequestLinks.or": "or",
@@ -1215,9 +1223,9 @@
   "AgentApplyNow.buttonLabel": "Apply now",
   "ManagerApplyNow.buttonLabel": "Apply now",
 
- "AuthenticationPage.login.toastTitle": "Welcome to the village!",
+  "AuthenticationPage.login.toastTitle": "Welcome to the village!",
   "AuthenticationPage.login.toastContent": " ",
-  "TopbarButton.agentTraining": "Agent Training", 
+  "TopbarButton.agentTraining": "Agent Training",
 
   "AgentTrainingPage.title": "Agent Training Course",
 
@@ -1232,7 +1240,6 @@
 
   "AuthenticationPage.agentSignupTitle": "Agent Training",
   "AuthenticationPage.agentSignupSubtitle": "Compelete your profile to begin the training",
-
 
   "AgentTraining.backButtonLabel": "Previous",
   "AgentTraining.nextButtonLabel": "Next Step",

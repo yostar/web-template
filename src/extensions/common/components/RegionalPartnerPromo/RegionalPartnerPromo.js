@@ -31,14 +31,14 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             const params = new URLSearchParams(window.location.search);
             const fprParam = params.get('fpr');
             const fprCookie = Cookies.get('_fprom_ref');
-            partnerId = fprParam || fprCookie;
+            partnerId = fprParam || fprCookie || '';
         }
 
         //console.log(' RegionalPartnerPromo partnerId', partnerId)
 
         if (region || (partnerId && partnerId.indexOf('ppv-') === 0)) {
             setLoading(true);
-            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partnerId=${partnerId}`)
+            fetch(`https://partner-promo-api.vendingvillage.com/?region=${region}&partner=${partnerId}`)
                 .then(response => response.json())
                 .then(data => {
                     //console.log("partner-promo-data", region, partnerId, data)
@@ -76,29 +76,34 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             <button onClick={handleClose} className={css.closeButton}>&times;</button>
             
             <div className={css.promoContainer}>
-                <h2 className={css.title}>{promoData.promoTitle}</h2>
-                <div className={css.promoTextContainer}>
-                    <p
-                        className={css.promoText}
-                        dangerouslySetInnerHTML={{
-                            __html: promoData.promoBody
-                                ?.replace('{companyName}', `<strong>${promoData.companyName}</strong>`)
-                                .replace('{region}', region),
-                        }}
-                    />
-                    
+                <div className={css.promoBadge}><FormattedMessage id="RegionalPartnerPromo.badgeLabel" /></div>
+                {promoData.logo && promoData.logo.length > 0 && (
+                    <img className={css.logo} src={promoData.logo} alt={promoData.companyName}/>
+                )}
+                <div className={css.promoContent}>
+                    <h2 className={css.title}>{promoData.promoTitle}</h2>
+                    <div className={css.promoTextContainer}>
+                        <p
+                            className={css.promoText}
+                            dangerouslySetInnerHTML={{
+                                __html: promoData.promoBody
+                                    ?.replace('{companyName}', `<strong>${promoData.companyName}</strong>`)
+                                    .replace('{region}', region),
+                            }}
+                        />
+                    </div>
                     <ModalIframeButton 
                         iframeUrl={`https://form.jotform.com/${promoData.formId}?region=${region}&promoTitle=${encodeURIComponent(promoData.promoTitle)}&contactName=${promoData.contactName}&contactEmail=${promoData.contactEmail}&companyName=${promoData.companyName}`} 
                         buttonLabel={promoData.ctaLabel} 
                         icon={iconMap[promoData.icon] || Phone}
                         buttonClassName={css.ctaButton}
                     />
-                    
                 </div>
+
             </div>
 
             <div className={css.selfPromo}>
-                <a target="_blank" href="/p/partnership"><FormattedMessage id="RegionalPartnerPromo.selfPromo" /></a>
+                <a target="_blank" href="mailto:dave@vendingvillage.com?subject=Partner Promo Inquiry"><FormattedMessage id="RegionalPartnerPromo.selfPromo" /></a>
             </div>
         </div>
     );
