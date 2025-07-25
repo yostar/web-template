@@ -1214,6 +1214,7 @@
   "EmailVerificationBanner.title": "Please verify your email address.",
   "EmailVerificationBanner.buttonLabel": "Verify now",
   "RegionalPartnerPromo.selfPromo": "Become a partner",
+  "RegionalPartnerPromo.badgeLabel": "sponsored",
   "SearchRequestLinks.findLocations": "Find locations for sale",
   "SearchRequestLinks.requestLocation": "Request a location",
   "SearchRequestLinks.or": "or",

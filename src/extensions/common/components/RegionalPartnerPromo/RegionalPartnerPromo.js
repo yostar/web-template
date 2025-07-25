@@ -76,25 +76,30 @@ const RegionalPartnerPromo = ({ address, varient, user }) => {
             <button onClick={handleClose} className={css.closeButton}>&times;</button>
             
             <div className={css.promoContainer}>
-                <h2 className={css.title}>{promoData.promoTitle}</h2>
-                <div className={css.promoTextContainer}>
-                    <p
-                        className={css.promoText}
-                        dangerouslySetInnerHTML={{
-                            __html: promoData.promoBody
-                                ?.replace('{companyName}', `<strong>${promoData.companyName}</strong>`)
-                                .replace('{region}', region),
-                        }}
-                    />
-                    
+                <div className={css.promoBadge}><FormattedMessage id="RegionalPartnerPromo.badgeLabel" /></div>
+                {promoData.logo && promoData.logo.length > 0 && (
+                    <img className={css.logo} src={promoData.logo} alt={promoData.companyName}/>
+                )}
+                <div className={css.promoContent}>
+                    <h2 className={css.title}>{promoData.promoTitle}</h2>
+                    <div className={css.promoTextContainer}>
+                        <p
+                            className={css.promoText}
+                            dangerouslySetInnerHTML={{
+                                __html: promoData.promoBody
+                                    ?.replace('{companyName}', `<strong>${promoData.companyName}</strong>`)
+                                    .replace('{region}', region),
+                            }}
+                        />
+                    </div>
                     <ModalIframeButton 
                         iframeUrl={`https://form.jotform.com/${promoData.formId}?region=${region}&promoTitle=${encodeURIComponent(promoData.promoTitle)}&contactName=${promoData.contactName}&contactEmail=${promoData.contactEmail}&companyName=${promoData.companyName}`} 
                         buttonLabel={promoData.ctaLabel} 
                         icon={iconMap[promoData.icon] || Phone}
                         buttonClassName={css.ctaButton}
                     />
-                    
                 </div>
+
             </div>
 
             <div className={css.selfPromo}>
