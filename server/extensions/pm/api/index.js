@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
-const axios = require('axios');
 const { getTrustedSdk, handleError } = require('../../common/sdk');
+const { sendPortalNotification } = require('../utils/notifications');
 const router = express.Router();
 
 // POST /api/pm/invite - send invite to property manager
@@ -19,7 +19,16 @@ router.post('/invite', async (req, res) => {
     const token = crypto.randomBytes(20).toString('hex');
 
     const listingRes = await trustedSdk.listings.show({ id: listingId });
-    const currentData = listingRes?.data?.data?.attributes?.publicData || {};
+    const listing = listingRes?.data?.data;
+    const currentData = listing?.attributes?.publicData || {};
+    const ownerId = listing?.relationships?.author?.data?.id?.uuid;
+
+    const currentUserRes = await trustedSdk.currentUser.show();
+    const currentUserId = currentUserRes?.data?.data?.id?.uuid;
+
+    if (ownerId !== currentUserId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
 
     await trustedSdk.listings.update({
       id: listingId,
@@ -35,41 +44,7 @@ router.post('/invite', async (req, res) => {
 
     const portalUrl = `${process.env.REACT_APP_MARKETPLACE_ROOT_URL}/pm/portal?listingId=${listingId}&token=${token}`;
 
-    if (process.env.SENDGRID_API_KEY && email) {
-      await axios.post(
-        'https://api.sendgrid.com/v3/mail/send',
-        {
-          personalizations: [{ to: [{ email }] }],
-          from: { email: 'no-reply@example.com' },
-          subject: 'Property manager portal',
-          content: [
-            {
-              type: 'text/plain',
-              value: `Open the portal: ${portalUrl}`,
-            },
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
-
-    if (process.env.OPENPHONE_API_KEY && phone) {
-      await axios.post(
-        'https://api.openphone.com/v1/messages',
-        { to: phone, text: portalUrl },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENPHONE_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
+    await sendPortalNotification({ email, phone, portalUrl });
 
     res.status(200).json({ success: true });
   } catch (e) {
@@ -117,7 +92,16 @@ router.post('/invite/resend', async (req, res) => {
   try {
     const trustedSdk = await getTrustedSdk(req);
     const listingRes = await trustedSdk.listings.show({ id: listingId });
-    const publicData = listingRes?.data?.data?.attributes?.publicData || {};
+    const listing = listingRes?.data?.data;
+    const publicData = listing?.attributes?.publicData || {};
+    const ownerId = listing?.relationships?.author?.data?.id?.uuid;
+
+    const currentUserRes = await trustedSdk.currentUser.show();
+    const currentUserId = currentUserRes?.data?.data?.id?.uuid;
+
+    if (ownerId !== currentUserId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
     const contact = publicData.pmContact || {};
     const { email, phone } = contact;
 
@@ -138,36 +122,7 @@ router.post('/invite/resend', async (req, res) => {
 
     const portalUrl = `${process.env.REACT_APP_MARKETPLACE_ROOT_URL}/pm/portal?listingId=${listingId}&token=${token}`;
 
-    if (process.env.SENDGRID_API_KEY && email) {
-      await axios.post(
-        'https://api.sendgrid.com/v3/mail/send',
-        {
-          personalizations: [{ to: [{ email }] }],
-          from: { email: 'no-reply@example.com' },
-          subject: 'Property manager portal',
-          content: [{ type: 'text/plain', value: `Open the portal: ${portalUrl}` }],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
-
-    if (process.env.OPENPHONE_API_KEY && phone) {
-      await axios.post(
-        'https://api.openphone.com/v1/messages',
-        { to: phone, text: portalUrl },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENPHONE_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
+    await sendPortalNotification({ email, phone, portalUrl });
 
     res.status(200).json({ success: true });
   } catch (e) {
