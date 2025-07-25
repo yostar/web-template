@@ -9,6 +9,13 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
   const [player, setPlayer] = useState(null);
   const [showFallback, setShowFallback] = useState(false);
 
+  // Move error handling outside useEffect so it can be accessed by the button
+  const handlePlayerError = () => {
+    console.error('YouTube player error triggered manually');
+    setShowFallback(true);
+    onProgressUpdate({ percentage: 100, message: 'Please watch all 20 videos before continuing' });
+  };
+
   useEffect(() => {
     let progressInterval;
 
@@ -66,19 +73,7 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
 
     const onPlayerError = (event) => {
       console.error('YouTube player error event:', event);
-      
-      // Silently retry once after a short delay
-      setTimeout(() => {
-        if (player) {
-          try {
-            player.destroy();
-          } catch (e) {
-            console.warn('Error destroying player:', e);
-          }
-        }
-        setPlayer(null);
-        initializePlayer();
-      }, 3000);
+      handlePlayerError();
     };
 
     const onPlayerReady = (event) => {
@@ -218,7 +213,7 @@ const YouTubePlayer = ({ playlistId, onProgressUpdate, userTraining }) => {
             <div className={css.overlayBottom}></div>
             <div className={css.overlayMiddle} onClick={handleOverlayClick}></div>
           </div>
-          <p className={css.fallbackText}>if the video player crashes, <a href="#" onClick={() => setShowFallback(true)}>click here</a></p>
+          <p className={css.fallbackText}>if the video player crashes, <button onClick={handlePlayerError}>click here</button></p>
           </>
         )
       }
